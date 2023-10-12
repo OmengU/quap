@@ -1,0 +1,9 @@
+services:
+  postgres:
+    container_name: quap
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
+    ports:
+      - 5432:5432
