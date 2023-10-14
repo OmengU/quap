@@ -14,5 +14,7 @@ namespace quap.Data
 		{
 			optionsBuilder.UseExceptionProcessor();
 		}
-	}
+        protected override void OnModelCreating(ModelBuilder builder)
+		=> builder.HasPostgresEnum<QType>();
+    }
 }

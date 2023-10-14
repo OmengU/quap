@@ -1,4 +1,9 @@
 
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using quap.Data;
+using quap.Models;
+
 namespace quap
 {
 	public class Program
@@ -14,7 +19,13 @@ namespace quap
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
-			var app = builder.Build();
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("QuizManagementDbContextConnection"));
+            dataSourceBuilder.MapEnum<QType>();
+            var dataSource = dataSourceBuilder.Build();
+
+            builder.Services.AddDbContext<QuizManagementDbContext>(options => options.UseNpgsql(dataSource));
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
