@@ -1,4 +1,6 @@
-﻿namespace quap.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace quap.Models.DTOs
 {
 	public class QuestionDto
 	{
@@ -9,4 +11,18 @@
 		public int Points { get; set; }
 		public Guid QuizId { get; set; }
 	}
+	public class UpdateQuestionDto
+	{
+		[Required]
+		public int NOptions { get; set; }
+        [Required]
+
+        public QType Type { get; set; }
+        [Required]
+
+        public int TimeLimit { get; set; }
+        [Required]
+
+        public int Points { get; set; }
+    }
 }
