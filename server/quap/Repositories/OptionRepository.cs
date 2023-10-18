@@ -39,7 +39,7 @@ namespace quap.Repositories
             return await _context.Options.FirstOrDefaultAsync(o => o.QuestionId == QuestionId);
         }
 
-        public async Task<Option> UpdateOption(Guid Id, UpdateOptionDto option)
+        public async Task<Option> UpdateOption(Guid Id, CreateUpdateOptionDto option)
         {
             Option newOption = await _context.Options.FirstOrDefaultAsync(o => o.OId.Equals(Id));
 

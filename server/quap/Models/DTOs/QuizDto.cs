@@ -7,7 +7,7 @@ namespace quap.Models.DTOs
         public string name { get; set; }
         public string description { get; set; }
         public int NQuestions { get; set; }
-        public List<Question> Questions { get; set; }
+        public List<QuestionDto> Questions { get; set; }
     }
 
     public class CreateUpdateQuizDto

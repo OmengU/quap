@@ -14,7 +14,7 @@ namespace quap.Models.DTOs
 		public Guid QuestionId { get; set; }
 
 	}
-	public class UpdateOptionDto
+	public class CreateUpdateOptionDto
 	{
         [Required]
         public string OptionText { get; set; }

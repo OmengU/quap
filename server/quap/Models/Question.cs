@@ -12,8 +12,8 @@ namespace quap.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public Guid QuestionId { get; set; }
-		public int NOptions { get; set; }
-		public List<Option> Options { get; set; }
+		public int NOptions { get; set; } = 0;
+		public List<Option> Options { get; set; } = new List<Option>();
 		public QType Type { get; set;}
 		public int TimeLimit { get; set; }
 		public int Points { get; set; }

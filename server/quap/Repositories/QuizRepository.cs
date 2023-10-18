@@ -17,7 +17,7 @@ namespace quap.Repositories
         public async Task<Quiz> AddQuestion(Guid id, Question question)
         {
             Quiz quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.QuizId == id);
-            if (quiz == null)
+            if (quiz != null)
             {
                 quiz.Questions.Add(question);
                 quiz.NQuestions++;
@@ -38,7 +38,7 @@ namespace quap.Repositories
         public async Task DeleteQuiz(Guid id)
         {
             Quiz quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.QuizId == id);
-            _context.Questions.Remove(quiz);
+            _context.Quizzes.Remove(quiz);
             await _context.SaveChangesAsync();
         }
 

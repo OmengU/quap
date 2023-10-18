@@ -47,9 +47,10 @@ namespace quap.Repositories
             return await _context.Questions.FirstOrDefaultAsync(q => q.QuestionId == Id);
         }
 
-        public Task<Question> UpdateQuestion(Guid Id, UpdateQuestionDto option)
+        public Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto option)
         {
             throw new NotImplementedException();
         }
+        public async Task<IEnumerable<Question>> GetAll() => await _context.Questions.ToListAsync();
     }
 }

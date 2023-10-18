@@ -11,18 +11,14 @@ namespace quap.Models.DTOs
 		public int Points { get; set; }
 		public Guid QuizId { get; set; }
 	}
-	public class UpdateQuestionDto
+	public class CreateUpdateQuestionDto
 	{
-		[Required]
-		public int NOptions { get; set; }
-        [Required]
 
+        [Required]
         public QType Type { get; set; }
         [Required]
-
         public int TimeLimit { get; set; }
         [Required]
-
         public int Points { get; set; }
     }
 }

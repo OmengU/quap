@@ -7,7 +7,7 @@ namespace quap.Repositories.IRepositories
     {
         Task<Option> GetOptionById(Guid Id);
         Task<Option> CreateOption(Option option);
-        Task<Option> UpdateOption(Guid Id, UpdateOptionDto option);
+        Task<Option> UpdateOption(Guid Id, CreateUpdateOptionDto option);
         Task DeleteOption(Guid Id);
         Task<Option> GetOptionByQuestionId(Guid QuestionId);
     }

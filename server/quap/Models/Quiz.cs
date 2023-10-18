@@ -8,9 +8,9 @@ namespace quap.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public Guid QuizId { get; set; }
-		public string name { get; set; }
-		public string description { get; set; }
-		public int NQuestions { get; set; }
-		public List<Question> Questions { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public int NQuestions { get; set; } = 0;
+		public List<Question> Questions { get; set; } = new List<Question>();
 	}
 }
