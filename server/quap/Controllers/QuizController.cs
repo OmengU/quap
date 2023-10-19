@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿    using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using quap.Models;
@@ -30,8 +30,8 @@ namespace quap.Controllers
         {
             try
             {
-                var result = await _quizRepository.GetAll();
-                return Ok(result);
+                var quizzes = _mapper.Map<IEnumerable<QuizDto>>(await _quizRepository.GetAll());
+                return Ok(quizzes);
             }catch (Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -42,7 +42,7 @@ namespace quap.Controllers
         {
             try
             {
-                var result = await _questionRepository.GetAll();
+                var result = _mapper.Map<IEnumerable<QuestionDto>>(await _questionRepository.GetAll());
                 return Ok(result);
             }
             catch (Exception ex)
@@ -55,7 +55,7 @@ namespace quap.Controllers
         {
             try
             {
-                var result = await _quizRepository.GetQuizById(id);
+                var result = _mapper.Map<QuizDto>(await _quizRepository.GetQuizById(id));
                 return Ok(result);
             }
             catch(Exception ex)
@@ -97,7 +97,7 @@ namespace quap.Controllers
             }
         }
         [HttpPatch("{id}/addoption")]
-        public async Task<ActionResult<Question>> AddOption(Guid id, [FromBody] CreateUpdateOptionDto dto)
+        public async Task<ActionResult<QuestionDto>> AddOption(Guid id, [FromBody] CreateUpdateOptionDto dto)
         {
             try
             {
@@ -106,8 +106,46 @@ namespace quap.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(question);
+                return Ok(_mapper.Map<QuestionDto>(question));
             }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("deletequiz/{id}")]
+        public async Task<ActionResult> DeleteQuiz (Guid id)
+        {
+            try
+            {
+                await _quizRepository.DeleteQuiz(id);
+                return NoContent();
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("deletequestion/{id}")]
+        public async Task<ActionResult> DeleteQuestion(Guid id)
+        {
+            try
+            {
+                await _questionRepository.DeleteQuestion(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("deleteoption/{id}")]
+        public async Task<ActionResult> DeleteOption(Guid id)
+        {
+            try
+            {
+                await _optionRepository.DeleteOption(id);
+                return NoContent();
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

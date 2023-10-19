@@ -42,9 +42,20 @@ namespace quap.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Quiz>> GetAll() => await _context.Quizzes.ToListAsync();
+        public async Task<IEnumerable<Quiz>> GetAll()
+        {
+            var quizzes = await _context.Quizzes.Include(q => q.Questions).ToListAsync();
+            foreach (var quiz in quizzes)
+            {
+                foreach (var question in quiz.Questions)
+                {
+                    question.Options = await _context.Options.Where(o => o.QuestionId == question.QuestionId).ToListAsync();
+                }
+            }
+            return quizzes;
+        }
 
-        public async Task<Quiz> GetQuizById(Guid id) => await _context.Quizzes.FirstOrDefaultAsync(q => q.QuizId == id);
+        public async Task<Quiz> GetQuizById(Guid id) => await _context.Quizzes.Include(q => q.Questions).FirstOrDefaultAsync(q => q.QuizId == id);
 
         public Task<Quiz> UpdateQuiz(Guid Id, CreateUpdateQuizDto quiz)
         {

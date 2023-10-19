@@ -4,13 +4,11 @@ namespace quap.Models.DTOs
 {
 	public class OptionDto
 	{
-		[Required]
+		public Guid OId { get; set; }
 		public string OptionText { get; set; }
 
-		[Required]
 		public bool IsCorrect { get; set; }
 
-		[Required]
 		public Guid QuestionId { get; set; }
 
 	}

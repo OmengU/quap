@@ -17,7 +17,7 @@ namespace quap.Repositories
         public async Task<Question> AddOption(Guid Id, Option option)
         {
             Question question = await _context.Questions.FirstOrDefaultAsync(q => q.QuestionId == Id);
-            if (question == null)
+            if (question != null)
             {
                 question.Options.Add(option);
                 question.NOptions++;
@@ -42,15 +42,12 @@ namespace quap.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Question> GetQuestionById(Guid Id)
-        {
-            return await _context.Questions.FirstOrDefaultAsync(q => q.QuestionId == Id);
-        }
+        public async Task<Question> GetQuestionById(Guid Id) => await _context.Questions.Include(q => q.Options).FirstOrDefaultAsync(q => q.QuestionId == Id);
 
         public Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto option)
         {
             throw new NotImplementedException();
         }
-        public async Task<IEnumerable<Question>> GetAll() => await _context.Questions.ToListAsync();
+        public async Task<IEnumerable<Question>> GetAll() => await _context.Questions.Include(q => q.Options).ToListAsync();
     }
 }

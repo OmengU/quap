@@ -4,8 +4,9 @@ namespace quap.Models.DTOs
 {
 	public class QuestionDto
 	{
+		public Guid QuestionId { get; set; }
 		public int NOptions { get; set; }
-		public List<Option> Options { get; set; }
+		public List<OptionDto> Options { get; set; }
 		public QType Type { get; set; }
 		public int TimeLimit { get; set; }
 		public int Points { get; set; }
