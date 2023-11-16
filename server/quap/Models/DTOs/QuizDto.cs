@@ -18,4 +18,11 @@ namespace quap.Models.DTOs
         [Required]
         public string description { get; set; }
     }
+    public class QuizOverviewDto
+    {
+        public Guid quizId { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
+        public int NQuestions { get; set; }
+    }
 }

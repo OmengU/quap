@@ -30,7 +30,7 @@ namespace quap.Controllers
         {
             try
             {
-                var quizzes = _mapper.Map<IEnumerable<QuizDto>>(await _quizRepository.GetAll());
+                var quizzes = _mapper.Map<IEnumerable<QuizOverviewDto>>(await _quizRepository.GetAll());
                 return Ok(quizzes);
             }catch (Exception ex)
             {

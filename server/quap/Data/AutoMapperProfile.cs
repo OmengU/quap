@@ -23,6 +23,9 @@ namespace quap.Data
             CreateMap<Quiz, QuizDto>().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
             CreateMap<Quiz, QuizDto>().ReverseMap().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
 
+            CreateMap<Quiz, QuizOverviewDto>();
+            CreateMap<Quiz, QuizOverviewDto>().ReverseMap();
+
             CreateMap<Quiz, CreateUpdateQuizDto>();
             CreateMap<Quiz, CreateUpdateQuizDto>().ReverseMap();
         }
