@@ -1,15 +1,14 @@
 import { Quiz } from "../../global";
+import QuizGridElement from "./QuizGridElement";
 
 type Props = { quizzes: Quiz[]; }
 
 const QuizGrid = ({ quizzes }: Props) => {
 
     return <div>
-        <ul>
-            {quizzes.map((q) =>
-                <li key={q.quizId}>{q.name} : {q.description}</li>
-            )}
-        </ul>
+        {quizzes.map((q) =>
+            <QuizGridElement quizName={q.name} description={q.description} nQuestions={q.nQuestions} id={q.quizId} key={q.quizId} />
+        )}
 
     </div>
 }
