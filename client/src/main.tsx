@@ -6,11 +6,23 @@ import App from './App.tsx'
 import Root from './routes/root.tsx'
 import { ChakraProvider } from '@chakra-ui/react'
 import Test from './routes/test.tsx'
+import CreateEditQuiz, { loader } from './routes/createEditQuiz.tsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />
+  },
+  {
+    path:"editquiz/:quizId",
+    element: <CreateEditQuiz />,
+    loader: loader,
+    children: [
+      {
+        path:"question/questionId"
+        
+      }
+    ]
   },
   {
     path: "/app",

@@ -32,7 +32,7 @@ const CreateQuizDialog = ({ isOpen, onClose }: Props) => {
                 <Button colorScheme='green' mr={3} onClick={(event) => {
                     event.preventDefault();
                     if (name.length > 0 && description.length > 0) {
-                        createQuiz({ name: name, description: description }).then((q) => {
+                        createQuiz({ name: name, description: description }).then(() => {
                             alert("Quiz created");
                         });
                     } else {
