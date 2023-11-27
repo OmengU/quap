@@ -37,12 +37,12 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("/questions")]
-        public async Task<ActionResult<Question>> GetAllQuestions()
+        [HttpGet("/questions/{id}")]
+        public async Task<ActionResult<Question>> GetAllQuestions(Guid id)
         {
             try
             {
-                var result = _mapper.Map<IEnumerable<QuestionDto>>(await _questionRepository.GetAll());
+                var result = _mapper.Map<IEnumerable<QuestionDto>>(await _questionRepository.GetAll(id));
                 return Ok(result);
             }
             catch (Exception ex)

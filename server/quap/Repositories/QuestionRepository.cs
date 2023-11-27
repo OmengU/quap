@@ -48,6 +48,6 @@ namespace quap.Repositories
         {
             throw new NotImplementedException();
         }
-        public async Task<IEnumerable<Question>> GetAll() => await _context.Questions.Include(q => q.Options).ToListAsync();
+        public async Task<IEnumerable<Question>> GetAll(Guid id) => await _context.Questions.Include(q => q.Options).Where(q => q.QuizId == id).ToListAsync();
     }
 }

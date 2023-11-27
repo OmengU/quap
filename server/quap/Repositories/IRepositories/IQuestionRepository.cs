@@ -11,7 +11,7 @@ namespace quap.Repositories.IRepositories
         Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto question);
         Task DeleteQuestion(Guid Id);
         Task<Question> AddOption(Guid Id, Option option);
-        Task<IEnumerable<Question>> GetAll();
+        Task<IEnumerable<Question>> GetAll(Guid id);
 
     }
 }
