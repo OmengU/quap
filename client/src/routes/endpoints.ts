@@ -49,6 +49,10 @@ export const getQuestions: GetQuestions = async (quizId: string) => {
 
 export const getQuestionById: GetQuestionById = async (questionId: string) => {
     try {
-        throw Error("Error");
+        const response = await fetch(`${URL}/question/${questionId}`);
+        const data = await response.json();
+        return data as Question;
+    } catch (e) {
+        throw e;
     }
 }

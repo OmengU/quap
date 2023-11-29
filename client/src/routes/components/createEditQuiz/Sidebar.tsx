@@ -17,7 +17,7 @@ const Sidebar = ({ questions }: Props) => {
                         {questions.map((question) => (
                             <li key={question.questionId}>
                                 <NavLink
-                                    to={`editquestion/${question.questionId}`}
+                                    to={`question/${question.questionId}`}
                                     className={({ isActive, isPending }) =>
                                         isActive
                                             ? "active"
@@ -26,7 +26,7 @@ const Sidebar = ({ questions }: Props) => {
                                                 : ""
                                     }
                                 >
-                                    <Link to={`editquestion/${question.questionId}`}>
+                                    <Link to={`question/${question.questionId}`}>
                                         {question.name != "" ? (
                                             <>
                                                 {question.name}

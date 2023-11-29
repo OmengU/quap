@@ -1,5 +1,6 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Badge, Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 type Props = {
     quizName: string,
@@ -29,7 +30,9 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
                     Play
                 </Button>
                 <Button leftIcon={<EditIcon />} variant='outline' colorScheme='green'>
-                    Edit
+                    <Link to={`editquiz/${id}`}>
+                        Edit
+                    </Link>
                 </Button>
                 <Button leftIcon={<DeleteIcon />} variant='solid' colorScheme='red'>
                     Delete
