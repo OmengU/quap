@@ -1,4 +1,4 @@
-import { Question, Quiz, QuizDto, URL } from "../global";
+import { Question, Quiz, QuizDto, URL, sURL } from "../global";
 
 
 type GetQuizzes = () => Promise<Quiz[]>
@@ -39,7 +39,7 @@ export const createQuiz: CreateQuiz = async (body: QuizDto) => {
 
 export const getQuestions: GetQuestions = async (quizId: string) => {
     try {
-        const response = await fetch(`${URL}/questions/${quizId}`);
+        const response = await fetch(`${sURL}/questions/${quizId}`);
         const data = await response.json();
         return data as Question[];
     } catch (e) {

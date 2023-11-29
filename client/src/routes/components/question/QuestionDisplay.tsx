@@ -9,10 +9,13 @@ type Props = {
 }
 
 const QuestionDisplay = ({ isEditing, question }: Props) => {
-    const [name, setName] = useState<string>(question.name);
+    const [name, setName] = useState<string>(question.questionName);
     const [type, setType] = useState<QType>(question.type);
     const [timeLimit, setTimeLimit] = useState<number>(question.timeLimit)
     const [points, setPoints] = useState<number>(question.points)
+
+    console.log(points);
+
 
     return <>
         <FormControl mb='2'>
@@ -28,8 +31,8 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
         </FormControl>
         <FormControl mb='2'>
             <FormLabel>Time Limit</FormLabel>
-            <NumberInput max={10} min={50}>
-                <NumberInputField disabled={!isEditing} value={timeLimit} />
+            <NumberInput min={10} max={60} defaultValue={timeLimit}>
+                <NumberInputField disabled={!isEditing} />
                 <NumberInputStepper>
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />

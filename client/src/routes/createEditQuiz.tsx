@@ -1,33 +1,26 @@
-import { Question } from "../global";
+import { Paths, Question } from "../global";
 import Sidebar from "./components/createEditQuiz/Sidebar";
 import { getQuestions } from "./endpoints";
-import { Outlet, useLoaderData, useParams } from "react-router";
+import { ActionFunctionArgs, LoaderFunction, Outlet, ParamParseKey, Params, useLoaderData } from "react-router";
 
-type Parms = {
-    questionId: string;
+interface TodoLoaderArgs extends ActionFunctionArgs {
+    params: Params<ParamParseKey<typeof Paths.editQuiz>>;
 }
 
-
-function invariant(value: unknown): asserts value {
-    if (value) return;
-
-    throw new Error("Invariant violation");
-}
-
-export async function loader() {
-    const { questionId } = useParams<Parms>();
-    invariant(questionId);
-    const questions = await getQuestions(questionId);
-    if (questions.length == 0) {
+export const loader: LoaderFunction = async ({ params }: TodoLoaderArgs) => {
+    const quizId = params.quizId ?? "";
+    const questions = await getQuestions(quizId);
+    if (questions == null) {
         throw new Response("", {
             status: 404,
             statusText: "Not Found",
         });
     }
-    return { questions };
-}
+    return questions;
+};
+
 const CreateEditQuiz = () => {
-    const questions = useLoaderData() as Question[];
+    const questions = useLoaderData() as Array<Question>;
 
     return <>
         <Sidebar questions={questions} />

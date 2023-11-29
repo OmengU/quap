@@ -1,3 +1,12 @@
+export declare type Params<Key extends string = string> = {
+    readonly [key in Key]: string | undefined;
+};
+
+export const Paths = {
+    editQuiz: "/editquiz/:quizId",
+    displayQuestion: "question/:questionId",
+} as const;
+
 export enum QType {
     SingleChoice,
     MultipleChoice,
@@ -10,7 +19,7 @@ export interface Quiz {
 }
 export interface Question {
     questionId: string;
-    name: string;
+    questionName: string;
     nOptions: number;
     type: QType;
     timeLimit: number;
@@ -22,3 +31,4 @@ export type QuizDto = {
     description: string
 }
 export const URL = 'http://localhost:5220/api/Quiz';
+export const sURL = 'http://localhost:5220';

@@ -7,7 +7,8 @@ import Root from './routes/root.tsx'
 import { ChakraProvider } from '@chakra-ui/react'
 import Test from './routes/test.tsx'
 import CreateEditQuiz, { loader } from './routes/createEditQuiz.tsx'
-import ShowQuestion, { questionloader } from './routes/showQuestion.tsx'
+import ShowQuestion, { questionLoader } from './routes/showQuestion.tsx'
+import { Paths } from './global.ts'
 
 const router = createBrowserRouter([
   {
@@ -15,15 +16,15 @@ const router = createBrowserRouter([
     element: <Root />
   },
   {
-    path:"editquiz/:quizId",
+    path: Paths.editQuiz,
     element: <CreateEditQuiz />,
     loader: loader,
     children: [
       {
-        path:"question/questionId",
+        path: Paths.displayQuestion,
         element: <ShowQuestion />,
-        loader: questionloader,
-      }
+        loader: questionLoader,
+      },
     ]
   },
   {
