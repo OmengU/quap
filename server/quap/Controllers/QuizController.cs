@@ -1,4 +1,4 @@
-﻿    using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using quap.Models;
@@ -63,6 +63,19 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("question/{id}")]
+        public async Task<ActionResult<Question>> GetQuestionById(Guid id)
+        {
+            try
+            {
+                var result = _mapper.Map<QuestionDto>(await _questionRepository.GetQuestionById(id));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost]
         public async Task<ActionResult<Quiz>> CreateQuiz([FromBody]CreateUpdateQuizDto dto)
         {
@@ -79,39 +92,60 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpPatch("{id}/addquestion")]
+        //public async Task<ActionResult<QuizDto>> AddQuestion(Guid id, [FromBody] CreateUpdateQuestionDto dto)
+        //{
+        //    try
+        //    {
+        //        var quiz = await _quizRepository.AddQuestion(id, _mapper.Map<Question>(dto));
+        //        if(quiz == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(_mapper.Map<QuizDto>(quiz));
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
         [HttpPatch("{id}/addquestion")]
-        public async Task<ActionResult<QuizDto>> AddQuestion(Guid id, [FromBody] CreateUpdateQuestionDto dto)
+        public async Task<ActionResult<QuizDto>> AddQuestion(Guid id)
         {
             try
             {
-                var quiz = await _quizRepository.AddQuestion(id, _mapper.Map<Question>(dto));
-                if(quiz == null)
+                var quiz = await _quizRepository.AddQuestion(id);
+                if (quiz == null)
                 {
                     return NotFound();
                 }
                 return Ok(_mapper.Map<QuizDto>(quiz));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPatch("{id}/addoption")]
-        public async Task<ActionResult<QuestionDto>> AddOption(Guid id, [FromBody] CreateUpdateOptionDto dto)
+
+        [HttpPatch("updatequestion/{id}")]
+        public async Task<IActionResult> UpdateQuestion(Guid id, [FromBody] CreateUpdateQuestionDto dto)
         {
             try
             {
-                var question = await _questionRepository.AddOption(id, _mapper.Map<Option>(dto));
-                if(question == null)
+                var question = await _questionRepository.UpdateQuestion(id, dto);
+                if (question == null)
                 {
                     return NotFound();
                 }
                 return Ok(_mapper.Map<QuestionDto>(question));
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+        
         [HttpDelete("deletequiz/{id}")]
         public async Task<ActionResult> DeleteQuiz (Guid id)
         {

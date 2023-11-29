@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using quap.Data;
 using quap.Models;
 using quap.Models.DTOs;
@@ -9,10 +10,12 @@ namespace quap.Repositories
     public class QuestionRepository : IQuestionRepository
     {
         private readonly QuizManagementDbContext _context;
+        private readonly IMapper _mapper;
 
-        public QuestionRepository(QuizManagementDbContext context)
+        public QuestionRepository(QuizManagementDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<Question> AddOption(Guid Id, Option option)
         {
@@ -44,9 +47,21 @@ namespace quap.Repositories
 
         public async Task<Question> GetQuestionById(Guid Id) => await _context.Questions.Include(q => q.Options).FirstOrDefaultAsync(q => q.QuestionId == Id);
 
-        public Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto option)
+        public async Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto question)
         {
-            throw new NotImplementedException();
+            Question newQuestion = await _context.Questions.FirstOrDefaultAsync(q => q.QuestionId.Equals(Id));
+
+            if (newQuestion != null)
+            {
+                newQuestion.QuestionName = question.QuestionName;
+                newQuestion.TimeLimit = question.TimeLimit;
+                newQuestion.Points = question.Points;
+                newQuestion.Type = question.Type;
+
+                await _context.SaveChangesAsync();
+                return newQuestion;
+            }
+            return null;
         }
         public async Task<IEnumerable<Question>> GetAll(Guid id) => await _context.Questions.Include(q => q.Options).Where(q => q.QuizId == id).ToListAsync();
     }

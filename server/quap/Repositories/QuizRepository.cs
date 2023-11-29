@@ -14,12 +14,12 @@ namespace quap.Repositories
         {
             _context = context;
         }
-        public async Task<Quiz> AddQuestion(Guid id, Question question)
+        public async Task<Quiz> AddQuestion(Guid id)
         {
             Quiz quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.QuizId == id);
             if (quiz != null)
             {
-                quiz.Questions.Add(question);
+                quiz.Questions.Add(new Question { });
                 quiz.NQuestions++;
 
                 await _context.SaveChangesAsync();
