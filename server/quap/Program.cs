@@ -32,6 +32,16 @@ namespace quap
             builder.Services.AddScoped<IOptionRepository, OptionRepository>();
 			builder.Services.AddDbContext<QuizManagementDbContext>(options => options.UseNpgsql(dataSource));
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
@@ -44,6 +54,8 @@ namespace quap
 			app.UseHttpsRedirection();
 
 			app.UseAuthorization();
+
+			app.UseCors();
 
 
 			app.MapControllers();
