@@ -1,7 +1,6 @@
 import { FormControl, FormHelperText, FormLabel, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select } from "@chakra-ui/react";
 import { QType, Question } from "../../../global";
-import { useState } from "react";
-import { QuestionIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
 
 type Props = {
     isEditing: boolean;
@@ -9,12 +8,20 @@ type Props = {
 }
 
 const QuestionDisplay = ({ isEditing, question }: Props) => {
+    
     const [name, setName] = useState<string>(question.questionName);
     const [type, setType] = useState<QType>(question.type);
     const [timeLimit, setTimeLimit] = useState<number>(question.timeLimit)
     const [points, setPoints] = useState<number>(question.points)
 
-    console.log(points);
+    useEffect(() => {
+        setName(question.questionName);
+        setType(question.type);
+        setTimeLimit(question.timeLimit);
+        setPoints(question.points);
+    }, [question]);
+
+    //console.log(points);
 
 
     return <>

@@ -1,30 +1,19 @@
-import { Paths, Question } from "../global";
+import { Box, Flex } from "@chakra-ui/react";
+import { Question } from "../global";
 import Sidebar from "./components/createEditQuiz/Sidebar";
-import { getQuestions } from "./endpoints";
-import { ActionFunctionArgs, LoaderFunction, Outlet, ParamParseKey, Params, useLoaderData } from "react-router";
-
-interface TodoLoaderArgs extends ActionFunctionArgs {
-    params: Params<ParamParseKey<typeof Paths.editQuiz>>;
-}
-
-export const loader: LoaderFunction = async ({ params }: TodoLoaderArgs) => {
-    const quizId = params.quizId ?? "";
-    const questions = await getQuestions(quizId);
-    if (questions == null) {
-        throw new Response("", {
-            status: 404,
-            statusText: "Not Found",
-        });
-    }
-    return questions;
-};
+import { Outlet, useLoaderData } from "react-router";
 
 const CreateEditQuiz = () => {
     const questions = useLoaderData() as Array<Question>;
 
+
     return <>
+    <Flex direction={"row"}>
         <Sidebar questions={questions} />
-        <Outlet />
+        <Box mt={5} ml={'4rem'}>
+            <Outlet/>
+        </Box>
+    </Flex>   
     </>
 }
 

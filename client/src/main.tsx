@@ -6,9 +6,11 @@ import App from './App.tsx'
 import Root from './routes/root.tsx'
 import { ChakraProvider } from '@chakra-ui/react'
 import Test from './routes/test.tsx'
-import CreateEditQuiz, { loader } from './routes/createEditQuiz.tsx'
-import ShowQuestion, { questionLoader } from './routes/showQuestion.tsx'
+import CreateEditQuiz from './routes/createEditQuiz.tsx'
+import ShowQuestion from './routes/showQuestion.tsx'
 import { Paths } from './global.ts'
+import { questionLoader } from './routes/LoaderActionFunctions/showQuestionLA.ts'
+import { loader } from './routes/LoaderActionFunctions/createEditQuizLA.ts'
 
 const router = createBrowserRouter([
   {
@@ -39,8 +41,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ChakraProvider>
-    <React.StrictMode>
       <RouterProvider router={router} />
-    </React.StrictMode>
-  </ChakraProvider>,
+  </ChakraProvider>
 )
