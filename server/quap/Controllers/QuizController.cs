@@ -111,16 +111,16 @@ namespace quap.Controllers
         //}
 
         [HttpPatch("{id}/addquestion")]
-        public async Task<ActionResult<QuizDto>> AddQuestion(Guid id)
+        public async Task<ActionResult<QuestionDto>> AddQuestion(Guid id)
         {
             try
             {
-                var quiz = await _quizRepository.AddQuestion(id);
-                if (quiz == null)
+                var question = await _quizRepository.AddQuestion(id);
+                if (question == null)
                 {
                     return NotFound();
                 }
-                return Ok(_mapper.Map<QuizDto>(quiz));
+                return Ok(_mapper.Map<QuestionDto>(question));
             }
             catch (Exception ex)
             {

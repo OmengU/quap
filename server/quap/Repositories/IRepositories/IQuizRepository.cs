@@ -9,7 +9,7 @@ namespace quap.Repositories.IRepositories
         Task<Quiz> CreateQuiz(Quiz quiz);
         Task<Quiz> UpdateQuiz(Guid Id, CreateUpdateQuizDto quiz);
         Task DeleteQuiz(Guid id);
-        Task<Quiz> AddQuestion(Guid id);
+        Task<Question> AddQuestion(Guid id);
         Task<IEnumerable<Quiz>> GetAll();
     }
 }
