@@ -1,3 +1,4 @@
+import { SimpleGrid } from "@chakra-ui/react";
 import { Quiz } from "../../global";
 import QuizGridElement from "./QuizGridElement";
 
@@ -5,12 +6,11 @@ type Props = { quizzes: Quiz[]; }
 
 const QuizGrid = ({ quizzes }: Props) => {
 
-    return <div>
+    return <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} ml={10}>
         {quizzes.map((q) =>
             <QuizGridElement quizName={q.name} description={q.description} nQuestions={q.nQuestions} id={q.quizId} key={q.quizId} />
         )}
-
-    </div>
+    </SimpleGrid>
 }
 
 export default QuizGrid;

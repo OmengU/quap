@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { QType, Question } from "../global";
+import { Question } from "../global";
 import QuestionDisplay from "./components/question/QuestionDisplay";
 
 

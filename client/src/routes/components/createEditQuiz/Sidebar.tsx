@@ -1,7 +1,7 @@
 import { Form, Link } from "react-router-dom";
 import { QType, Question } from "../../../global";
 import { Badge, Box, Button, ButtonGroup, Flex, Heading, IconButton, Spacer } from "@chakra-ui/react";
-import { AddIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
+import { AddIcon, CheckIcon, CloseIcon, DeleteIcon } from "@chakra-ui/icons";
 
 type Props = { questions: Question[]; }
 
@@ -14,8 +14,8 @@ const Sidebar = ({ questions }: Props) => {
                     {questions.length != 0 ? (
                         <ButtonGroup display={'flex'} flexDirection={'column'} gap={3} alignItems={"flex-start"} mb={10} isAttached variant={'outline'}>
                             {questions.map((q) =>
-                                <Box key={q.questionId}>
-                                    <Button colorScheme="green" borderRightRadius={0} onClick={(event) => {event.preventDefault();}}>
+                                <Box key={q.questionId} display={"flex"} flexDirection={"row"}>
+                                    <Button colorScheme="green" borderRightRadius={0} onClick={(event) => { event.preventDefault(); }}>
                                         <Link to={`question/${q.questionId}`}>
                                             {q.questionName != "" ? (
                                                 <>
@@ -28,7 +28,9 @@ const Sidebar = ({ questions }: Props) => {
                                             <Badge colorScheme="green" ml={1}>{q.nOptions} Options</Badge>
                                         </Link>
                                     </Button>
-                                    <IconButton aria-label='Delete Question' colorScheme="red" icon={<DeleteIcon />} borderLeftRadius={0} />
+                                    <Form method="DELETE" action={`deletequestion/${q.questionId}`}>
+                                        <IconButton type="submit" aria-label='Delete Question' colorScheme="red" icon={<DeleteIcon />} borderLeftRadius={0} />
+                                    </Form>
                                 </Box>
 
                             )}
@@ -44,7 +46,14 @@ const Sidebar = ({ questions }: Props) => {
                 </nav>
             </div>
             <Spacer />
-            <Button colorScheme="green" leftIcon={<CheckIcon />} size={'lg'} mb={5}>Save</Button>
+            <ButtonGroup mb={"5"}>
+                <Button colorScheme="green" leftIcon={<CheckIcon />} size={'lg'}>Save</Button>
+                <Button colorScheme="red" variant={"outline"} leftIcon={<CloseIcon />} size={"lg"}>
+                    <Link to={"/"}>
+                    Cancel
+                    </Link>
+                </Button>
+            </ButtonGroup>
         </Flex>
     </>
 }

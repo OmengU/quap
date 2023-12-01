@@ -1,6 +1,6 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Badge, Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 
 type Props = {
     quizName: string,
@@ -10,7 +10,7 @@ type Props = {
 }
 
 const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
-    return <Card maxW='sm' m='10'>
+    return <Card maxW='sm'>
         <CardHeader>
             <Flex direction='row'>
                 <Heading size='lg'>{quizName}</Heading>
@@ -34,9 +34,11 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
                         Edit
                     </Link>
                 </Button>
-                <Button leftIcon={<DeleteIcon />} variant='solid' colorScheme='red'>
-                    Delete
-                </Button>
+                <Form method="DELETE" action={`deletequiz/${id}`}>
+                    <Button type="submit" leftIcon={<DeleteIcon />} variant='solid' colorScheme='red'>
+                        Delete
+                    </Button>
+                </Form>
             </ButtonGroup>
         </CardFooter>
     </Card>

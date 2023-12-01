@@ -1,10 +1,13 @@
-import { Question, Quiz, QuizDto, URL, sURL } from "../global";
+import { Question, QuestionDto, Quiz, QuizDto, URL, sURL } from "../global";
 
 
 type GetQuizzes = () => Promise<Quiz[]>
 type CreateQuiz = (body: QuizDto) => Promise<Quiz>
 type GetQuestions = (quizId: string) => Promise<Question[]>
 type GetQuestionById = (questionId: string) => Promise<Question>
+type UpdateQuestion = (questionId :string, body: QuestionDto) => Promise<Question>
+type AddQuestion = (quizId : string) => Promise<Question>
+type Delete = (id : string) => void
 
 
 export const getQuizzes: GetQuizzes = async () => {
@@ -55,4 +58,39 @@ export const getQuestionById: GetQuestionById = async (questionId: string) => {
     } catch (e) {
         throw e;
     }
+}
+
+export const updateQuestion: UpdateQuestion = async(id : string, body: QuestionDto) => {
+    const response = await fetch(`${URL}/updatequestion/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+  
+      return data as Question;
+}
+export const addQuestion : AddQuestion = async(id: string) => {
+    const response = await fetch(`${URL}/${id}/addquestion`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+  
+      return data as Question;
+}
+export const deleteQuestion : Delete = async(id: string) => {
+    await fetch(`${URL}/deletequestion/${id}`, {
+        method: 'DELETE'
+      });
+}
+
+export const deleteQuiz : Delete = async(id: string) => {
+    await fetch(`${URL}/deletequiz/${id}`, {
+        method: 'DELETE'
+      });
 }
