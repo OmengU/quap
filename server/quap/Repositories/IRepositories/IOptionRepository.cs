@@ -9,6 +9,7 @@ namespace quap.Repositories.IRepositories
         Task<Option> CreateOption(Option option);
         Task<Option> UpdateOption(Guid Id, CreateUpdateOptionDto option);
         Task DeleteOption(Guid Id);
-        Task<Option> GetOptionByQuestionId(Guid QuestionId);
+        Task<IEnumerable<Option>> GetOptionsByQuestionId(Guid QuestionId);
+        Task ToggleCorrect(Guid Id);
     }
 }

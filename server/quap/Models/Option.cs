@@ -8,8 +8,8 @@ namespace quap.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public Guid OId { get; set; }
-		public string OptionText { get; set; }
-		public bool IsCorrect {  get; set; }
+		public string OptionText { get; set; } = String.Empty;
+		public bool IsCorrect { get; set; } = false;
 
 		public Guid QuestionId { get; set; }
 		public Question Question { get; set; }

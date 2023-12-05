@@ -11,22 +11,25 @@ namespace quap.Repositories
     {
         private readonly QuizManagementDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IOptionRepository _optionRepository;
 
-        public QuestionRepository(QuizManagementDbContext context, IMapper mapper)
+        public QuestionRepository(QuizManagementDbContext context, IMapper mapper, IOptionRepository optionRepository)
         {
             _context = context;
             _mapper = mapper;
+            _optionRepository = optionRepository;
         }
-        public async Task<Question> AddOption(Guid Id, Option option)
+        public async Task<Option> AddOption(Guid Id)
         {
             Question question = await _context.Questions.FirstOrDefaultAsync(q => q.QuestionId == Id);
             if (question != null)
             {
+                Option option = new Option { };
                 question.Options.Add(option);
                 question.NOptions++;
 
                 await _context.SaveChangesAsync();
-                return question;
+                return option;
             }
             return null;
         }

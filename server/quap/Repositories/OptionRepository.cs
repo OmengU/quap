@@ -25,7 +25,9 @@ namespace quap.Repositories
         public async Task DeleteOption(Guid Id)
         {
             Option option = await _context.Options.FirstOrDefaultAsync(o => o.OId == Id);
+            Question question = await _context.Questions.FirstOrDefaultAsync(question => question.QuestionId == option.QuestionId);
             _context.Options.Remove(option);
+            question.NOptions--;
             await _context.SaveChangesAsync();
         }
 
@@ -34,9 +36,13 @@ namespace quap.Repositories
             return await _context.Options.FirstOrDefaultAsync(o => o.OId == Id);
         }
 
-        public async Task<Option> GetOptionByQuestionId(Guid QuestionId)
+        public async Task<IEnumerable<Option>> GetOptionsByQuestionId(Guid QuestionId) => await _context.Options.Where(o => o.QuestionId == QuestionId).ToListAsync();
+
+        public async Task ToggleCorrect(Guid Id)
         {
-            return await _context.Options.FirstOrDefaultAsync(o => o.QuestionId == QuestionId);
+            Option option = await _context.Options.FirstOrDefaultAsync(o => o.OId == Id);
+            option.IsCorrect = !option.IsCorrect;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Option> UpdateOption(Guid Id, CreateUpdateOptionDto option)
@@ -45,8 +51,11 @@ namespace quap.Repositories
 
             if(option != null)
             {
-                //still tba requires mapper (will do next time)
-                return null;
+                newOption.OptionText = option.OptionText;
+                newOption.IsCorrect = option.IsCorrect;
+
+                await _context.SaveChangesAsync();
+                return newOption;
             }
             return null;
         }
