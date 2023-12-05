@@ -1,9 +1,17 @@
 import { ActionFunctionArgs, Params, ParamParseKey, LoaderFunction, redirect, ActionFunction } from "react-router";
 import { Paths, QuestionDto } from "../../global";
-import { deleteQuestion, getQuestionById, updateQuestion } from "../endpoints";
+import { addOption, deleteOption, deleteQuestion, getQuestionById, updateQuestion } from "../endpoints";
 
 interface QuestionLoaderArgs extends ActionFunctionArgs {
     params: Params<ParamParseKey<typeof Paths.displayQuestion>>;
+}
+
+interface OptionDeleteArgs extends ActionFunctionArgs {
+    params: Params<ParamParseKey<typeof Paths.deleteOption>>;
+}
+
+interface AddOptionArgs extends ActionFunctionArgs {
+    params: Params<ParamParseKey<typeof Paths.addOption>>;
 }
 
 type QuestionActionArgs = {
@@ -45,3 +53,17 @@ export const deleteQuestionAction : ActionFunction = async ({ params } : Questio
     await deleteQuestion(questionId);
     return redirect(`../`);
 }
+
+export const deleteOptionAction : ActionFunction = async ({ params } : OptionDeleteArgs) => {
+    const optionId = params.optionId ?? "";
+    const questionId = params.questionId ?? "";
+    await deleteOption(optionId);
+    return redirect(`../question/${questionId}`);
+}
+
+export const addOptionAction: ActionFunction = async({ params }: AddOptionArgs) => {
+    const questionId = params.questionId ?? "";
+    await addOption(questionId);
+    return redirect(`../question/${questionId}`)
+}
+

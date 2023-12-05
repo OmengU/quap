@@ -8,6 +8,8 @@ export const Paths = {
     editQuestion: "editquestion/:questionId",
     deleteQuestion: "deletequestion/:questionId",
     deleteQuiz: "deletequiz/:quizId",
+    deleteOption: "deleteoption/:questionId/:optionId",
+    addOption: "addoption/:questionId"
 } as const;
 
 export enum QType {
@@ -24,10 +26,17 @@ export interface Question {
     questionId: string;
     questionName: string;
     nOptions: number;
+    options: Option[];
     type: QType;
     timeLimit: number;
     points: number;
     quizId: string;
+}
+export interface Option {
+    oId: string;
+    optionText: string;
+    isCorrect: boolean;
+    questionId: string;
 }
 export type QuizDto = {
     name: string,

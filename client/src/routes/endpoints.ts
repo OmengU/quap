@@ -1,4 +1,4 @@
-import { Question, QuestionDto, Quiz, QuizDto, URL, sURL } from "../global";
+import { Question, QuestionDto, Quiz, QuizDto, URL, sURL, Option } from "../global";
 
 
 type GetQuizzes = () => Promise<Quiz[]>
@@ -7,7 +7,9 @@ type GetQuestions = (quizId: string) => Promise<Question[]>
 type GetQuestionById = (questionId: string) => Promise<Question>
 type UpdateQuestion = (questionId :string, body: QuestionDto) => Promise<Question>
 type AddQuestion = (quizId : string) => Promise<Question>
+type AddOption = (questionId : string) => Promise<Option>
 type Delete = (id : string) => void
+type ToggleOption = (optionId: string) => void
 
 
 export const getQuizzes: GetQuizzes = async () => {
@@ -83,6 +85,19 @@ export const addQuestion : AddQuestion = async(id: string) => {
   
       return data as Question;
 }
+
+export const addOption : AddOption = async(questionid: string) => {
+    const response = await fetch(`${URL}/${questionid}/addoption`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+  
+      return data as Option;
+}
+
 export const deleteQuestion : Delete = async(id: string) => {
     await fetch(`${URL}/deletequestion/${id}`, {
         method: 'DELETE'
@@ -92,5 +107,17 @@ export const deleteQuestion : Delete = async(id: string) => {
 export const deleteQuiz : Delete = async(id: string) => {
     await fetch(`${URL}/deletequiz/${id}`, {
         method: 'DELETE'
+      });
+}
+
+export const deleteOption: Delete = async(id: string) => {
+    await fetch(`${URL}/deleteoption/${id}`, {
+        method: 'DELETE'
+      });
+}
+
+export const toggleOption : ToggleOption = async(optionId: string) => {
+    await fetch(`${URL}/${optionId}/togglecorrect`, {
+        method: 'PATCH'
       });
 }

@@ -8,7 +8,7 @@ import Test from './routes/test.tsx'
 import CreateEditQuiz from './routes/createEditQuiz.tsx'
 import ShowQuestion from './routes/showQuestion.tsx'
 import { Paths } from './global.ts'
-import { deleteQuestionAction, questionAction, questionLoader } from './routes/LoaderActionFunctions/QuestionLA.ts'
+import { addOptionAction, deleteOptionAction, deleteQuestionAction, questionAction, questionLoader } from './routes/LoaderActionFunctions/QuestionLA.ts'
 import { action as addQuestionAction, deleteQuizAction, loader } from './routes/LoaderActionFunctions/QuizLA.ts'
 import CreateEditQuestion from './routes/createEditQuestion.tsx'
 
@@ -44,6 +44,14 @@ const router = createBrowserRouter([
         path: Paths.deleteQuestion,
         action: deleteQuestionAction,
       },
+      {
+        path: Paths.deleteOption,
+        action: deleteOptionAction,
+      },
+      {
+        path: Paths.addOption,
+        action: addOptionAction,
+      }
     ]
   },
   {

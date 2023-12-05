@@ -10,7 +10,7 @@ import CreateQuizDialog from "./components/CreateQuizDialog";
 
 const Root: React.FC = () => {
     const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-    useEffect(() => { getQuizzes().then((q) => setQuizzes(q)) }, [quizzes]);
+    useEffect(() => { getQuizzes().then((q) => setQuizzes(q)) }, []);
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return <>
