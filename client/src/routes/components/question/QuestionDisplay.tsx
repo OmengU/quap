@@ -9,7 +9,7 @@ type Props = {
     question: Question;
 }
 
-const QuestionDisplay = ({ isEditing, question }: Props) => {
+const QuestionDisplay = ({ isEditing, question}: Props) => {
 
     const [name, setName] = useState<string>(question.questionName);
     const [type, setType] = useState<QType>(question.type);

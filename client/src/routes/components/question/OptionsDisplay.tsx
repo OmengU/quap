@@ -19,19 +19,18 @@ const OptionsDisplay = ({options, type, isEditing, questionId}: Props) => {
     });
     
     const [hasCorrect, setHasCorrect] = useState<boolean>(boo)
-
     console.log(questionId);
+
     
     return <>
     <Box>
         {options.map((o) => 
-            <OptionDisplay key={o.oId} option={o} isEditing={isEditing} isSingle={type == QType.SingleChoice? true: false} isAnswered={hasCorrect} setAnswered={setHasCorrect} />
+            <OptionDisplay key={o.oId} option={o} isEditing={isEditing} isSingle={type == QType.SingleChoice ? true : false} isAnswered={hasCorrect} setAnswered={setHasCorrect}/>
         )}
     </Box>
     <Form method="PATCH" action={`../addoption/${questionId}`}>
-        <Button type="submit" colorScheme="green">Add Option</Button>
+        <Button type="submit" colorScheme="green" display={!isEditing ? "none" : "auto"}>Add Option</Button>
     </Form>
-    
     </>
 }
 
