@@ -187,7 +187,25 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
+
+        [HttpPatch("{optionid}/settext")]
+        public async Task<IActionResult> ChangeText(Guid optionId, [FromBody] string text)
+        {
+            try
+            {
+                var option = await _optionRepository.SetText(optionId, text);
+                if (option == null)
+                {
+                    return NotFound();
+                }
+                return Ok(_mapper.Map<OptionDto>(option));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("deletequiz/{id}")]
         public async Task<ActionResult> DeleteQuiz (Guid id)
         {

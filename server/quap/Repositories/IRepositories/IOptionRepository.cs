@@ -11,5 +11,6 @@ namespace quap.Repositories.IRepositories
         Task DeleteOption(Guid Id);
         Task<IEnumerable<Option>> GetOptionsByQuestionId(Guid QuestionId);
         Task ToggleCorrect(Guid Id);
+        Task<Option> SetText(Guid id, string text);
     }
 }

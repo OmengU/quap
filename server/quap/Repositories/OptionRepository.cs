@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using quap.Data;
 using quap.Models;
 using quap.Models.DTOs;
@@ -37,6 +38,20 @@ namespace quap.Repositories
         }
 
         public async Task<IEnumerable<Option>> GetOptionsByQuestionId(Guid QuestionId) => await _context.Options.Where(o => o.QuestionId == QuestionId).ToListAsync();
+
+        public async Task<Option> SetText(Guid id, string text)
+        {
+            Option option = await _context.Options.FirstOrDefaultAsync(o => o.OId.Equals(id));
+
+            if (option != null)
+            {
+                option.OptionText = text;
+
+                await _context.SaveChangesAsync();
+                return option;
+            }
+            return null;
+        }
 
         public async Task ToggleCorrect(Guid Id)
         {
