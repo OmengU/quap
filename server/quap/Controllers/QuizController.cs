@@ -176,11 +176,11 @@ namespace quap.Controllers
         }
 
         [HttpPatch("{optionid}/togglecorrect")]
-        public async Task<IActionResult> ToggleComplete(Guid optionId)
+        public async Task<IActionResult> ToggleComplete(Guid optionid)
         {
             try
             {
-                await _optionRepository.ToggleCorrect(optionId);
+                await _optionRepository.ToggleCorrect(optionid);
                 return NoContent();
             }catch (Exception ex)
             {
@@ -189,11 +189,11 @@ namespace quap.Controllers
         }
 
         [HttpPatch("{optionid}/settext")]
-        public async Task<IActionResult> ChangeText(Guid optionId, [FromBody] string text)
+        public async Task<IActionResult> ChangeText(Guid optionid, [FromBody] string text)
         {
             try
             {
-                var option = await _optionRepository.SetText(optionId, text);
+                var option = await _optionRepository.SetText(optionid, text);
                 if (option == null)
                 {
                     return NotFound();
