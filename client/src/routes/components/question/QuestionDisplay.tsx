@@ -1,21 +1,26 @@
 import { Button, ButtonGroup, FormControl, FormHelperText, FormLabel, Heading, Input, Select } from "@chakra-ui/react";
 import { QType, Question } from "../../../global";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { Form, Link } from "react-router-dom";
+import { OptionNamesContext } from "../../showQuestion";
+import { setText } from "../../endpoints";
+import { TypeContext } from "../../createEditQuestion";
 
 type Props = {
     isEditing: boolean;
     question: Question;
 }
 
-const QuestionDisplay = ({ isEditing, question}: Props) => {
+const QuestionDisplay = ({ isEditing, question }: Props) => {
 
     const [name, setName] = useState<string>(question.questionName);
-    const [type, setType] = useState<QType>(question.type);
+    const { type, setType } = useContext(TypeContext);
     const [timeLimit, setTimeLimit] = useState<number>(question.timeLimit);
     const [points, setPoints] = useState<number>(question.points);
     const [id, setId] = useState<string>(question.questionId);
+
+    const { optionNames } = useContext(OptionNamesContext);
 
     useEffect(() => {
         setName(question.questionName);
@@ -26,7 +31,6 @@ const QuestionDisplay = ({ isEditing, question}: Props) => {
     }, [question]);
 
     //console.log(points);
-
 
     return <>
         <Form method="post">
@@ -62,7 +66,13 @@ const QuestionDisplay = ({ isEditing, question}: Props) => {
                 <FormHelperText>Enter how many points should be awarded on correct completion</FormHelperText>
             </FormControl>
             <ButtonGroup mt={"5"}>
-                <Button colorScheme="green" display={!isEditing ? "none" : "auto"} leftIcon={<CheckIcon />} size={"lg"} type="submit">Save</Button>
+                <Button colorScheme="green" display={!isEditing ? "none" : "auto"} leftIcon={<CheckIcon />} size={"lg"} type="submit" onClick={() => {
+                    for (let [key, value] of Object.entries(optionNames)) {
+                        setText(key, value)
+                            .then(data => console.log(data))
+                            .catch(error => console.error(error));
+                    }
+                }}>Save</Button>
                 <Button colorScheme="green" variant={"outline"} leftIcon={<EditIcon />} display={isEditing ? "none" : "auto"} size={"lg"}>
                     <Link to={`../editquestion/${id}`}>Edit</ Link>
                 </Button>

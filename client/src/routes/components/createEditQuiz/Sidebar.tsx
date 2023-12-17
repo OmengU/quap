@@ -1,6 +1,6 @@
 import { Form, Link } from "react-router-dom";
 import { QType, Question } from "../../../global";
-import { Badge, Box, Button, ButtonGroup, Flex, Heading, IconButton, Spacer } from "@chakra-ui/react";
+import { Badge, Box, Button, ButtonGroup, Card, CardBody, Flex, Heading, IconButton, Spacer, Text } from "@chakra-ui/react";
 import { AddIcon, CheckIcon, CloseIcon, DeleteIcon } from "@chakra-ui/icons";
 
 type Props = { questions: Question[]; }
@@ -36,9 +36,11 @@ const Sidebar = ({ questions }: Props) => {
                             )}
                         </ButtonGroup>
                     ) : (
-                        <p>
-                            <i>No questions</i>
-                        </p>
+                        <Card mb={5} align={"center"} variant={"filled"}>
+                            <CardBody>
+                                <Text>No Questions</Text>
+                            </CardBody>
+                        </Card>
                     )}
                     <Form method="post">
                         <Button type="submit" colorScheme="green" leftIcon={<AddIcon />} >New</Button>
@@ -50,7 +52,7 @@ const Sidebar = ({ questions }: Props) => {
                 <Button colorScheme="green" leftIcon={<CheckIcon />} size={'lg'}>Save</Button>
                 <Button colorScheme="red" variant={"outline"} leftIcon={<CloseIcon />} size={"lg"}>
                     <Link to={"/"}>
-                    Cancel
+                        Cancel
                     </Link>
                 </Button>
             </ButtonGroup>

@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async ({ params }: QuestionsLoaderArgs) =>
     return questions;
 };
 
-export const quizLoader: LoaderFunction = async() => {
+export const quizLoader: LoaderFunction = async () => {
     const quizzes = await getQuizzes();
     if (quizzes == null) {
         throw new Response("", {
@@ -29,14 +29,14 @@ export const quizLoader: LoaderFunction = async() => {
     return quizzes;
 }
 
-export const action : ActionFunction = async ({ params } : QuestionsLoaderArgs) => {
+export const addQuestionAction: ActionFunction = async ({ params }: QuestionsLoaderArgs) => {
     const quizId = params.quizId ?? "";
-    const question : Question = await addQuestion(quizId);
+    const question: Question = await addQuestion(quizId);
     return redirect(`editquestion/${question.questionId}`);
 }
 
-export const deleteQuizAction : ActionFunction = async ({ params } : QuestionsLoaderArgs) => {
+export const deleteQuizAction: ActionFunction = ({ params }: QuestionsLoaderArgs) => {
     const quizId = params.quizId ?? "";
-    await deleteQuiz(quizId);
-    return redirect("/");
+    deleteQuiz(quizId);
+    return redirect(`../`);
 }

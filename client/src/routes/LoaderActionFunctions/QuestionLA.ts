@@ -48,22 +48,22 @@ export async function questionAction({ request, params }: QuestionActionArgs) {
     return redirect(`../question/${params.questionId}`);
 }
 
-export const deleteQuestionAction : ActionFunction = async ({ params } : QuestionLoaderArgs) => {
+export const deleteQuestionAction: ActionFunction = async ({ params }: QuestionLoaderArgs) => {
     const questionId = params.questionId ?? "";
     await deleteQuestion(questionId);
     return redirect(`../`);
 }
 
-export const deleteOptionAction : ActionFunction = async ({ params } : OptionDeleteArgs) => {
+export const deleteOptionAction: ActionFunction = async ({ params }: OptionDeleteArgs) => {
     const optionId = params.optionId ?? "";
     const questionId = params.questionId ?? "";
     await deleteOption(optionId);
-    return redirect(`../question/${questionId}`);
+    return redirect(`../editquestion/${questionId}`);
 }
 
-export const addOptionAction: ActionFunction = async({ params }: AddOptionArgs) => {
+export const addOptionAction: ActionFunction = async ({ params }: AddOptionArgs) => {
     const questionId = params.questionId ?? "";
     await addOption(questionId);
-    return redirect(`../question/${questionId}`)
+    return redirect(`../editquestion/${questionId}`)
 }
 
