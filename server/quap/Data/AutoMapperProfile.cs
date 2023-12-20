@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using quap.Models;
 using quap.Models.DTOs;
+using quap.Models.DTOs.GameDTOs;
+using quap.Models.GameModels;
 
 namespace quap.Data
 {
@@ -28,6 +30,14 @@ namespace quap.Data
 
             CreateMap<Quiz, CreateUpdateQuizDto>();
             CreateMap<Quiz, CreateUpdateQuizDto>().ReverseMap();
+
+            // Game Maps
+
+            CreateMap<Player, PlayerDto>();
+            CreateMap<Player, PlayerDto>().ReverseMap();
+
+            CreateMap<Player, CreatePlayerDto>();
+            CreateMap<Player, CreatePlayerDto>().ReverseMap();
         }
     }
 }
