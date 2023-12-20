@@ -1,6 +1,7 @@
 ﻿using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using quap.Models;
+using quap.Models.GameModels;
 
 namespace quap.Data
 {
@@ -10,6 +11,9 @@ namespace quap.Data
 		public DbSet<Quiz> Quizzes { get; set; }
 		public DbSet <Question> Questions { get; set; }
 		public DbSet<Option> Options { get; set; }
+
+		public DbSet<Player> Players { get; set; }
+		public DbSet<Game> Games { get; set; }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseExceptionProcessor();

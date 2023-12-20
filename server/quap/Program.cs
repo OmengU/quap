@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using quap.Data;
+using quap.Hubs;
 using quap.Models;
 using quap.Repositories;
 using quap.Repositories.IRepositories;
@@ -22,6 +23,7 @@ namespace quap
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 			builder.Services.AddAutoMapper(typeof(Program).Assembly);
+			builder.Services.AddSignalR();
 
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("QuizManagementDbContextConnection"));
             dataSourceBuilder.MapEnum<QType>();
@@ -59,6 +61,7 @@ namespace quap
 
 
 			app.MapControllers();
+			app.MapHub<GameHub>("/Game");
 
 			app.Run();
 		}
