@@ -9,13 +9,14 @@ import CreateEditQuiz from './routes/createEditQuiz.tsx'
 import ShowQuestion from './routes/showQuestion.tsx'
 import { Paths } from './global.ts'
 import { addOptionAction, deleteOptionAction, deleteQuestionAction, questionAction, questionLoader } from './routes/LoaderActionFunctions/QuestionLA.ts'
-import { action as addQuestionAction, deleteQuizAction, loader } from './routes/LoaderActionFunctions/QuizLA.ts'
+import { addQuestionAction as addQuestionAction, deleteQuizAction, loader, quizLoader } from './routes/LoaderActionFunctions/QuizLA.ts'
 import CreateEditQuestion from './routes/createEditQuestion.tsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    loader: quizLoader,
     children: [
       {
         path: Paths.deleteQuiz,
@@ -66,6 +67,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ChakraProvider>
-      <RouterProvider router={router} />
+    <RouterProvider router={router} />
   </ChakraProvider>
 )

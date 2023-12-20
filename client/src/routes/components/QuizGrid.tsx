@@ -6,7 +6,7 @@ type Props = { quizzes: Quiz[]; }
 
 const QuizGrid = ({ quizzes }: Props) => {
 
-    return <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} ml={10}>
+    return <SimpleGrid columns={{ base: 1, md: 4 }} spacing={10} ml={10} mr={10}>
         {quizzes.map((q) =>
             <QuizGridElement quizName={q.name} description={q.description} nQuestions={q.nQuestions} id={q.quizId} key={q.quizId} />
         )}
