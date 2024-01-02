@@ -1,4 +1,4 @@
-import { Question, QuestionDto, Quiz, QuizDto, URL, sURL, Option } from "../global";
+import { Question, QuestionDto, Quiz, QuizDto, URL, sURL, Option, Game, GameURL } from "../global";
 
 
 type GetQuizzes = () => Promise<Quiz[]>
@@ -11,6 +11,10 @@ type AddOption = (questionId: string) => Promise<Option>
 type Delete = (id: string) => void
 type ToggleOption = (optionId: string) => void
 type SetText = (optionId: string, text: string) => Promise<Option>
+
+type InitializeGame = (quizId: string) => Promise<Game>
+type GetCurrGameId = () => Promise<string>
+type GetIP = () => Promise<string>
 
 
 export const getQuizzes: GetQuizzes = async () => {
@@ -134,4 +138,41 @@ export const setText: SetText = async (optionId: string, text: string) => {
     const data = await response.json();
 
     return data as Option;
+}
+
+export const initializeGame: InitializeGame = async (quizId: string) => {
+    const headers = { 'Content-Type': 'application/json' };
+
+    try {
+        const response = await fetch(`${GameURL}/${quizId}`, {
+            method: 'POST',
+            headers,
+        });
+        const data = await response.json();
+
+        return data as Game;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export const getCurrGameId: GetCurrGameId = async () => {
+    try {
+        const response = await fetch(`${GameURL}/active`)
+        const data = await response.json();
+        return data as string;
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const getIP: GetIP = async () => {
+    try {
+        const response = await fetch(`${GameURL}/ip`)
+        const data = await response.text();
+        return data as string;
+    } catch (e) {
+        throw e;
+    }
 }

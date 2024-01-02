@@ -9,7 +9,10 @@ export const Paths = {
     deleteQuestion: "deletequestion/:questionId",
     deleteQuiz: "deletequiz/:quizId",
     deleteOption: "deleteoption/:questionId/:optionId",
-    addOption: "addoption/:questionId"
+    addOption: "addoption/:questionId",
+    startGame: "startgame/:quizId",
+    gameWaitingRoom: "wait/:gameId",
+    joinGame: "play"
 } as const;
 
 export enum QType {
@@ -20,6 +23,7 @@ export interface Quiz {
     quizId: string;
     name: string;
     description: string;
+    questions: Question[]
     nQuestions: number;
 }
 export interface Question {
@@ -38,6 +42,20 @@ export interface Option {
     isCorrect: boolean;
     questionId: string;
 }
+export interface Player {
+    playerId: string;
+    name: string;
+    icon: string;
+    score: number;
+    gameId: string;
+}
+export interface Game {
+    gameId: string;
+    players: Player[];
+    nPlayers: number;
+    quiz: Quiz;
+    current: boolean;
+}
 export type QuizDto = {
     name: string,
     description: string
@@ -49,6 +67,11 @@ export type QuestionDto = {
     timeLimit: number,
     points: number,
 }
+export type PlayerDto = {
+    name: string;
+    icon: string;
+}
 
 export const URL = 'http://localhost:5220/api/Quiz';
+export const GameURL = 'http://localhost:5220/api/Game'
 export const sURL = 'http://localhost:5220';

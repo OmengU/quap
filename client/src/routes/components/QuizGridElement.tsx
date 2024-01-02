@@ -26,9 +26,11 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
         </CardBody>
         <CardFooter>
             <ButtonGroup spacing='2'>
-                <Button variant='solid' colorScheme='green' >
-                    Play
-                </Button>
+                <Form method="post" action={`startgame/${id}`}>
+                    <Button variant='solid' colorScheme='green' type="submit">
+                        Play
+                    </Button>
+                </Form>
                 <Button leftIcon={<EditIcon />} variant='outline' colorScheme='green'>
                     <Link to={`editquiz/${id}`}>
                         Edit

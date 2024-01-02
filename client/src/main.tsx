@@ -11,6 +11,9 @@ import { Paths } from './global.ts'
 import { addOptionAction, deleteOptionAction, deleteQuestionAction, questionAction, questionLoader } from './routes/LoaderActionFunctions/QuestionLA.ts'
 import { addQuestionAction as addQuestionAction, deleteQuizAction, loader, quizLoader } from './routes/LoaderActionFunctions/QuizLA.ts'
 import CreateEditQuestion from './routes/createEditQuestion.tsx'
+import { startGameAction } from './routes/LoaderActionFunctions/GameLA.ts'
+import WaitingRoom from './routes/gameWaitingRoom.tsx'
+import JoinGame from './routes/joinGame.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,7 +25,19 @@ const router = createBrowserRouter([
         path: Paths.deleteQuiz,
         action: deleteQuizAction,
       },
+      {
+        path: Paths.startGame,
+        action: startGameAction,
+      },
     ]
+  },
+  {
+    path: Paths.gameWaitingRoom,
+    element: <WaitingRoom />,
+  },
+  {
+    path: Paths.joinGame,
+    element: <JoinGame />
   },
   {
     path: Paths.editQuiz,
