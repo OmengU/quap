@@ -10,5 +10,7 @@ namespace quap.Repositories.GameRepositories.IRepositories
         Task<Game> AddPlayer(Guid gameId, Player player);
 
         Task DeleteGame(Guid gameId);
+
+        Task<Guid> GetCurrentGameId();
     }
 }

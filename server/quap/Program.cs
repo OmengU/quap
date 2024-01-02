@@ -5,6 +5,8 @@ using quap.Data;
 using quap.Hubs;
 using quap.Models;
 using quap.Repositories;
+using quap.Repositories.GameRepositories;
+using quap.Repositories.GameRepositories.IRepositories;
 using quap.Repositories.IRepositories;
 using System.Text.Json.Serialization;
 
@@ -32,7 +34,9 @@ namespace quap
             builder.Services.AddScoped<IQuizRepository, QuizRepository>();
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
             builder.Services.AddScoped<IOptionRepository, OptionRepository>();
-			builder.Services.AddDbContext<QuizManagementDbContext>(options => options.UseNpgsql(dataSource));
+			builder.Services.AddScoped<IGameRepository, GameRepository>();
+			builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+            builder.Services.AddDbContext<QuizManagementDbContext>(options => options.UseNpgsql(dataSource));
 
             builder.Services.AddCors(options =>
             {

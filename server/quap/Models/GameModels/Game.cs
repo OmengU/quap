@@ -11,6 +11,6 @@ namespace quap.Models.GameModels
         public List<Player> Players { get; set; } = new List<Player>();
         public int NPlayers { get; set; } = 0;
         public Quiz Quiz { get; set; }
-
+        public bool Current { get; set; } = true;
     }
 }

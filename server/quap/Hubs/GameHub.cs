@@ -24,7 +24,7 @@ namespace quap.Hubs
 
         public async Task RegisterPlayer(Guid gameId, CreatePlayerDto dto)
         {
-            Player createdPlayer = await _playerRepository.CreatePlayer(dto);
+            Player createdPlayer = await _playerRepository.CreatePlayer(dto, gameId);
             await _gameRepository.AddPlayer(gameId, createdPlayer);
 
             await Clients.All.SendAsync("playerAdded", _mapper.Map<PlayerDto>(createdPlayer));

@@ -24,7 +24,7 @@ namespace quap.Repositories.GameRepositories
             if (game == null) return null;
 
             game.Players.Add(player);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return game;
         }
@@ -51,6 +51,15 @@ namespace quap.Repositories.GameRepositories
             {
                 _context.Games.Remove(game);
             }
+        }
+
+        public async Task<Guid> GetCurrentGameId()
+        {
+            Game game = await _context.Games.FirstOrDefaultAsync(g => g.Current.Equals(true));
+            Guid gameId = game.GameId;
+
+            if (gameId == null) return Guid.Empty;
+            return gameId;
         }
     }
 }
