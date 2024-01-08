@@ -18,7 +18,7 @@ namespace quap.Repositories.GameRepositories
             _context = context;
             _mapper = mapper;
         }
-        public async Task<Player> AddScore(Guid playerId, float scoreToAdd)
+        public async Task<Player> AddScore(Guid playerId, int scoreToAdd)
         {
             Player player = await _context.Players.FirstOrDefaultAsync(p => p.PlayerId.Equals(playerId));
             if (player == null) return null;

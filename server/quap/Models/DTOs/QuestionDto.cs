@@ -25,4 +25,13 @@ namespace quap.Models.DTOs
         [Required]
         public int Points { get; set; }
     }
+
+	public class SendQuestionDto
+	{
+        public string QuestionName { get; set; }
+        public QType Type { get; set; }
+        public int TimeLimit { get; set; }
+        public int Points { get; set; }
+        public List<SendOptionDto> Options { get; set; }
+    }
 }

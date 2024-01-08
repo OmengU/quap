@@ -10,14 +10,22 @@ namespace quap.Data
     {
         public AutoMapperProfile() 
         {
+            // Quiz Maps
+            
             CreateMap<Option, OptionDto>();
             CreateMap<Option, OptionDto>().ReverseMap();
 
             CreateMap<Option, CreateUpdateOptionDto>();
             CreateMap<Option, CreateUpdateOptionDto>().ReverseMap();
 
+            CreateMap<Option, SendOptionDto>();
+            CreateMap<Option, SendOptionDto>().ReverseMap();
+
             CreateMap<Question, QuestionDto>().ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => src.QuestionId));
             CreateMap<Question, QuestionDto>().ReverseMap().ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => src.QuestionId));
+
+            CreateMap<Question, SendQuestionDto>();
+            CreateMap<Question, SendQuestionDto>().ReverseMap();
 
             CreateMap<Question, CreateUpdateQuestionDto>();
             CreateMap<Question, CreateUpdateQuestionDto>().ReverseMap();

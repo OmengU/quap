@@ -20,4 +20,10 @@ namespace quap.Models.DTOs
         [Required]
         public bool IsCorrect { get; set; }
     }
+
+	public class SendOptionDto
+	{
+        public Guid OId { get; set; }
+        public string OptionText { get; set; }
+    }
 }
