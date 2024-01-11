@@ -14,6 +14,8 @@ import CreateEditQuestion from './routes/createEditQuestion.tsx'
 import { startGameAction } from './routes/LoaderActionFunctions/GameLA.ts'
 import WaitingRoom from './routes/gameWaitingRoom.tsx'
 import JoinGame from './routes/joinGame.tsx'
+import GameTutor from './routes/gameTutor.tsx'
+import GamePlayer from './routes/gamePlayer.tsx'
 
 const router = createBrowserRouter([
   {
@@ -37,7 +39,15 @@ const router = createBrowserRouter([
   },
   {
     path: Paths.joinGame,
-    element: <JoinGame />
+    element: <JoinGame />,
+  },
+  {
+    path: Paths.gameTutor,
+    element: <GameTutor />,
+  },
+  {
+    path: Paths.gameStudent,
+    element: <GamePlayer />,
   },
   {
     path: Paths.editQuiz,

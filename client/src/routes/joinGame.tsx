@@ -22,6 +22,11 @@ const JoinGame = () => {
         .then(() => console.log('Connection started!'))
         .catch(e => console.log('Error while establishing connection :('));
 
+    connection.on("addedYou", (id: string) => {
+        console.log(id);
+        localStorage.setItem('playerId', id);
+    })
+
     useEffect(() => {
         getCurrGameId().then((id) => setGameId(id))
     }, [])

@@ -12,7 +12,9 @@ export const Paths = {
     addOption: "addoption/:questionId",
     startGame: "startgame/:quizId",
     gameWaitingRoom: "wait/:gameId",
-    joinGame: "play"
+    joinGame: "play",
+    gameTutor: "gameTeacher",
+    gameStudent: "gameStudent",
 } as const;
 
 export enum QType {
@@ -67,6 +69,20 @@ export type QuestionDto = {
     timeLimit: number,
     points: number,
 }
+
+export type GameQuestionDto = {
+    questionName: string,
+    type: QType,
+    timeLimit: number,
+    points: number,
+    options: GameOptionDto[],
+}
+
+export type GameOptionDto = {
+    oId: string;
+    optionText: string;
+}
+
 export type PlayerDto = {
     name: string;
     icon: string;
