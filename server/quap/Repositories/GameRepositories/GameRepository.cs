@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using quap.Data;
 using quap.Models;
+using quap.Models.DTOs;
 using quap.Models.DTOs.GameDTOs;
 using quap.Models.GameModels;
 using quap.Repositories.GameRepositories.IRepositories;
@@ -50,6 +52,7 @@ namespace quap.Repositories.GameRepositories
             if (game != null)
             {
                 _context.Games.Remove(game);
+                await _context.SaveChangesAsync();
             }
         }
 
@@ -60,6 +63,13 @@ namespace quap.Repositories.GameRepositories
 
             if (gameId == null) return Guid.Empty;
             return gameId;
+        }
+
+        public async Task<GameDto> GetCurrentGame()
+        {
+            GameDto game = _mapper.Map<GameDto>(await _context.Games.Include(g => g.Quiz).FirstOrDefaultAsync(g => g.Current.Equals(true)));
+            game.Quiz.Questions = await _context.Questions.Where(q => q.QuizId == game.Quiz.QuizId).ProjectTo<QuestionDto>(_mapper.ConfigurationProvider).ToListAsync();
+            return game;
         }
     }
 }

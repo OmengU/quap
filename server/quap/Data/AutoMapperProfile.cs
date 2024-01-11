@@ -41,6 +41,9 @@ namespace quap.Data
 
             // Game Maps
 
+            CreateMap<Game, GameDto>();
+            CreateMap<Game, GameDto>().ReverseMap();
+            
             CreateMap<Player, PlayerDto>();
             CreateMap<Player, PlayerDto>().ReverseMap();
 

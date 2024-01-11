@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using quap.Models;
+using quap.Models.DTOs.GameDTOs;
 using quap.Models.GameModels;
 using quap.Repositories.GameRepositories.IRepositories;
 using System.Net;
@@ -57,6 +58,17 @@ namespace quap.Controllers
             }
 
             return ipAddress;
+        }
+        [HttpGet("current")]
+        public async Task<ActionResult<GameDto>> GetCurrentGame()
+        {
+            GameDto game = await _gameRepository.GetCurrentGame();
+            return Ok(game);
+        }
+        [HttpDelete("{gameId}")]
+        public async Task DeleteGame(Guid gameId)
+        {
+            await _gameRepository.DeleteGame(gameId);
         }
 
     }

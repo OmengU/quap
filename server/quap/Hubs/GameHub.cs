@@ -21,8 +21,8 @@ namespace quap.Hubs
 
         private int _currentQuestionIndex = 0;
         private Timer _questionTimer;
-        private List<Question> _questions;
-        private Game _game;
+        private static List<Question> _questions;
+        private static Game _game;
 
         public GameHub(IMapper mapper, IPlayerRepository playerRepository, IGameRepository gameRepository, IQuizRepository quizRepository, QuizManagementDbContext context)
         {
@@ -31,8 +31,16 @@ namespace quap.Hubs
             _gameRepository = gameRepository;
             _quizRepository = quizRepository;
             _context = context;
-            _questions = _context.Games.FirstOrDefault(g => g.Current == true).Quiz.Questions.ToList();
-            _game = _context.Games.FirstOrDefault(g => g.Current == true);
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            _game = _mapper.Map<Game>(await _gameRepository.GetCurrentGame());
+            _questions = _game.Quiz.Questions;
+
+            //await Console.Out.WriteLineAsync(_questions[1].QuestionName);
+
+            await base.OnConnectedAsync();
         }
 
         public async Task RegisterPlayer(Guid gameId, CreatePlayerDto dto)
@@ -48,13 +56,14 @@ namespace quap.Hubs
 
         private async Task SendQuestion()
         {
+            await Console.Out.WriteLineAsync(_questions[1].QuestionName);
             if (_currentQuestionIndex < _questions.Count)
             {
                 await Clients.All.SendAsync("newQuestion", _mapper.Map<SendQuestionDto>(_questions[_currentQuestionIndex]));
             }
             else
             {
-                _questionTimer.Dispose();
+               // _questionTimer.Dispose();
                 await Clients.All.SendAsync("endGame");
             }
         }
@@ -63,13 +72,13 @@ namespace quap.Hubs
         {
             await SendQuestion();
 
-            _questionTimer = new Timer(async _ => await RequestScores(), null, TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
+            //_questionTimer = new Timer(async _ => await RequestScores(), null, TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
             _currentQuestionIndex++;
         }
 
         public async Task RequestScores()
         {
-            _questionTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            //_questionTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
             await Clients.All.SendAsync("topPlayers", _game.Players.OrderByDescending(p => p.Score).Take(3).ToList());
 
@@ -83,7 +92,7 @@ namespace quap.Hubs
         {
             await SendQuestion();
 
-            _questionTimer.Change(TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
+            //_questionTimer.Change(TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
             _currentQuestionIndex++;
         }
 
