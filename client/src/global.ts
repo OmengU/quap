@@ -17,6 +17,8 @@ export const Paths = {
     gameStudent: "gameStudent",
 } as const;
 
+export const colors = ["#FF7F7F", "#7BEf7B ", "#7F7FFF", "#FF7FFF", "#FFA500", " #79F5F5"];
+
 export enum QType {
     SingleChoice,
     MultipleChoice,

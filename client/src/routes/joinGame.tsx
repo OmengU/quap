@@ -1,10 +1,11 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, useDisclosure, Text, Box, } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, useDisclosure, Text, Box, Flex, } from "@chakra-ui/react";
 import { getCurrGameId } from "./endpoints";
 import { SetStateAction, useEffect, useState } from "react";
 import Picker from "@emoji-mart/react";
 import Data from "@emoji-mart/data";
 import * as signalR from "@microsoft/signalr";
-import { PlayerDto, sURL } from "../global";
+import { GameQuestionDto, Paths, PlayerDto, sURL } from "../global";
+import { useNavigate } from "react-router";
 
 const JoinGame = () => {
     const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true })
@@ -13,6 +14,7 @@ const JoinGame = () => {
     const [icon, setIcon] = useState<string>("");
     const [gameId, setGameId] = useState<string>("");
     const [isPickerVisible, setPickerVisible] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     let connection = new signalR.HubConnectionBuilder()
         .withUrl(`${sURL}/Game`)
@@ -20,11 +22,15 @@ const JoinGame = () => {
 
     connection.start()
         .then(() => console.log('Connection started!'))
-        .catch(e => console.log('Error while establishing connection :('));
+        .catch(() => console.log('Error while establishing connection :('));
 
     connection.on("addedYou", (id: string) => {
         console.log(id);
         localStorage.setItem('playerId', id);
+    })
+
+    connection.on("newQuestion", (question: GameQuestionDto) => {
+        navigate(`../${Paths.gameStudent}`, { state: question });
     })
 
     useEffect(() => {
@@ -65,6 +71,7 @@ const JoinGame = () => {
                             icon: icon,
                         };
                         connection.invoke("RegisterPlayer", gameId, dto)
+                            .then(onClose)
                             .catch(err => console.error(err));
                     }}>
                         Join Game
@@ -72,6 +79,12 @@ const JoinGame = () => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
+        <Flex justifyContent={"center"} alignItems={"center"} h={"100vh"}>
+            <Text fontSize={"8xl"}>
+                Game starting soon!!!
+            </Text>
+        </Flex>
+
     </>
 }
 

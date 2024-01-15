@@ -17,7 +17,7 @@ const WaitingRoom = () => {
 
     connection.start()
         .then(() => console.log('Connection started!'))
-        .catch(e => console.log('Error while establishing connection :('));
+        .catch(() => console.log('Error while establishing connection :('));
 
     connection.on("playerAdded", (player) => {
         setPlayers([...players, player])
