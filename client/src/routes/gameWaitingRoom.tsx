@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getIP } from "./endpoints";
 import * as signalR from "@microsoft/signalr";
@@ -30,14 +30,16 @@ const WaitingRoom = () => {
     useEffect(() => { getIP().then((ip) => setGameLink(ip)) }, [])
 
     return <>
-        <Flex direction={"column"} align={"center"}>
-            <Heading mt={5}>
-                Waiting room
-            </Heading>
-            <Text fontSize={"xl"} mt={10}>
-                Connect to this game via: {gameLink}:5173/play
-            </Text>
-            <Button colorScheme="green" onClick={(event) => {
+        <Flex direction={"row"} justify={"center"} align={"center"} gap={"1.5rem"} bgGradient={"linear(to-l, #7928CA, #FF0080)"} p={"1.5rem"}>
+            <Flex direction={"column"}>
+                <Heading mt={1} bg={"white"} fontSize={"5xl"} p={"1.5rem"} borderRadius={"15px"}>
+                    Waiting room
+                </Heading>
+                <Text fontSize={"xl"} mt={3} bg={"white"} p={"1rem"} borderRadius={"15px"}>
+                    Connect to this game via: {gameLink}:5173/play
+                </Text>
+            </Flex>
+            <Button colorScheme="green" mt={"3"} size={"lg"} onClick={(event) => {
                 event.preventDefault();
                 connection.invoke("StartGame")
                     .catch(err => console.error(err));
@@ -45,14 +47,20 @@ const WaitingRoom = () => {
                 Start game
             </Button>
         </Flex>
-        <Box>
-            <ul>
-                {players.map((p) =>
-                    <li>{p.icon} {p.name}</li>
-                )}
-            </ul>
-
-        </Box>
+        <Flex wrap="wrap" justifyContent="flex-start" p={"2.5rem"} gap={"1.5rem"}>
+            {players.map((p) =>
+                <Card>
+                    <CardBody display="flex" flexDirection={"column"} justifyContent="center" alignItems="center">
+                        <Text fontSize={"4xl"}>
+                            {p.icon}
+                        </Text>
+                        <Text fontSize={"5xl"}>
+                            {p.name}
+                        </Text>
+                    </CardBody>
+                </Card>
+            )}
+        </Flex>
     </>
 }
 
