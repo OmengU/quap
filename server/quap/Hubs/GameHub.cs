@@ -46,7 +46,7 @@ namespace quap.Hubs
         public async Task RegisterPlayer(Guid gameId, CreatePlayerDto dto)
         {
             Player createdPlayer = await _playerRepository.CreatePlayer(dto, gameId);
-            await _gameRepository.AddPlayer(gameId, createdPlayer);
+            await _gameRepository.AddPlayer(_game.GameId, createdPlayer);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, createdPlayer.PlayerId.ToString());
 
@@ -80,9 +80,14 @@ namespace quap.Hubs
         {
             //_questionTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
-            await Clients.All.SendAsync("topPlayers", _game.Players.OrderByDescending(p => p.Score).Take(3).ToList());
+            var playersWithScore = _game.Players.Where(p => p.Score > 0).ToList();
+            var topPlayers = playersWithScore.Count < 3
+                ? playersWithScore.Concat(_game.Players.Except(playersWithScore).OrderBy(p => Guid.NewGuid()).Take(3 - playersWithScore.Count)).ToList()
+                : playersWithScore.OrderByDescending(p => p.Score).Take(3).ToList();
 
-            foreach(Player player in  _game.Players)
+            await Clients.All.SendAsync("topPlayers", topPlayers);
+
+            foreach (Player player in  _game.Players)
             {
                 await Clients.Group(player.PlayerId.ToString()).SendAsync("resultRecieved", player.Score);
             }
@@ -113,8 +118,10 @@ namespace quap.Hubs
             if (options.All(o => o.IsCorrect))
             {
                 await _playerRepository.AddScore(playerId, (int)_questions[_currentQuestionIndex].Points);
+                //await Clients.Group(player.PlayerId.ToString()).SendAsync("correctResult");
             }
-            
+            await Clients.Group(player.PlayerId.ToString()).SendAsync("submitRecieved");
+
         }
     }
 }

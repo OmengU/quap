@@ -7,7 +7,7 @@ namespace quap.Models.DTOs.GameDTOs
         public Guid PlayerId { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
-        public float Score { get; set; }
+        public int Score { get; set; }
     }
 
     public class CreatePlayerDto
