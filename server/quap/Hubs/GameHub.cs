@@ -19,7 +19,7 @@ namespace quap.Hubs
         private readonly IQuizRepository _quizRepository;
         private readonly QuizManagementDbContext _context;
 
-        private int _currentQuestionIndex = 0;
+        private static int _currentQuestionIndex = 0;
         private Timer _questionTimer;
         private static List<Question> _questions;
         private static Game _game;
@@ -70,6 +70,7 @@ namespace quap.Hubs
 
         public async Task StartGame()
         {
+            _currentQuestionIndex = 0;
             await SendQuestion();
 
             //_questionTimer = new Timer(async _ => await RequestScores(), null, TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
@@ -117,7 +118,7 @@ namespace quap.Hubs
 
             if (options.All(o => o.IsCorrect))
             {
-                await _playerRepository.AddScore(playerId, (int)_questions[_currentQuestionIndex].Points);
+                await _playerRepository.AddScore(playerId, (int)_questions[_currentQuestionIndex-1].Points);
                 //await Clients.Group(player.PlayerId.ToString()).SendAsync("correctResult");
             }
             await Clients.Group(player.PlayerId.ToString()).SendAsync("submitRecieved");
