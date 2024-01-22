@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { GameQuestionDto, Player, QType, colors, sURL } from "../global";
-import { Badge, Box, Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
-import * as signalR  from "@microsoft/signalr";
+import { Badge, Box, Button, Card, CardBody, Flex, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+import * as signalR from "@microsoft/signalr";
 import { useState } from "react";
 
 const GameTutor = () => {
@@ -12,16 +12,23 @@ const GameTutor = () => {
     connection.start()
         .then(() => console.log('Connection started!'))
         .catch(() => console.log('Error while establishing connection :('));
-    
+
     const location = useLocation();
     const data: GameQuestionDto = location.state;
-    console.log(data);
 
-    const[question, setQuestion] = useState<GameQuestionDto>(data);
+    const [question, setQuestion] = useState<GameQuestionDto>(data);
+    const [scores, setScores] = useState<Player[]>([]);
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     connection.on("topPlayers", (scoreList: Player[]) => {
-        console.log(scoreList);
+        setScores(scoreList);
+        onOpen();
     });
+
+    connection.on("newQuestion", (newQuestion: GameQuestionDto) => {
+        setQuestion(newQuestion);
+        onClose();
+    })
 
     return <>
         <Box>
@@ -52,7 +59,7 @@ const GameTutor = () => {
                         onClick={(event) => {
                             event.preventDefault();
                             connection.invoke("RequestScores")
-                            .catch(err => console.error(err));
+                                .catch(err => console.error(err));
                         }}>
                         Next Question
                     </Button>
@@ -74,7 +81,39 @@ const GameTutor = () => {
             )}
         </Flex>
 
-
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent maxW={"50%"}>
+                <ModalHeader>Current Leaderboard</ModalHeader>
+                <ModalBody display={"flex"} flexDirection={"row"} gap={"2rem"} justifyContent={"center"}>
+                    <TableContainer>
+                        <Table variant='striped' colorScheme="green">
+                            <Thead>
+                                <Tr>
+                                    <Th isNumeric>Placement</Th>
+                                    <Th>Player</Th>
+                                    <Th isNumeric>Current Score</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {scores.map((s, i) =>
+                                    <Tr key={i}>
+                                        <Td isNumeric>{i + 1}.</Td>
+                                        <Td>{s.icon} {s.name}</Td>
+                                        <Td isNumeric>{s.score}</Td>
+                                    </Tr>
+                                )}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                    <Button colorScheme="green" p={"1.5rem"} onClick={(event) => {
+                        event.preventDefault();
+                        connection.invoke("NextQuestion")
+                            .catch(err => console.error(err));
+                    }}>Next Question</Button>
+                </ModalBody>
+            </ModalContent>
+        </Modal>
     </>
 }
 
