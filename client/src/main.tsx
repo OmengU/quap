@@ -16,6 +16,7 @@ import WaitingRoom from './routes/gameWaitingRoom.tsx'
 import JoinGame from './routes/joinGame.tsx'
 import GameTutor from './routes/gameTutor.tsx'
 import GamePlayer from './routes/gamePlayer.tsx'
+import Scoreboard from './routes/scoreboard.tsx'
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path: Paths.gameStudent,
     element: <GamePlayer />,
+  },
+  {
+    path: Paths.scoreboard,
+    element: <Scoreboard />,
   },
   {
     path: Paths.editQuiz,
