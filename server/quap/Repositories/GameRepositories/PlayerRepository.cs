@@ -29,10 +29,11 @@ namespace quap.Repositories.GameRepositories
             return player;
         }
 
-        public async Task<Player> CreatePlayer(CreatePlayerDto dto, Guid gameId)
+        public async Task<Player> CreatePlayer(CreatePlayerDto dto)
         {
             Player player = _mapper.Map<Player>(dto);
-            player.GameId = gameId;
+            Game game = await _context.Games.FirstOrDefaultAsync();
+            player.GameId = game.GameId;
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
 

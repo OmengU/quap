@@ -7,11 +7,9 @@ namespace quap.Repositories.GameRepositories.IRepositories
     {
         Task<Game> CreateGame(Guid quizId);
 
-        Task<Game> AddPlayer(Guid gameId, Player player);
+        Task<Game> AddPlayer(Player player);
 
         Task DeleteGame(Guid gameId);
-
-        Task<Guid> GetCurrentGameId();
 
         Task<GameDto> GetCurrentGame();
     }

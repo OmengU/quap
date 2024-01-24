@@ -43,10 +43,10 @@ namespace quap.Hubs
             await base.OnConnectedAsync();
         }
 
-        public async Task RegisterPlayer(Guid gameId, CreatePlayerDto dto)
+        public async Task RegisterPlayer(CreatePlayerDto dto)
         {
-            Player createdPlayer = await _playerRepository.CreatePlayer(dto, gameId);
-            await _gameRepository.AddPlayer(_game.GameId, createdPlayer);
+            Player createdPlayer = await _playerRepository.CreatePlayer(dto);
+            await _gameRepository.AddPlayer(createdPlayer);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, createdPlayer.PlayerId.ToString());
 
@@ -64,7 +64,7 @@ namespace quap.Hubs
             else
             {
                // _questionTimer.Dispose();
-                await Clients.All.SendAsync("endGame");
+                await Clients.All.SendAsync("endGame", _game.Players.OrderByDescending(p => p.Score).ToList());
             }
         }
 
@@ -75,6 +75,14 @@ namespace quap.Hubs
 
             //_questionTimer = new Timer(async _ => await RequestScores(), null, TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
             _currentQuestionIndex++;
+        }
+
+        public async Task EndGame()
+        {
+            await _gameRepository.DeleteGame(_game.GameId);
+            await _context.SaveChangesAsync();
+            _game = null;
+            _questions = null;
         }
 
         public async Task RequestScores()

@@ -20,9 +20,9 @@ namespace quap.Repositories.GameRepositories
             _context = context;
             _mapper = mapper;
         }
-        public async Task<Game> AddPlayer(Guid gameId, Player player)
+        public async Task<Game> AddPlayer(Player player)
         {
-            Game game = await _context.Games.FirstOrDefaultAsync(g => g.GameId.Equals(gameId));
+            Game game = await _context.Games.FirstOrDefaultAsync();
             if (game == null) return null;
 
             game.Players.Add(player);
@@ -56,18 +56,12 @@ namespace quap.Repositories.GameRepositories
             }
         }
 
-        public async Task<Guid> GetCurrentGameId()
-        {
-            Game game = await _context.Games.FirstOrDefaultAsync(g => g.Current.Equals(true));
-            Guid gameId = game.GameId;
-
-            if (gameId == null) return Guid.Empty;
-            return gameId;
-        }
-
         public async Task<GameDto> GetCurrentGame()
         {
             GameDto game = _mapper.Map<GameDto>(await _context.Games.Include(g => g.Quiz).FirstOrDefaultAsync(g => g.Current.Equals(true)));
+
+            if (game == null) return null;
+
             game.Quiz.Questions = await _context.Questions.Where(q => q.QuizId == game.Quiz.QuizId).ProjectTo<QuestionDto>(_mapper.ConfigurationProvider).ToListAsync();
             game.Players = await _context.Players.Where(p => p.GameId.Equals(game.GameId)).ProjectTo<PlayerDto>(_mapper.ConfigurationProvider).ToListAsync();
             return game;

@@ -37,12 +37,6 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("active")]
-        public async Task<ActionResult<Guid>> GetActiveGame()
-        {
-            Guid gameId = await _gameRepository.GetCurrentGameId();
-            return Ok(gameId);
-        }
         [HttpGet("ip")]
         public string GetIPAddress()
         {
@@ -62,8 +56,19 @@ namespace quap.Controllers
         [HttpGet("current")]
         public async Task<ActionResult<GameDto>> GetCurrentGame()
         {
-            GameDto game = await _gameRepository.GetCurrentGame();
-            return Ok(game);
+            try
+            {
+                GameDto game = await _gameRepository.GetCurrentGame();
+                if(game == null)
+                {
+                    return NotFound("Game not found");
+                }
+                return Ok(game);
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
         [HttpDelete("{gameId}")]
         public async Task DeleteGame(Guid gameId)
