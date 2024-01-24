@@ -1,6 +1,5 @@
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, useDisclosure, Text, Box, Flex, } from "@chakra-ui/react";
-import { getCurrGameId } from "./endpoints";
-import { SetStateAction, useEffect, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import Picker from "@emoji-mart/react";
 import Data from "@emoji-mart/data";
 import * as signalR from "@microsoft/signalr";
@@ -12,32 +11,47 @@ const JoinGame = () => {
 
     const [name, setName] = useState<string>("")
     const [icon, setIcon] = useState<string>("");
-    const [gameId, setGameId] = useState<string>("");
     const [isPickerVisible, setPickerVisible] = useState<boolean>(false);
     const navigate = useNavigate();
 
-    let connection = new signalR.HubConnectionBuilder()
-        .withUrl(`${sURL}/Game`)
-        .build();
-
-    connection.start()
-        .then(() => console.log('Connection started!'))
-        .catch(() => console.log('Error while establishing connection :('));
-
-    connection.on("addedYou", (id: string) => {
-        console.log(id);
-        localStorage.setItem('playerId', id);
-    })
-
-    connection.on("newQuestion", (question: GameQuestionDto) => {
-        navigate(`../${Paths.gameStudent}`, { state: question });
-    })
+    const connection = useRef<signalR.HubConnection | null>(null);
 
     useEffect(() => {
-        getCurrGameId().then((id) => setGameId(id))
-    }, [])
+        connection.current = new signalR.HubConnectionBuilder()
+            .withUrl(`${sURL}/Game`)
+            .build();
 
-    console.log(gameId);
+        connection.current.start()
+            .then(() => console.log('Connection started!'))
+            .catch(() => console.log('Error while establishing connection :('));
+
+
+        if (connection.current) {
+            connection.current.on("addedYou", (id: string) => {
+                localStorage.setItem('playerId', id);
+            })
+
+            connection.current.on("newQuestion", (question: GameQuestionDto) => {
+                navigate(`../${Paths.gameStudent}`, { state: question });
+            })
+        }
+
+        return () => {
+            if (connection.current) {
+                connection.current.off("addedYou");
+                connection.current.off("newQuestion");
+                connection.current.stop()
+                    .then(() => console.log('Connection stopped!'))
+                    .catch(() => console.log('Error while stopping connection :('));
+            }
+        };
+    }, []);
+
+
+
+    useEffect(() => {
+
+    }, [])
 
     return <>
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
@@ -70,9 +84,10 @@ const JoinGame = () => {
                             name: name,
                             icon: icon,
                         };
-                        connection.invoke("RegisterPlayer", gameId, dto)
-                            .then(onClose)
-                            .catch(err => console.error(err));
+                        if (connection.current)
+                            connection.current.invoke("RegisterPlayer", dto)
+                                .then(onClose)
+                                .catch(err => console.error(err));
                     }}>
                         Join Game
                     </Button>

@@ -1,5 +1,5 @@
-import { useLocation } from "react-router-dom";
-import { GameQuestionDto, Player, QType, colors, sURL } from "../global";
+import { useLocation, useNavigate } from "react-router-dom";
+import { GameQuestionDto, Paths, Player, QType, colors, sURL } from "../global";
 import { Badge, Box, Button, Card, CardBody, Flex, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import * as signalR from "@microsoft/signalr";
 import { useState } from "react";
@@ -15,6 +15,7 @@ const GameTutor = () => {
 
     const location = useLocation();
     const data: GameQuestionDto = location.state;
+    const navigate = useNavigate();
 
     const [question, setQuestion] = useState<GameQuestionDto>(data);
     const [scores, setScores] = useState<Player[]>([]);
@@ -28,6 +29,10 @@ const GameTutor = () => {
     connection.on("newQuestion", (newQuestion: GameQuestionDto) => {
         setQuestion(newQuestion);
         onClose();
+    })
+
+    connection.on("endGame", (scoreList: Player[]) => {
+        navigate(`../${Paths.scoreboard}`, { state: scoreList });
     })
 
     return <>

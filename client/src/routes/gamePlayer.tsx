@@ -93,7 +93,7 @@ const GamePlayer = () => {
             <ModalOverlay />
             <ModalContent maxW={"50%"} p={"1.5rem"}>
                 <ModalBody display={"flex"} flexDirection={"row"} gap={"2rem"} justifyContent={"center"}>
-                    {scores[scores.length - 1] > scores[scores.length - 2] ?
+                    {scores[scores.length - 1] != scores[scores.length - 2] ?
                         <Flex direction={"column"} align={"center"}>
                             <Heading>Congratulations.</Heading>
                             <Text fontSize={"6xl"}>🥳</Text>
@@ -102,7 +102,7 @@ const GamePlayer = () => {
                             </Text>
                         </Flex>
                         :
-                        <Flex>
+                        <Flex direction={"column"} align={"center"}>
                             <Heading>Too Bad.</Heading>
                             <Text fontSize={"6xl"}>😢</Text>
                             <Text fontSize={"xl"}>

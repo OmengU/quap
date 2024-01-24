@@ -13,7 +13,6 @@ type ToggleOption = (optionId: string) => void
 type SetText = (optionId: string, text: string) => Promise<Option>
 
 type InitializeGame = (quizId: string) => Promise<Game>
-type GetCurrGameId = () => Promise<string>
 type GetIP = () => Promise<string>
 
 
@@ -154,16 +153,6 @@ export const initializeGame: InitializeGame = async (quizId: string) => {
     } catch (error) {
         console.error(error);
         throw error;
-    }
-}
-
-export const getCurrGameId: GetCurrGameId = async () => {
-    try {
-        const response = await fetch(`${GameURL}/active`)
-        const data = await response.json();
-        return data as string;
-    } catch (e) {
-        throw e;
     }
 }
 
