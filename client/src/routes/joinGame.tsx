@@ -12,6 +12,7 @@ const JoinGame = () => {
     const [name, setName] = useState<string>("")
     const [icon, setIcon] = useState<string>("");
     const [isPickerVisible, setPickerVisible] = useState<boolean>(false);
+    const [isWaitingTextVisible, setWaitingTextVisible] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const connection = useRef<signalR.HubConnection | null>(null);
@@ -47,12 +48,6 @@ const JoinGame = () => {
         };
     }, []);
 
-
-
-    useEffect(() => {
-
-    }, [])
-
     return <>
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
             <ModalOverlay />
@@ -86,7 +81,10 @@ const JoinGame = () => {
                         };
                         if (connection.current)
                             connection.current.invoke("RegisterPlayer", dto)
-                                .then(onClose)
+                                .then(() => {
+                                    onClose();
+                                    setWaitingTextVisible(true);
+                                })
                                 .catch(err => console.error(err));
                     }}>
                         Join Game
@@ -94,7 +92,7 @@ const JoinGame = () => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
-        <Flex justifyContent={"center"} alignItems={"center"} h={"100vh"}>
+        <Flex justifyContent={"center"} alignItems={"center"} h={"100vh"} display={isWaitingTextVisible ? "flex" : "none"}>
             <Text fontSize={"8xl"}>
                 Game starting soon!!!
             </Text>

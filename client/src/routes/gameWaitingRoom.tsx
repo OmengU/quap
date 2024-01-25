@@ -48,8 +48,8 @@ const WaitingRoom = () => {
             </Button>
         </Flex>
         <Flex wrap="wrap" justifyContent="flex-start" p={"2.5rem"} gap={"1.5rem"}>
-            {players.map((p) =>
-                <Card>
+            {players.map((p, i) =>
+                <Card key={i}>
                     <CardBody display="flex" flexDirection={"column"} justifyContent="center" alignItems="center">
                         <Text fontSize={"4xl"}>
                             {p.icon}
