@@ -99,7 +99,7 @@ namespace quap.Hubs
 
             foreach (Player player in _game.Players)
             {
-                await _hubContext.Clients.Group(player.PlayerId.ToString()).SendAsync("resultRecieved", player.Score);
+                await _hubContext.Clients.Group(player.PlayerId.ToString()).SendAsync("resultReceived", player.Score);
             }
         }
 
@@ -129,7 +129,7 @@ namespace quap.Hubs
             {
                 await _playerRepository.AddScore(playerId, (int)_questions[_currentQuestionIndex-1].Points);
             }
-            await Clients.Group(player.PlayerId.ToString()).SendAsync("submitRecieved");
+            await Clients.Group(player.PlayerId.ToString()).SendAsync("submitReceived");
 
         }
     }

@@ -22,13 +22,13 @@ const GamePlayer = () => {
     const [answered, setAnswered] = useState<boolean>(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    connection.on("submitRecieved", () => {
+    connection.on("submitReceived", () => {
         setAnswered(true);
     })
 
-    connection.on("resultRecieved", (score: number) => {
+    connection.on("resultReceived", (score: number) => {
         console.log(score);
-        setScores((prevScores) => [...prevScores, score]);    
+        setScores((prevScores) => [...prevScores, score]);
         onOpen();
     });
 
