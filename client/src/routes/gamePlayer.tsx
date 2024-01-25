@@ -27,7 +27,8 @@ const GamePlayer = () => {
     })
 
     connection.on("resultRecieved", (score: number) => {
-        setScores([...scores, score]);
+        console.log(score);
+        setScores((prevScores) => [...prevScores, score]);    
         onOpen();
     });
 
@@ -65,15 +66,15 @@ const GamePlayer = () => {
                     minW={{ base: "100%", md: question.options.length <= 3 ? `${100 / question.options.length}%` : "33.33%" }}
                     h={{ base: `${100 / question.options.length}%`, md: question.options.length <= 3 ? "100%" : "50%" }}>
                     <Button p={"1.5rem"}
-                        bg={question.type == QType.MultipleChoice && !multiIds.includes(o.oId) ? "white" : colors[i]}
-                        color={question.type == QType.MultipleChoice && !multiIds.includes(o.oId) ? "black" : "white"}
-                        border={question.type == QType.MultipleChoice && !multiIds.includes(o.oId) ? `10px solid ${colors[i]}` : "none"}
+                        bg={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? "white" : colors[i]}
+                        color={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? "black" : "white"}
+                        border={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? `10px solid ${colors[i]}` : "none"}
                         minW={"100%"}
                         h={"100%"}
                         isDisabled={answered}
                         onClick={question.type == QType.MultipleChoice ? (event) => selectMulti(event, o.oId) : (event) => submitSingle(event, o.oId)}
-                        _hover={question.type == QType.MultipleChoice && !multiIds.includes(o.oId) ? { bg: colors[i], border: `none`, color: "white" } :
-                            { bg: "white", border: `4px solid ${colors[i]}`, color: "black" }}>
+                        _hover={answered ? {} : question.type == QType.MultipleChoice && !multiIds.includes(o.oId) ? { bg: colors[i], border: `none`, color: "white" } :
+                            { bg: "white", border: `10px solid ${colors[i]}`, color: "black" }}>
                         <Text fontSize={"5xl"}>
                             {o.optionText}
                         </Text>
