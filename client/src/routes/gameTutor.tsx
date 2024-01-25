@@ -2,17 +2,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { GameQuestionDto, Paths, Player, QType, colors, sURL } from "../global";
 import { Badge, Box, Button, Card, CardBody, Flex, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import * as signalR from "@microsoft/signalr";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const GameTutor = () => {
-    let connection = new signalR.HubConnectionBuilder()
-        .withUrl(`${sURL}/Game`)
-        .build();
-
-    connection.start()
-        .then(() => console.log('Connection started!'))
-        .catch(() => console.log('Error while establishing connection :('));
-
     const location = useLocation();
     const data: GameQuestionDto = location.state;
     const navigate = useNavigate();
@@ -21,26 +13,78 @@ const GameTutor = () => {
     const [scores, setScores] = useState<Player[]>([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    connection.on("topPlayers", (scoreList: Player[]) => {
-        setScores(scoreList);
-        onOpen();
-    });
+    const [timerSeconds, setTimerSeconds] = useState<number>(question.timeLimit);
+    const [timerActive, setTimerActive] = useState<boolean>(true);
 
-    connection.on("newQuestion", (newQuestion: GameQuestionDto) => {
-        setQuestion(newQuestion);
-        onClose();
-    })
+    const connection = useRef<signalR.HubConnection | null>(null);
 
-    connection.on("endGame", (scoreList: Player[]) => {
-        navigate(`../${Paths.scoreboard}`, { state: scoreList });
-    })
+    useEffect(() => {
+        connection.current = new signalR.HubConnectionBuilder()
+            .withUrl(`${sURL}/Game`)
+            .build();
+
+        connection.current.start()
+            .then(() => console.log('Connection started!'))
+            .catch(() => console.log('Error while establishing connection :('));
+
+
+        if (connection.current) {
+            connection.current.on("topPlayers", (scoreList: Player[]) => {
+                setScores(scoreList);
+                pauseTimer();
+                onOpen();
+            });
+
+            connection.current.on("newQuestion", (newQuestion: GameQuestionDto) => {
+                setQuestion(newQuestion);
+                resetTimer(newQuestion.timeLimit);
+                onClose();
+            })
+
+            connection.current.on("endGame", (scoreList: Player[]) => {
+                navigate(`../${Paths.scoreboard}`, { state: scoreList });
+            })
+        }
+
+        return () => {
+            if (connection.current) {
+                connection.current.off("topPlayers");
+                connection.current.off("newQuestion");
+                connection.current.off("endGame");
+                connection.current.stop()
+                    .then(() => console.log('Connection stopped!'))
+                    .catch(() => console.log('Error while stopping connection :('));
+            }
+        };
+    }, []);
+
+    const pauseTimer = () => {
+        setTimerActive(false);
+    }
+
+    const resetTimer = (seconds: number) => {
+        setTimerSeconds(seconds);
+        setTimerActive(true);
+    }
+
+    useEffect(() => {
+        let interval: number = 0;
+        if (timerActive && timerSeconds > 0) {
+            interval = setInterval(() => {
+                setTimerSeconds((timerSeconds) => timerSeconds - 1);
+            }, 1000);
+        } else if (!timerActive && timerSeconds != 0) {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [timerActive, timerSeconds]);
 
     return <>
         <Box>
             <Flex h={"33vh"} bgGradient={"linear(to-l, #7928CA, #FF0080)"} direction={"row"} align={"center"} justify={"center"} p={"1rem"} gap={"2rem"}>
                 <Flex align={"center"} h={"60%"} bg={"white"} borderRadius={"15px"} p={"1.5rem"}>
                     <Text fontSize={"5xl"}>
-                        ⏱️{question.timeLimit}
+                        ⏱️{timerSeconds}
                     </Text>
                 </Flex>
                 <Flex align={"center"} h={"60%"} bg={"white"} borderRadius={"15px"} p={"1.5rem"} >
@@ -63,8 +107,9 @@ const GameTutor = () => {
                         _hover={{ bgGradient: "linear(to-r, #7928CA, #FF0080)" }}
                         onClick={(event) => {
                             event.preventDefault();
-                            connection.invoke("RequestScores")
-                                .catch(err => console.error(err));
+                            if (connection.current)
+                                connection.current.invoke("RequestScores")
+                                    .catch(err => console.error(err));
                         }}>
                         Next Question
                     </Button>
@@ -113,8 +158,9 @@ const GameTutor = () => {
                     </TableContainer>
                     <Button colorScheme="green" p={"1.5rem"} onClick={(event) => {
                         event.preventDefault();
-                        connection.invoke("NextQuestion")
-                            .catch(err => console.error(err));
+                        if (connection.current)
+                            connection.current.invoke("NextQuestion")
+                                .catch(err => console.error(err));
                     }}>Next Question</Button>
                 </ModalBody>
             </ModalContent>
