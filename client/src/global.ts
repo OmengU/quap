@@ -91,6 +91,13 @@ export type PlayerDto = {
     icon: string;
 }
 
+export type PasswordDto = { password: string };
+
+export type ChangePasswordDto = {
+    oldPassword: string;
+    newPassword: string;
+}
+
 export const URL = `http://${location.hostname}:5220/api/Quiz`;
 export const GameURL = `http://${location.hostname}:5220/api/Game`
 export const sURL = `http://${location.hostname}:5220`;

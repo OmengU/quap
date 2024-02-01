@@ -14,6 +14,8 @@ namespace quap.Data
 
 		public DbSet<Player> Players { get; set; }
 		public DbSet<Game> Games { get; set; }
+
+		public DbSet<Password> Passwords { get; set; }
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseExceptionProcessor();

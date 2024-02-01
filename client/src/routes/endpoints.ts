@@ -1,4 +1,4 @@
-import { Question, QuestionDto, Quiz, QuizDto, URL, sURL, Option, Game, GameURL } from "../global";
+import { Question, QuestionDto, Quiz, QuizDto, URL, sURL, Option, Game, GameURL, PasswordDto, ChangePasswordDto } from "../global";
 
 
 type GetQuizzes = () => Promise<Quiz[]>
@@ -14,6 +14,11 @@ type SetText = (optionId: string, text: string) => Promise<Option>
 
 type InitializeGame = (quizId: string) => Promise<Game>
 type GetIP = () => Promise<string>
+
+type CheckIfPassword = () => Promise<Response>
+type VerifyPassword = (dto: PasswordDto) => Promise<Response>
+type RegisterPassword = (dto: PasswordDto) => Promise<Response>
+type ChangePassword = (dto: ChangePasswordDto) => Promise<Response>
 
 
 export const getQuizzes: GetQuizzes = async () => {
@@ -163,5 +168,56 @@ export const getIP: GetIP = async () => {
         return data as string;
     } catch (e) {
         throw e;
+    }
+}
+
+export const checkIfPassword: CheckIfPassword = async () => {
+    try {
+        const response = await fetch(`${sURL}/api/Auth`);
+        return await response;
+    } catch (e) {
+        throw e
+    }
+}
+export const verifyPassword: VerifyPassword = async (dto: PasswordDto) => {
+    try {
+        const response = await fetch(`${sURL}/api/Auth/verify`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dto),
+        });
+        return await response;
+    } catch (e) {
+        throw e
+    }
+}
+export const changePassword: ChangePassword = async (dto: ChangePasswordDto) => {
+    try {
+        const response = await fetch(`${sURL}/api/Auth/change-password`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dto),
+        });
+        return await response;
+    } catch (e) {
+        throw e
+    }
+}
+export const registerPassword: RegisterPassword = async (dto: PasswordDto) => {
+    try {
+        const response = await fetch(`${sURL}/api/Auth/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dto),
+        });
+        return await response;
+    } catch (e) {
+        throw e
     }
 }
