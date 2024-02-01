@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using quap.Models;
 using quap.Models.DTOs.GameDTOs;
@@ -10,6 +11,7 @@ using System.Net.Sockets;
 namespace quap.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("DynamicCorsPolicy")]
     [ApiController]
     public class GameController : ControllerBase
     {

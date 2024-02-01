@@ -40,11 +40,12 @@ namespace quap
 
             builder.Services.AddCors(options =>
             {
-                options.AddDefaultPolicy(builder =>
+                options.AddPolicy("DynamicCorsPolicy", builder =>
                 {
-                    builder.AllowAnyOrigin()
+                    builder.AllowAnyHeader()
                            .AllowAnyMethod()
-                           .AllowAnyHeader();
+                           .AllowCredentials()
+                           .SetIsOriginAllowed(origin => true);
                 });
             });
 
@@ -61,7 +62,7 @@ namespace quap
 
 			app.UseAuthorization();
 
-			app.UseCors();
+			app.UseCors("DynamicCorsPolicy");
 
 
 			app.MapControllers();

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using quap.Models;
@@ -8,6 +9,7 @@ using quap.Repositories.IRepositories;
 namespace quap.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("DynamicCorsPolicy")]
     [ApiController]
     public class QuizController : ControllerBase
     {
