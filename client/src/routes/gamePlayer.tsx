@@ -60,7 +60,7 @@ const GamePlayer = () => {
     }
 
     return <>
-        <Flex direction={{ base: "column", md: "row" }} wrap="wrap" justify={{ base: "flex-start", md: "center" }} h={question.type == QType.MultipleChoice ? "90vh" : "100vh"} p={"1.5rem"}>
+        <Flex direction={{ base: "column", md: "row" }} wrap="wrap" justify={{ base: "flex-start", md: "center" }} h={question.type == QType.MultipleChoice ? "90vdh" : "100dvh"} p={"1.5rem"}>
             {question.options.map((o, i) =>
                 <Box p="1rem" key={i}
                     minW={{ base: "100%", md: question.options.length <= 3 ? `${100 / question.options.length}%` : "33.33%" }}
@@ -92,22 +92,22 @@ const GamePlayer = () => {
 
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent maxW={"50%"} p={"1.5rem"}>
+            <ModalContent maxW={{ base: "80%", md: "50%" }} p={"1.5rem"}>
                 <ModalBody display={"flex"} flexDirection={"row"} gap={"2rem"} justifyContent={"center"}>
                     {scores[scores.length - 1] != scores[scores.length - 2] ?
                         <Flex direction={"column"} align={"center"}>
                             <Heading>Congratulations.</Heading>
                             <Text fontSize={"6xl"}>🥳</Text>
-                            <Text fontSize={"xl"}>
-                                You have answered the Question correctly. Your score is now {scores[scores.length - 1]}
+                            <Text fontSize={"xl"} textAlign={"center"}>
+                                You have answered the Question correctly. Your score is now {scores[scores.length - 1]}.
                             </Text>
                         </Flex>
                         :
                         <Flex direction={"column"} align={"center"}>
                             <Heading>Too Bad.</Heading>
                             <Text fontSize={"6xl"}>😢</Text>
-                            <Text fontSize={"xl"}>
-                                You got this question wrong. Your score is remains at {scores[scores.length - 1]}
+                            <Text fontSize={"xl"} textAlign={"center"}>
+                                You got this question wrong. Your score is remains at {scores[scores.length - 1]}.
                             </Text>
                         </Flex>
                     }

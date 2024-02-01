@@ -92,8 +92,8 @@ const JoinGame = () => {
                 </ModalFooter>
             </ModalContent>
         </Modal>
-        <Flex justifyContent={"center"} alignItems={"center"} h={"100vh"} display={isWaitingTextVisible ? "flex" : "none"}>
-            <Text fontSize={"8xl"}>
+        <Flex justifyContent={"center"} alignItems={"center"} h={"100dvh"} w={"100dvw"} display={isWaitingTextVisible ? "flex" : "none"}>
+            <Text fontSize={"8xl"} textAlign={"center"}>
                 Game starting soon!!!
             </Text>
         </Flex>
