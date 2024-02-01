@@ -91,6 +91,6 @@ export type PlayerDto = {
     icon: string;
 }
 
-export const URL = 'http://localhost:5220/api/Quiz';
-export const GameURL = 'http://localhost:5220/api/Game'
-export const sURL = 'http://localhost:5220';
+export const URL = `http://${location.hostname}:5220/api/Quiz`;
+export const GameURL = `http://${location.hostname}:5220/api/Game`
+export const sURL = `http://${location.hostname}:5220`;
