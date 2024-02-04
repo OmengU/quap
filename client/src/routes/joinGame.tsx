@@ -1,4 +1,4 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, useDisclosure, Text, Box, Flex, } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, FormControl, FormLabel, Input, ModalFooter, Button, useDisclosure, Text, Box, Flex, Alert, AlertDescription, AlertIcon, AlertTitle, } from "@chakra-ui/react";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import Picker from "@emoji-mart/react";
 import Data from "@emoji-mart/data";
@@ -7,12 +7,15 @@ import { GameQuestionDto, Paths, PlayerDto, sURL } from "../global";
 import { useNavigate } from "react-router";
 
 const JoinGame = () => {
-    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true })
+    const { isOpen, onClose, onOpen } = useDisclosure({ defaultIsOpen: true })
+    const { isOpen: isError, onOpen: setErrorVisible } = useDisclosure()
+
 
     const [name, setName] = useState<string>("")
     const [icon, setIcon] = useState<string>("");
     const [isPickerVisible, setPickerVisible] = useState<boolean>(false);
     const [isWaitingTextVisible, setWaitingTextVisible] = useState<boolean>(false);
+    const isPlayerAdded = useRef<boolean>(false);
     const navigate = useNavigate();
 
     const connection = useRef<signalR.HubConnection | null>(null);
@@ -29,18 +32,29 @@ const JoinGame = () => {
 
         if (connection.current) {
             connection.current.on("addedYou", (id: string) => {
+                console.log("simon");
                 localStorage.setItem('playerId', id);
+                isPlayerAdded.current = true;
+                setWaitingTextVisible(true);
             })
 
             connection.current.on("newQuestion", (question: GameQuestionDto) => {
-                navigate(`../${Paths.gameStudent}`, { state: question });
+                console.log(isPlayerAdded);
+                if (isPlayerAdded.current) navigate(`../${Paths.gameStudent}`, { state: question });
             })
+
+            connection.current.on("gameRunning", () => {
+                onOpen();
+                setErrorVisible();
+            })
+
         }
 
         return () => {
             if (connection.current) {
                 connection.current.off("addedYou");
                 connection.current.off("newQuestion");
+                connection.current.off("gameRunning");
                 connection.current.stop()
                     .then(() => console.log('Connection stopped!'))
                     .catch(() => console.log('Error while stopping connection :('));
@@ -49,6 +63,11 @@ const JoinGame = () => {
     }, []);
 
     return <>
+        <Alert status='error' display={isError ? "flex" : "none"}>
+            <AlertIcon />
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>No Game is available for joining (either running or none started)</AlertDescription>
+        </Alert>
         <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
             <ModalOverlay />
             <ModalContent>
@@ -83,7 +102,6 @@ const JoinGame = () => {
                             connection.current.invoke("RegisterPlayer", dto)
                                 .then(() => {
                                     onClose();
-                                    setWaitingTextVisible(true);
                                 })
                                 .catch(err => console.error(err));
                     }}>

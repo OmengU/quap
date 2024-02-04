@@ -38,20 +38,29 @@ namespace quap.Hubs
         public override async Task OnConnectedAsync()
         {
             _game = _mapper.Map<Game>(await _gameRepository.GetCurrentGame());
-            _questions = _game.Quiz.Questions;
+            if(_game != null) _questions = _game.Quiz.Questions;
+
 
             await base.OnConnectedAsync();
         }
 
         public async Task RegisterPlayer(CreatePlayerDto dto)
         {
-            Player createdPlayer = await _playerRepository.CreatePlayer(dto);
-            await _gameRepository.AddPlayer(createdPlayer);
+            await Console.Out.WriteLineAsync(_currentQuestionIndex.ToString());
+            if (_currentQuestionIndex == 0 && _game != null)
+            {
+                Player createdPlayer = await _playerRepository.CreatePlayer(dto);
+                await _gameRepository.AddPlayer(createdPlayer);
 
-            await Groups.AddToGroupAsync(Context.ConnectionId, createdPlayer.PlayerId.ToString());
+                await Groups.AddToGroupAsync(Context.ConnectionId, createdPlayer.PlayerId.ToString());
 
-            await Clients.All.SendAsync("playerAdded", _mapper.Map<PlayerDto>(createdPlayer));
-            await Clients.Group(createdPlayer.PlayerId.ToString()).SendAsync("addedYou", createdPlayer.PlayerId);
+                await Clients.All.SendAsync("playerAdded", _mapper.Map<PlayerDto>(createdPlayer));
+                await Clients.Group(createdPlayer.PlayerId.ToString()).SendAsync("addedYou", createdPlayer.PlayerId);
+            }
+            else
+            {
+                await Clients.Client(Context.ConnectionId).SendAsync("gameRunning");
+            }
         }
 
         private async Task SendQuestion()
@@ -73,8 +82,14 @@ namespace quap.Hubs
             _currentQuestionIndex = 0;
             await SendQuestion();
 
-            _questionTimer = new Timer(async _ => await RequestScores(), null, TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
+            _questionTimer = new Timer(async _ => await TimeOut(), null, TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
             _currentQuestionIndex++;
+        }
+
+        public async Task TimeOut()
+        {
+            await _hubContext.Clients.All.SendAsync("timeOut");
+            await RequestScores();
         }
 
         public async Task EndGame()
@@ -83,6 +98,7 @@ namespace quap.Hubs
             await _context.SaveChangesAsync();
             _game = null;
             _questions = null;
+            _currentQuestionIndex = 0;
         }
 
         //hubContext needed in order to work with the timer
@@ -115,22 +131,25 @@ namespace quap.Hubs
         {
             Player player = await _context.Players.FirstOrDefaultAsync(p => p.PlayerId.Equals(playerId));
 
-            // add player to group if they have no score in order to be able send stuff to them
-            if (player.Score == 0) await Groups.AddToGroupAsync(Context.ConnectionId, playerId.ToString());
-
-            List<Option> options = new List<Option>();
-
-            foreach(Guid optionId in optionIds)
+            
+            if(player != null)
             {
-                options.Add(await _context.Options.FirstOrDefaultAsync(o => o.OId.Equals(optionId)));
-            }
+                // add player to group if they have no score in order to be able send stuff to them
+                if (player.Score == 0) await Groups.AddToGroupAsync(Context.ConnectionId, playerId.ToString());
 
-            if (options.All(o => o.IsCorrect))
-            {
-                await _playerRepository.AddScore(playerId, (int)_questions[_currentQuestionIndex-1].Points);
-            }
-            await Clients.Group(player.PlayerId.ToString()).SendAsync("submitReceived");
+                List<Option> options = new List<Option>();
 
+                foreach (Guid optionId in optionIds)
+                {
+                    options.Add(await _context.Options.FirstOrDefaultAsync(o => o.OId.Equals(optionId)));
+                }
+
+                if (options.All(o => o.IsCorrect))
+                {
+                    await _playerRepository.AddScore(playerId, (int)_questions[_currentQuestionIndex - 1].Points);
+                }
+                await Clients.Group(player.PlayerId.ToString()).SendAsync("submitReceived");
+            }
         }
     }
 }

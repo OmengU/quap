@@ -21,6 +21,7 @@ const GamePlayer = () => {
     const [scores, setScores] = useState<number[]>([0]);
     const [answered, setAnswered] = useState<boolean>(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isOpenTimeout, onOpen: onOpenTimeout, onClose: onCloseTimeout } = useDisclosure();
 
     connection.on("submitReceived", () => {
         setAnswered(true);
@@ -32,10 +33,15 @@ const GamePlayer = () => {
         onOpen();
     });
 
+    connection.on("timeOut", () => {
+        onOpenTimeout();
+    })
+
     connection.on("newQuestion", (newQuestion: GameQuestionDto) => {
         setMultiIds([]);
         setQuestion(newQuestion);
         onClose();
+        onCloseTimeout();
         setAnswered(false);
     })
 
@@ -90,7 +96,7 @@ const GamePlayer = () => {
             </Box>
             : null}
 
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
             <ModalOverlay />
             <ModalContent maxW={{ base: "80%", md: "50%" }} p={"1.5rem"}>
                 <ModalBody display={"flex"} flexDirection={"row"} gap={"2rem"} justifyContent={"center"}>
@@ -107,10 +113,24 @@ const GamePlayer = () => {
                             <Heading>Too Bad.</Heading>
                             <Text fontSize={"6xl"}>😢</Text>
                             <Text fontSize={"xl"} textAlign={"center"}>
-                                You got this question wrong. Your score is remains at {scores[scores.length - 1]}.
+                                You got this question wrong {isOpenTimeout ? "or you didn't answer in time" : ""}. Your score is remains at {scores[scores.length - 1]}.
                             </Text>
                         </Flex>
                     }
+                </ModalBody>
+            </ModalContent>
+        </Modal>
+        <Modal isOpen={isOpenTimeout && !isOpen ? isOpenTimeout : false} onClose={onCloseTimeout} closeOnOverlayClick={false}>
+            <ModalOverlay />
+            <ModalContent maxW={{ base: "40%", md: "20%" }} p={"1.5rem"}>
+                <ModalBody display={"flex"} flexDirection={"row"} gap={"2rem"} justifyContent={"center"}>
+                    <Flex direction={"column"} align={"center"}>
+                        <Heading>Too Bad.</Heading>
+                        <Text fontSize={"6xl"}>😢</Text>
+                        <Text fontSize={"xl"} textAlign={"center"}>
+                            Time ran out.
+                        </Text>
+                    </Flex>
                 </ModalBody>
             </ModalContent>
         </Modal>
