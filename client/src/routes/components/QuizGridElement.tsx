@@ -1,7 +1,7 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Badge, Button, ButtonGroup, Card, CardBody, CardFooter, CardHeader, Divider, Flex, Heading, Spacer, Text, useDisclosure } from "@chakra-ui/react";
-import { useContext, useState } from "react";
-import { Form, Link } from "react-router-dom";
+import { useContext, useRef } from "react";
+import { Form } from "react-router-dom";
 import { PasswordContext } from "../root";
 import { useNavigate } from "react-router";
 import VerifyPasswordModal from "./VerifyPasswordModal";
@@ -19,13 +19,19 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
     const { isOpen: isOpenDeleteVerify, onOpen: onOpenDeleteVerify, onClose: onCloseDeleteVerify } = useDisclosure()
 
     const navigate = useNavigate();
-    const [verified, setVerfied] = useState<boolean>(false);
+    const deleteRef = useRef<HTMLFormElement>(null);
+    const deleteBtnRef = useRef<HTMLButtonElement>(null);
 
     const { hasPassword } = useContext(PasswordContext);
 
-    const handleVerificationSuccess = (route: string) => {
-        navigate(route);
+    const onVerificationSuccessDelete = () => {
+        //deleteRef.current?.submit();
+        deleteBtnRef.current?.click();
     };
+
+    const onVerificationSuccessEdit = () => {
+        navigate(`editquiz/${id}`);
+    }
 
     return <>
         <Card maxW='sm'>
@@ -51,11 +57,9 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
                     </Form>
                     <Button leftIcon={<EditIcon />} variant='outline' colorScheme='green' onClick={onOpenEditVerify}>
                         Edit
-                        <Link to={`editquiz/${id}`}>
-
-                        </Link>
                     </Button>
-                    <Form method="DELETE" action={`deletequiz/${id}`}>
+                    <Form method="DELETE" action={`deletequiz/${id}`} ref={deleteRef}>
+                        <Button type="submit" display={"none"} ref={deleteBtnRef}></Button>
                         <Button leftIcon={<DeleteIcon />} variant='solid' colorScheme='red' onClick={onOpenDeleteVerify}>
                             Delete
                         </Button>
@@ -63,8 +67,8 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
                 </ButtonGroup>
             </CardFooter>
         </Card>
-        {hasPassword ? <VerifyPasswordModal isOpen={isOpenEditVerify} onClose={onCloseEditVerify} onVerificationSuccess={() => handleVerificationSuccess(`editquiz/${id}`)}></VerifyPasswordModal> : <RegisterPasswordModal isOpen={isOpenEditVerify} onClose={onCloseEditVerify}></RegisterPasswordModal>}
-        {hasPassword ? <VerifyPasswordModal isOpen={isOpenDeleteVerify} onClose={onCloseDeleteVerify} onVerificationSuccess={() => handleVerificationSuccess(`deletequiz/${id}`)}></VerifyPasswordModal> : <RegisterPasswordModal isOpen={isOpenDeleteVerify} onClose={onCloseDeleteVerify}></RegisterPasswordModal>}
+        {hasPassword ? <VerifyPasswordModal isOpen={isOpenEditVerify} onClose={onCloseEditVerify} onSuccess={onVerificationSuccessEdit} ></VerifyPasswordModal> : <RegisterPasswordModal isOpen={isOpenEditVerify} onClose={onCloseEditVerify}></RegisterPasswordModal>}
+        {hasPassword ? <VerifyPasswordModal isOpen={isOpenDeleteVerify} onClose={onCloseDeleteVerify} onSuccess={onVerificationSuccessDelete} ></VerifyPasswordModal> : <RegisterPasswordModal isOpen={isOpenDeleteVerify} onClose={onCloseDeleteVerify}></RegisterPasswordModal>}
     </>
 
 }

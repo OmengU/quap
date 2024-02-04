@@ -6,10 +6,10 @@ import { verifyPassword } from "../endpoints";
 type Props = {
     isOpen: boolean,
     onClose: () => void,
-    setVerified: React.Dispatch<React.SetStateAction<boolean>>,
+    onSuccess: () => void,
 }
 
-const VerifyPasswordModal = ({ isOpen, onClose, setVerified }: Props) => {
+const VerifyPasswordModal = ({ isOpen, onClose, onSuccess }: Props) => {
     const [password, setPassword] = useState<string>("");
     const [hasError, setError] = useState<boolean>(false);
 
@@ -39,7 +39,7 @@ const VerifyPasswordModal = ({ isOpen, onClose, setVerified }: Props) => {
                     const response = verifyPassword(dto);
 
                     if ((await response).ok) {
-                        setVerified(true);
+                        onSuccess();
                         onClose();
                     } else {
                         setError(true);
