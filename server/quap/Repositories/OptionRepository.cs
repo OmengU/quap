@@ -39,27 +39,6 @@ namespace quap.Repositories
 
         public async Task<IEnumerable<Option>> GetOptionsByQuestionId(Guid QuestionId) => await _context.Options.Where(o => o.QuestionId == QuestionId).ToListAsync();
 
-        public async Task<Option> SetText(Guid id, string text)
-        {
-            Option option = await _context.Options.FirstOrDefaultAsync(o => o.OId.Equals(id));
-
-            if (option != null)
-            {
-                option.OptionText = text;
-
-                await _context.SaveChangesAsync();
-                return option;
-            }
-            return null;
-        }
-
-        public async Task ToggleCorrect(Guid Id)
-        {
-            Option option = await _context.Options.FirstOrDefaultAsync(o => o.OId == Id);
-            option.IsCorrect = !option.IsCorrect;
-            await _context.SaveChangesAsync();
-        }
-
         public async Task<Option> UpdateOption(Guid Id, CreateUpdateOptionDto option)
         {
             Option newOption = await _context.Options.FirstOrDefaultAsync(o => o.OId.Equals(Id));

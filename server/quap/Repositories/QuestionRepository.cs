@@ -44,7 +44,9 @@ namespace quap.Repositories
         public async Task DeleteQuestion(Guid Id)
         {
             Question question = _context.Questions.FirstOrDefault(q => q.QuestionId == Id);
+            Quiz quiz = await _context.Quizzes.FirstOrDefaultAsync(quiz => quiz.QuizId.Equals(question.QuizId));
             _context.Questions.Remove(question);
+            quiz.NQuestions--;
             await _context.SaveChangesAsync();
         }
 

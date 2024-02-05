@@ -73,6 +73,11 @@ export type QuestionDto = {
     points: number,
 }
 
+export type OptionDto = {
+    optionText: string;
+    isCorrect: boolean;
+}
+
 export type GameQuestionDto = {
     questionName: string,
     type: QType,
@@ -98,6 +103,6 @@ export type ChangePasswordDto = {
     newPassword: string;
 }
 
-export const URL = `http://${location.hostname}:5220/api/Quiz`;
+export const URL = `http://${location.hostname}:5220/api`;
 export const GameURL = `http://${location.hostname}:5220/api/Game`
 export const sURL = `http://${location.hostname}:5220`;

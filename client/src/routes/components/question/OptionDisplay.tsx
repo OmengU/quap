@@ -1,66 +1,53 @@
-import { useState, useEffect, useContext } from "react";
-import { Option } from "../../../global"
+import { useContext } from "react";
+import { Option, OptionDto, QType } from "../../../global"
 import { Flex, FormControl, IconButton, Input } from "@chakra-ui/react";
 import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Form } from "react-router-dom";
-import { toggleOption } from "../../endpoints";
-import { OptionNamesContext } from "../../showQuestion";
+import { OptionsContext } from "../../showQuestion";
+import { TypeContext } from "../../createEditQuestion";
 
 type Props = {
     option: Option;
     isEditing: boolean;
-    isSingle: boolean;
-    isAnswered: boolean;
-    setAnswered: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const OptionDisplay = ({ option, isEditing, isSingle, isAnswered, setAnswered }: Props) => {
+const OptionDisplay = ({ option, isEditing}: Props) => {
+    const id = option.oId;
 
-    const [text, setText] = useState<string>(option.optionText);
-    const [isCorrect, setCorrect] = useState<boolean>(option.isCorrect);
-    const [id, setId] = useState<string>(option.oId);
-
-    const { optionNames, setOptionNames } = useContext(OptionNamesContext);
-
-    useEffect(() => {
-        setText(option.optionText);
-        setCorrect(option.isCorrect);
-        setId(option.oId);
-    }, [option]);
+    const { options, setOptions } = useContext(OptionsContext);
+    const { type } = useContext(TypeContext);
 
     return <>
         <Flex direction={"row"} mb={4}>
             <FormControl>
-                <Input name="questionName" disabled={!isEditing} value={option.optionText == "" ? (optionNames[id] == undefined ? "" : optionNames[id]) : option.optionText} onChange={(event) => {
-                    setText(event.target.value)
-                    setOptionNames({ ...optionNames, [id]: event.target.value });
+                <Input name="questionName" disabled={!isEditing} value={options[id] == undefined ? "" : options[id].optionText} onChange={(event) => {
+                    setOptions((prevOptions: { [key: string]: OptionDto }) => {
+                        //update the optiontext on the option with the current id (..prev[id], o) copies all other values from option with id and changes the text
+                        return { ...prevOptions, [id]: { ...prevOptions[id], optionText: event.target.value } };
+                    });
                 }} />
             </FormControl>
-            <IconButton icon={<CheckIcon />} aria-label={"correct"} variant={isCorrect ? "solid" : "outline"} colorScheme="green" isDisabled={!isEditing} onClick={(event) => {
+            {/*check if id is present in options and if not or if and not correct make outline */}
+            <IconButton icon={<CheckIcon />} aria-label={"correct"} variant={options[id] == undefined ? "outline" :(options[id].isCorrect ? "solid" : "outline")} colorScheme="green" isDisabled={!isEditing} onClick={(event) => {
                 event.preventDefault();
-                if ((isSingle && !isAnswered && !isCorrect) || (!isSingle)) {
-                    setCorrect(!isCorrect);
-                    setAnswered(true);
-                    toggleOption(option.oId);
-                    console.log("simon");
-                } else if (isSingle && isAnswered && isCorrect) {
-                    setCorrect(!isCorrect);
-                    setAnswered(false);
-                    toggleOption(option.oId);
-                } else if (!isSingle) {
-                    setCorrect(!isCorrect);
-                    setAnswered(false);
-                    toggleOption(option.oId);
-                }
+                setOptions((prevOptions: { [key: string]: OptionDto }) => {
+                    // check if question is SC and if there is a correct option and if the current option is not correct and return error and old object if the case. otherwise return updated options
+                    const correctOptionId = Object.keys(prevOptions).find(key => prevOptions[key].isCorrect);
+                    if (correctOptionId && correctOptionId !== id && !prevOptions[id].isCorrect && type == QType.SingleChoice) {
+                        console.error(`Option with id ${id} cannot be marked as correct because there is already a correct option.`);
+                        return prevOptions;
+                    }
+                    return { ...prevOptions, [id]: { ...prevOptions[id], isCorrect: !prevOptions[id].isCorrect } };
+                });
             }} />
             <Form method="DELETE" action={`../deleteoption/${option.questionId}/${id}`}>
                 <IconButton type="submit" aria-label={"delete"} icon={<DeleteIcon />} colorScheme="red" display={!isEditing ? "none" : "auto"} onClick={() => {
-                    (isAnswered && isCorrect) ? setAnswered(false) : setAnswered(isAnswered);
-                    if (optionNames[id] != undefined) {
-                        setOptionNames(prevOptionNames => {
-                            let newOptionNames = { ...prevOptionNames };
-                            delete newOptionNames[id];
-                            return newOptionNames;
+                    if (options[id] != undefined) {
+                        // if an option is deleted it it is removed from options context state by creating a new object with the same options, removing the option and replaceing the old options with new object
+                        setOptions(prevOptions => {
+                            let newOptions = { ...prevOptions };
+                            delete newOptions[id];
+                            return newOptions;
                         });
                     }
                 }} />

@@ -3,8 +3,8 @@ import { QType, Question } from "../../../global";
 import { useContext, useEffect, useState } from "react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { Form, Link } from "react-router-dom";
-import { OptionNamesContext } from "../../showQuestion";
-import { setText } from "../../endpoints";
+import { OptionsContext } from "../../showQuestion";
+import { updateOption } from "../../endpoints";
 import { TypeContext } from "../../createEditQuestion";
 
 type Props = {
@@ -20,7 +20,7 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
     const [points, setPoints] = useState<number>(question.points);
     const [id, setId] = useState<string>(question.questionId);
 
-    const { optionNames } = useContext(OptionNamesContext);
+    const { options } = useContext(OptionsContext);
 
     useEffect(() => {
         setName(question.questionName);
@@ -29,8 +29,6 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
         setPoints(question.points);
         setId(question.questionId);
     }, [question]);
-
-    //console.log(points);
 
     return <>
         <Form method="post">
@@ -45,9 +43,7 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
             <FormControl mb='2'>
                 <FormLabel>Question Type</FormLabel>
                 <Select name="type" mb={"2"} placeholder='Select type' disabled={!isEditing} value={type.toString()} onChange={(event) => {
-                    //console.log(`Old type:${QType[type]}`);
                     setType(Number(event.target.value));
-                    //console.log(`New type:${QType[type]}`);
                 }}>
                     <option value={QType.SingleChoice}>{QType[QType.SingleChoice]}</option>
                     <option value={QType.MultipleChoice}>{QType[QType.MultipleChoice]}</option>
@@ -67,8 +63,8 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
             </FormControl>
             <ButtonGroup mt={"5"}>
                 <Button colorScheme="green" display={!isEditing ? "none" : "auto"} leftIcon={<CheckIcon />} size={"lg"} type="submit" onClick={() => {
-                    for (let [key, value] of Object.entries(optionNames)) {
-                        setText(key, value)
+                    for (let [key, value] of Object.entries(options)) {
+                        updateOption(key, value)
                             .then(data => console.log(data))
                             .catch(error => console.error(error));
                     }
@@ -81,7 +77,6 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
                 </Button>
             </ButtonGroup>
         </Form>
-
     </>
 }
 export default QuestionDisplay;

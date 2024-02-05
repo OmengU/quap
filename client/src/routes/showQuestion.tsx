@@ -1,36 +1,49 @@
 import { useLoaderData } from "react-router-dom";
-import { Question } from "../global";
+import { OptionDto, Question } from "../global";
 import QuestionDisplay from "./components/question/QuestionDisplay";
 import { Flex } from "@chakra-ui/react";
 import OptionsDisplay from "./components/question/OptionsDisplay";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
-type OptionNamesContextType = {
-    optionNames: { [key: string]: string },
-    setOptionNames: React.Dispatch<React.SetStateAction<{ [key: string]: string }>>
+type OptionsContextType = {
+    options: { [key: string]: OptionDto },
+    setOptions: React.Dispatch<React.SetStateAction<{ [key: string]: OptionDto }>>
 }
 
-const iOptionNamesContextState = {
-    optionNames: {},
-    setOptionNames: () => { }
+const iOptionsContextState = {
+    options: {},
+    setOptions: () => { }
 }
 
 
-export const OptionNamesContext = createContext<OptionNamesContextType>(iOptionNamesContextState);
+export const OptionsContext = createContext<OptionsContextType>(iOptionsContextState);
 
 const ShowQuestion = () => {
     const question = useLoaderData() as Question;
-    const [optionNames, setOptionNames] = useState<{ [key: string]: string }>({});
+    const [options, setOptions] = useState<{ [key: string]: OptionDto }>({});
 
-    console.log(question.points);
+    // everytime a new question is selected the right options are set as the options
+    useEffect(() => {
+        setOptions(() => {
+            if(question.options.length > 0){
+                return question.options.reduce((acc: { [key: string]: OptionDto; }, option) => {
+                    acc[option.oId] = {
+                        optionText: option.optionText,
+                        isCorrect: option.isCorrect
+                    };
+                    return acc;
+                }, {});
+            } else return {}
+        })
+    }, [question])
 
     return <>
-        <OptionNamesContext.Provider value={{ optionNames, setOptionNames }}>
+        <OptionsContext.Provider value={{ options, setOptions }}>
             <Flex direction={"row"} gap={20}>
                 <QuestionDisplay isEditing={false} question={question} />
                 <OptionsDisplay options={question.options} isEditing={false} questionId={question.questionId} />
             </Flex>
-        </OptionNamesContext.Provider>
+        </OptionsContext.Provider>
     </>
 }
 

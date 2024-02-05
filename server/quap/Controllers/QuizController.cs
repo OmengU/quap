@@ -39,7 +39,7 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("/questions/{id}")]
+        [HttpGet("{id}/questions")]
         public async Task<ActionResult<Question>> GetAllQuestions(Guid id)
         {
             try
@@ -52,18 +52,7 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("options/{id}")]
-        public async Task<ActionResult<Option>> GetAllOptions(Guid id)
-        {
-            try
-            {
-                var result = _mapper.Map<IEnumerable<OptionDto>>(await _optionRepository.GetOptionsByQuestionId(id));
-                return Ok(result);
-            } catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Quiz>> GetQuizById(Guid id)
         {
@@ -77,19 +66,7 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("question/{id}")]
-        public async Task<ActionResult<Question>> GetQuestionById(Guid id)
-        {
-            try
-            {
-                var result = _mapper.Map<QuestionDto>(await _questionRepository.GetQuestionById(id));
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+
         [HttpPost]
         public async Task<ActionResult<Quiz>> CreateQuiz([FromBody] CreateUpdateQuizDto dto)
         {
@@ -106,109 +83,8 @@ namespace quap.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        //[HttpPatch("{id}/addquestion")]
-        //public async Task<ActionResult<QuizDto>> AddQuestion(Guid id, [FromBody] CreateUpdateQuestionDto dto)
-        //{
-        //    try
-        //    {
-        //        var quiz = await _quizRepository.AddQuestion(id, _mapper.Map<Question>(dto));
-        //        if(quiz == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(_mapper.Map<QuizDto>(quiz));
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
 
-        [HttpPatch("{id}/addquestion")]
-        public async Task<ActionResult<QuestionDto>> AddQuestion(Guid id)
-        {
-            try
-            {
-                var question = await _quizRepository.AddQuestion(id);
-                if (question == null)
-                {
-                    return NotFound();
-                }
-                return Ok(_mapper.Map<QuestionDto>(question));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpPatch("{id}/addoption")]
-        public async Task<ActionResult<QuestionDto>> AddOption(Guid id)
-        {
-            try
-            {
-                var option = await _questionRepository.AddOption(id);
-                if (option == null)
-                {
-                    return NotFound();
-                }
-                return Ok(_mapper.Map<OptionDto>(option));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPatch("updatequestion/{id}")]
-        public async Task<IActionResult> UpdateQuestion(Guid id, [FromBody] CreateUpdateQuestionDto dto)
-        {
-            try
-            {
-                var question = await _questionRepository.UpdateQuestion(id, dto);
-                if (question == null)
-                {
-                    return NotFound();
-                }
-                return Ok(_mapper.Map<QuestionDto>(question));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPatch("{optionid}/togglecorrect")]
-        public async Task<IActionResult> ToggleComplete(Guid optionid)
-        {
-            try
-            {
-                await _optionRepository.ToggleCorrect(optionid);
-                return NoContent();
-            }catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPatch("{optionid}/settext")]
-        public async Task<IActionResult> ChangeText(Guid optionid, [FromBody] string text)
-        {
-            try
-            {
-                var option = await _optionRepository.SetText(optionid, text);
-                if (option == null)
-                {
-                    return NotFound();
-                }
-                return Ok(_mapper.Map<OptionDto>(option));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("deletequiz/{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteQuiz (Guid id)
         {
             try
@@ -216,32 +92,6 @@ namespace quap.Controllers
                 await _quizRepository.DeleteQuiz(id);
                 return NoContent();
             }catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete("deletequestion/{id}")]
-        public async Task<ActionResult> DeleteQuestion(Guid id)
-        {
-            try
-            {
-                await _questionRepository.DeleteQuestion(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpDelete("deleteoption/{optionid}")]
-        public async Task<ActionResult> DeleteOption(Guid OptionId)
-        {
-            try
-            {
-                await _optionRepository.DeleteOption(OptionId);
-                return NoContent();
-            }
-            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
