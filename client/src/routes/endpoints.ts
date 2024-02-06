@@ -2,9 +2,11 @@ import { Question, QuestionDto, Quiz, QuizDto, URL, sURL, Option, Game, GameURL,
 
 
 type GetQuizzes = () => Promise<Quiz[]>
+type GetQuizById = (quizId: string) => Promise<Quiz>
 type CreateQuiz = (body: QuizDto) => Promise<Quiz>
 type GetQuestions = (quizId: string) => Promise<Question[]>
 type GetQuestionById = (questionId: string) => Promise<Question>
+type UpdateQuiz = (quizId: string, body: QuizDto) => Promise<Quiz>
 type UpdateQuestion = (questionId: string, body: QuestionDto) => Promise<Question>
 type UpdateOption = (optionId: string, body: OptionDto) => Promise<Option>
 type AddQuestion = (quizId: string) => Promise<Question>
@@ -25,6 +27,16 @@ export const getQuizzes: GetQuizzes = async () => {
         const response = await fetch(`${URL}/Quiz`);
         const data = await response.json();
         return data as Quiz[];
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const getQuizById: GetQuizById = async (id: string) => {
+    try {
+        const response = await fetch(`${URL}/Quiz/${id}`);
+        const data = await response.json();
+        return data as Quiz;
     } catch (e) {
         throw e;
     }
@@ -68,6 +80,19 @@ export const getQuestionById: GetQuestionById = async (questionId: string) => {
     } catch (e) {
         throw e;
     }
+}
+
+export const updateQuiz: UpdateQuiz = async(id: string, body: QuizDto) => {
+    const response = await fetch(`${URL}/Quiz/${id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+    const data = await response.json();
+
+    return data as Quiz;
 }
 
 export const updateQuestion: UpdateQuestion = async (id: string, body: QuestionDto) => {

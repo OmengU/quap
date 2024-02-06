@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using quap.Data;
 using quap.Models;
 using quap.Models.DTOs;
 using quap.Repositories.IRepositories;
@@ -18,7 +19,7 @@ namespace quap.Controllers
         private readonly IQuizRepository _quizRepository;
         private readonly IMapper _mapper;
 
-        public QuizController(IOptionRepository optionRepository, IQuestionRepository questionRepository, IQuizRepository quizRepository, IMapper mapper)
+        public QuizController(IOptionRepository optionRepository, IQuestionRepository questionRepository, IQuizRepository quizRepository, IMapper mapper, QuizManagementDbContext context)
         {
             _optionRepository = optionRepository;
             _questionRepository = questionRepository;
@@ -79,6 +80,24 @@ namespace quap.Controllers
                 Quiz quiz = await _quizRepository.CreateQuiz(_mapper.Map<Quiz>(dto));
                 return Ok(quiz);
             } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateQuiz(Guid id, [FromBody] CreateUpdateQuizDto dto)
+        {
+            try
+            {
+                var quiz = await _quizRepository.UpdateQuiz(id, dto);
+                if (quiz == null)
+                {
+                    return NotFound();
+                }
+                return Ok(_mapper.Map<QuizDto>(quiz));
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

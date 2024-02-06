@@ -18,8 +18,10 @@ namespace quap.Models
 		public QType Type { get; set;} = QType.SingleChoice;
 		public int ?TimeLimit { get; set; }
 		public int ?Points { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now.ToUniversalTime();
 
-		public Guid QuizId { get; set; }
+
+        public Guid QuizId { get; set; }
 		public Quiz Quiz { get; set; }
 
 

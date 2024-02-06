@@ -12,5 +12,6 @@ namespace quap.Models
 		public string Description { get; set; }
 		public int NQuestions { get; set; } = 0;
 		public List<Question> Questions { get; set; } = new List<Question>();
+		public DateTime CreationDate { get; set; } = DateTime.Now.ToUniversalTime();
 	}
 }

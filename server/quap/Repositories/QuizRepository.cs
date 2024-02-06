@@ -45,7 +45,7 @@ namespace quap.Repositories
 
         public async Task<IEnumerable<Quiz>> GetAll()
         {
-            var quizzes = await _context.Quizzes.Include(q => q.Questions).ToListAsync();
+            var quizzes = await _context.Quizzes.Include(q => q.Questions).OrderBy(q => q.CreationDate).ToListAsync();
             foreach (var quiz in quizzes)
             {
                 foreach (var question in quiz.Questions)
@@ -58,9 +58,19 @@ namespace quap.Repositories
 
         public async Task<Quiz> GetQuizById(Guid id) => await _context.Quizzes.Include(q => q.Questions).FirstOrDefaultAsync(q => q.QuizId == id);
 
-        public Task<Quiz> UpdateQuiz(Guid Id, CreateUpdateQuizDto quiz)
+        public async Task<Quiz> UpdateQuiz(Guid Id, CreateUpdateQuizDto quiz)
         {
-            throw new NotImplementedException();
+            Quiz newQuiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.QuizId.Equals(Id));
+
+            if (newQuiz != null)
+            {
+                newQuiz.Name = quiz.Name;
+                newQuiz.Description = quiz.Description;
+
+                await _context.SaveChangesAsync();
+                return newQuiz;
+            }
+            return null;
         }
     }
 }

@@ -68,6 +68,6 @@ namespace quap.Repositories
             }
             return null;
         }
-        public async Task<IEnumerable<Question>> GetAll(Guid id) => await _context.Questions.Include(q => q.Options).Where(q => q.QuizId == id).ToListAsync();
+        public async Task<IEnumerable<Question>> GetAll(Guid id) => await _context.Questions.Include(q => q.Options).Where(q => q.QuizId == id).OrderBy(q => q.CreationDate).ToListAsync();
     }
 }

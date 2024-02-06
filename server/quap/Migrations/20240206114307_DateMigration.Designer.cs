@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using quap.Data;
@@ -12,9 +13,11 @@ using quap.Models;
 namespace quap.Migrations
 {
     [DbContext(typeof(QuizManagementDbContext))]
-    partial class QuizManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240206114307_DateMigration")]
+    partial class DateMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +82,6 @@ namespace quap.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
 
@@ -122,9 +122,6 @@ namespace quap.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("NOptions")
                         .HasColumnType("integer");
 
@@ -156,9 +153,6 @@ namespace quap.Migrations
                     b.Property<Guid>("QuizId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()

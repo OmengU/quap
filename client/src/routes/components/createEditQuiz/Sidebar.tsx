@@ -1,11 +1,14 @@
 import { Form, Link } from "react-router-dom";
 import { QType, Question } from "../../../global";
-import { Badge, Box, Button, ButtonGroup, Card, CardBody, Flex, Heading, IconButton, Spacer, Text } from "@chakra-ui/react";
-import { AddIcon, CheckIcon, CloseIcon, DeleteIcon } from "@chakra-ui/icons";
+import { Badge, Box, Button, ButtonGroup, Card, CardBody, Flex, Heading, IconButton, Spacer, Text, useDisclosure } from "@chakra-ui/react";
+import { AddIcon, CloseIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import ChangeQuizModal from "./ChangeQuizModal";
 
 type Props = { questions: Question[]; }
 
 const Sidebar = ({ questions }: Props) => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    
     return <>
         <Flex direction='column' align='flex-start' ml='3' h='100vh' borderRight={"2px solid darkgray"} p={5}>
             <div id="sidebar">
@@ -32,7 +35,6 @@ const Sidebar = ({ questions }: Props) => {
                                         <IconButton type="submit" aria-label='Delete Question' colorScheme="red" icon={<DeleteIcon />} borderLeftRadius={0} />
                                     </Form>
                                 </Box>
-
                             )}
                         </ButtonGroup>
                     ) : (
@@ -49,13 +51,14 @@ const Sidebar = ({ questions }: Props) => {
             </div>
             <Spacer />
             <ButtonGroup mb={"5"}>
-                <Button colorScheme="green" leftIcon={<CheckIcon />} size={'lg'}>Save</Button>
-                <Button colorScheme="red" variant={"outline"} leftIcon={<CloseIcon />} size={"lg"}>
+                <Button colorScheme="green" variant={"outline"} leftIcon={<EditIcon />} size={'lg'} onClick={onOpen}>Edit Details</Button>
+                <Button colorScheme="red" leftIcon={<CloseIcon />} size={"lg"}>
                     <Link to={"/"}>
-                        Cancel
+                        Close
                     </Link>
                 </Button>
             </ButtonGroup>
+            <ChangeQuizModal isOpen={isOpen} onClose={onClose} quizId={questions[0].quizId}></ChangeQuizModal>
         </Flex>
     </>
 }

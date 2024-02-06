@@ -37,7 +37,7 @@ namespace quap.Repositories
             return await _context.Options.FirstOrDefaultAsync(o => o.OId == Id);
         }
 
-        public async Task<IEnumerable<Option>> GetOptionsByQuestionId(Guid QuestionId) => await _context.Options.Where(o => o.QuestionId == QuestionId).ToListAsync();
+        public async Task<IEnumerable<Option>> GetOptionsByQuestionId(Guid QuestionId) => await _context.Options.Where(o => o.QuestionId == QuestionId).OrderBy(q => q.CreationDate).ToListAsync();
 
         public async Task<Option> UpdateOption(Guid Id, CreateUpdateOptionDto option)
         {

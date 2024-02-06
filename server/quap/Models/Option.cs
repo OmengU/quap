@@ -10,8 +10,9 @@ namespace quap.Models
 		public Guid OId { get; set; }
 		public string OptionText { get; set; } = String.Empty;
 		public bool IsCorrect { get; set; } = false;
+        public DateTime CreationDate { get; set; } = DateTime.Now.ToUniversalTime();
 
-		public Guid QuestionId { get; set; }
+        public Guid QuestionId { get; set; }
 		public Question Question { get; set; }
 	}
 }
