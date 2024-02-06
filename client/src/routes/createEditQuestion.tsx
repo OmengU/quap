@@ -16,16 +16,27 @@ const iTypeContextState = {
     setType: () => { }
 }
 
+type OptionErrorContextType = {
+    hasOptionError: boolean,
+    setOptionError: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const iOptionErrorContextState = {
+    hasOptionError: true,
+    setOptionError: () => { }
+}
 
 export const TypeContext = createContext<TypeContextType>(iTypeContextState);
+export const OptionErrorContext = createContext<OptionErrorContextType>(iOptionErrorContextState);
 
 const CreateEditQuestion = () => {
     const q = useLoaderData() as Question;
-    
+
     const [type, setType] = useState<QType>(q.type);
     const [question] = useState<Question>(q);
+    const [hasOptionError, setOptionError] = useState<boolean>(true);
     const [options, setOptions] = useState<{ [key: string]: OptionDto }>(() => {
-        if(question.options.length > 0){
+        if (question.options.length > 0) {
             return question.options.reduce((acc: { [key: string]: OptionDto; }, option) => {
                 acc[option.oId] = {
                     optionText: option.optionText,
@@ -38,12 +49,14 @@ const CreateEditQuestion = () => {
 
     return <>
         <OptionsContext.Provider value={{ options, setOptions }}>
-            <TypeContext.Provider value={{ type, setType }}>
-                <Flex direction={"row"} gap={20}>
-                    <QuestionDisplay isEditing={true} question={question} />
-                    <OptionsDisplay options={q.options} isEditing={true} questionId={question.questionId} />
-                </Flex>
-            </TypeContext.Provider>
+            <OptionErrorContext.Provider value={{ hasOptionError, setOptionError }}>
+                <TypeContext.Provider value={{ type, setType }}>
+                    <Flex direction={"row"} gap={20}>
+                        <QuestionDisplay isEditing={true} question={question} />
+                        <OptionsDisplay options={q.options} isEditing={true} questionId={question.questionId} />
+                    </Flex>
+                </TypeContext.Provider>
+            </OptionErrorContext.Provider>
         </OptionsContext.Provider>
     </>
 }

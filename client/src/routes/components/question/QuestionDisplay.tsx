@@ -1,11 +1,11 @@
-import { Button, ButtonGroup, FormControl, FormHelperText, FormLabel, Heading, Input, Select } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Button, ButtonGroup, FormControl, FormHelperText, FormLabel, Heading, Input, Select } from "@chakra-ui/react";
 import { QType, Question } from "../../../global";
 import { useContext, useEffect, useState } from "react";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { Form, Link } from "react-router-dom";
 import { OptionsContext } from "../../showQuestion";
 import { updateOption } from "../../endpoints";
-import { TypeContext } from "../../createEditQuestion";
+import { OptionErrorContext } from "../../createEditQuestion";
 
 type Props = {
     isEditing: boolean;
@@ -15,12 +15,15 @@ type Props = {
 const QuestionDisplay = ({ isEditing, question }: Props) => {
 
     const [name, setName] = useState<string>(question.questionName);
-    const { type, setType } = useContext(TypeContext);
+    const [type, setType] = useState<QType>(question.type);
     const [timeLimit, setTimeLimit] = useState<number>(question.timeLimit);
     const [points, setPoints] = useState<number>(question.points);
     const [id, setId] = useState<string>(question.questionId);
 
-    const { options } = useContext(OptionsContext);
+    const [hasEmptyError, setEmptyError] = useState<boolean>(false);
+
+    const { options, setOptions } = useContext(OptionsContext);
+    const { hasOptionError } = useContext(OptionErrorContext);
 
     useEffect(() => {
         setName(question.questionName);
@@ -30,20 +33,37 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
         setId(question.questionId);
     }, [question]);
 
+    useEffect(() => {
+        setEmptyError(name == "" || points == 0 || timeLimit == 0);
+    }, [name, points, timeLimit])
+
     return <>
         <Form method="post">
             <FormControl mb='2'>
                 <FormLabel>
                     <Heading as={"h2"} size={"lg"} mb={"4"}>Question</Heading>
                 </FormLabel>
+                {/*check if isEditing to avoid the error briefly appearing when saving*/}
+                <Alert status='error' display={hasEmptyError && isEditing ? "flex" : "none"} h={"auto"} w={"auto"} borderRadius={"15px"}>
+                    <AlertIcon />
+                    <AlertDescription>Fields empty or points/timelimit not numbers!</AlertDescription>
+                </Alert>
                 <FormLabel>Question Name</FormLabel>
                 <Input name="questionName" disabled={!isEditing} value={name} onChange={(event) => setName(event.target.value)} />
                 <FormHelperText mb={"2"}>Enter your Question</FormHelperText>
             </FormControl>
             <FormControl mb='2'>
                 <FormLabel>Question Type</FormLabel>
-                <Select name="type" mb={"2"} placeholder='Select type' disabled={!isEditing} value={type.toString()} onChange={(event) => {
+                <Select name="type" mb={"2"} disabled={!isEditing} value={type.toString()} onChange={(event) => {
                     setType(Number(event.target.value));
+                    //set each option to false in order to avoid single choice quesions having multiple correct options
+                    setOptions(prevOptions => {
+                        let newOptions = { ...prevOptions };
+                        for (let key in newOptions) {
+                            newOptions[key].isCorrect = false;
+                        }
+                        return newOptions;
+                    });
                 }}>
                     <option value={QType.SingleChoice}>{QType[QType.SingleChoice]}</option>
                     <option value={QType.MultipleChoice}>{QType[QType.MultipleChoice]}</option>
@@ -62,7 +82,7 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
                 <FormHelperText>Enter how many points should be awarded on correct completion</FormHelperText>
             </FormControl>
             <ButtonGroup mt={"5"}>
-                <Button colorScheme="green" display={!isEditing ? "none" : "auto"} leftIcon={<CheckIcon />} size={"lg"} type="submit" onClick={() => {
+                <Button colorScheme="green" display={!isEditing ? "none" : "auto"} isDisabled={hasEmptyError || hasOptionError} leftIcon={<CheckIcon />} size={"lg"} type="submit" onClick={() => {
                     for (let [key, value] of Object.entries(options)) {
                         updateOption(key, value)
                             .then(data => console.log(data))
@@ -72,7 +92,7 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
                 <Button colorScheme="green" variant={"outline"} leftIcon={<EditIcon />} display={isEditing ? "none" : "auto"} size={"lg"}>
                     <Link to={`../editquestion/${id}`}>Edit</ Link>
                 </Button>
-                <Button colorScheme="red" variant={"outline"} leftIcon={<CloseIcon />} size={"md"} display={!isEditing ? "none" : "auto"}>
+                <Button colorScheme="red" variant={"outline"} leftIcon={<CloseIcon />} size={"md"} display={!isEditing ? "none" : "auto"} isDisabled={hasEmptyError || hasOptionError}>
                     <Link to={`../question/${id}`}>Cancel</ Link>
                 </Button>
             </ButtonGroup>

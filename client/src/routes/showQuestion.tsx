@@ -20,12 +20,13 @@ export const OptionsContext = createContext<OptionsContextType>(iOptionsContextS
 
 const ShowQuestion = () => {
     const question = useLoaderData() as Question;
+
     const [options, setOptions] = useState<{ [key: string]: OptionDto }>({});
 
     // everytime a new question is selected the right options are set as the options
     useEffect(() => {
         setOptions(() => {
-            if(question.options.length > 0){
+            if (question.options.length > 0) {
                 return question.options.reduce((acc: { [key: string]: OptionDto; }, option) => {
                     acc[option.oId] = {
                         optionText: option.optionText,
