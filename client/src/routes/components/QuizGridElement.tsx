@@ -36,7 +36,7 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
     return <>
         <Card maxW='sm'>
             <CardHeader>
-                <Flex direction='row'>
+                <Flex direction='row' wrap={"wrap"} gap={2}>
                     <Heading size='lg'>{quizName}</Heading>
                     <Spacer />
                     <Badge fontSize='.9rem' colorScheme="green">{nQuestions} {nQuestions == 1 ? "Question" : "Questions"}</Badge>
@@ -49,7 +49,7 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
                 </Text>
             </CardBody>
             <CardFooter>
-                <ButtonGroup spacing='2'>
+                <ButtonGroup display={"flex"} flexWrap={"wrap"} gap={2} spacing={0}>
                     <Form method="post" action={`startgame/${id}`}>
                         <Button variant='solid' colorScheme='green' type="submit">
                             Play

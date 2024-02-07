@@ -5,7 +5,7 @@ import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { Form, Link } from "react-router-dom";
 import { OptionsContext } from "../../showQuestion";
 import { updateOption } from "../../endpoints";
-import { OptionErrorContext } from "../../createEditQuestion";
+import { OptionErrorContext, TypeContext } from "../../createEditQuestion";
 
 type Props = {
     isEditing: boolean;
@@ -24,6 +24,7 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
 
     const { options, setOptions } = useContext(OptionsContext);
     const { hasOptionError } = useContext(OptionErrorContext);
+    const {setType : setContextType} = useContext(TypeContext);
 
     useEffect(() => {
         setName(question.questionName);
@@ -56,6 +57,7 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
                 <FormLabel>Question Type</FormLabel>
                 <Select name="type" mb={"2"} disabled={!isEditing} value={type.toString()} onChange={(event) => {
                     setType(Number(event.target.value));
+                    setContextType(Number(event.target.value));
                     //set each option to false in order to avoid single choice quesions having multiple correct options
                     setOptions(prevOptions => {
                         let newOptions = { ...prevOptions };

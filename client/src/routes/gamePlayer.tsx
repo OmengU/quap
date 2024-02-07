@@ -66,7 +66,7 @@ const GamePlayer = () => {
     }
 
     return <>
-        <Flex direction={{ base: "column", md: "row" }} wrap="wrap" justify={{ base: "flex-start", md: "center" }} h={question.type == QType.MultipleChoice ? "90vdh" : "100dvh"} p={"1.5rem"}>
+        <Flex direction={{ base: "column", md: "row" }} wrap="wrap" justify={{ base: "flex-start", md: "center" }} h={question.type == QType.MultipleChoice ? "90dvh" : "100dvh"} p={"1.5rem"}>
             {question.options.map((o, i) =>
                 <Box p="1rem" key={i}
                     minW={{ base: "100%", md: question.options.length <= 3 ? `${100 / question.options.length}%` : "33.33%" }}

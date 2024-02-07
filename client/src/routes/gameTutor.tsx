@@ -47,6 +47,7 @@ const GameTutor = () => {
         }
 
         return () => {
+            console.log('Starting to close connection...');
             if (connection.current) {
                 connection.current.off("topPlayers");
                 connection.current.off("newQuestion");
@@ -158,9 +159,11 @@ const GameTutor = () => {
                     </TableContainer>
                     <Button colorScheme="green" p={"1.5rem"} onClick={(event) => {
                         event.preventDefault();
-                        if (connection.current)
+                        if (connection.current) {
+                            console.log(connection.current.state);
                             connection.current.invoke("NextQuestion")
                                 .catch(err => console.error(err));
+                        }
                     }}>Next Question</Button>
                 </ModalBody>
             </ModalContent>

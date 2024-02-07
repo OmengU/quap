@@ -65,7 +65,6 @@ namespace quap.Hubs
 
         private async Task SendQuestion()
         {
-            await Console.Out.WriteLineAsync(_questions[1].QuestionName);
             if (_currentQuestionIndex < _questions.Count)
             {
                 await Clients.All.SendAsync("newQuestion", _mapper.Map<SendQuestionDto>(_questions[_currentQuestionIndex]));

@@ -58,7 +58,7 @@ const Sidebar = ({ questions }: Props) => {
                     </Link>
                 </Button>
             </ButtonGroup>
-            <ChangeQuizModal isOpen={isOpen} onClose={onClose} quizId={questions[0].quizId}></ChangeQuizModal>
+            <ChangeQuizModal isOpen={isOpen} onClose={onClose}></ChangeQuizModal>
         </Flex>
     </>
 }
