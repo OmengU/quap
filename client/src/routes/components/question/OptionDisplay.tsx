@@ -11,7 +11,7 @@ type Props = {
     isEditing: boolean;
 }
 
-const OptionDisplay = ({ option, isEditing}: Props) => {
+const OptionDisplay = ({ option, isEditing }: Props) => {
     const id = option.oId;
 
     const { options, setOptions } = useContext(OptionsContext);
@@ -28,7 +28,7 @@ const OptionDisplay = ({ option, isEditing}: Props) => {
                 }} />
             </FormControl>
             {/*check if id is present in options and if not or if and not correct make outline */}
-            <IconButton icon={<CheckIcon />} aria-label={"correct"} variant={options[id] == undefined ? "outline" :(options[id].isCorrect ? "solid" : "outline")} colorScheme="green" isDisabled={!isEditing} onClick={(event) => {
+            <IconButton icon={<CheckIcon />} aria-label={"correct"} variant={options[id] == undefined ? "outline" : (options[id].isCorrect ? "solid" : "outline")} colorScheme="green" isDisabled={!isEditing} onClick={(event) => {
                 event.preventDefault();
                 setOptions((prevOptions: { [key: string]: OptionDto }) => {
                     // check if question is SC and if there is a correct option and if the current option is not correct and return error and old object if the case. otherwise return updated options
@@ -52,9 +52,7 @@ const OptionDisplay = ({ option, isEditing}: Props) => {
                     }
                 }} />
             </Form>
-
         </Flex>
-
     </>
 }
 

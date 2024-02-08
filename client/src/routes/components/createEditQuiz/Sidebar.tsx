@@ -8,7 +8,7 @@ type Props = { questions: Question[]; }
 
 const Sidebar = ({ questions }: Props) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
-    
+
     return <>
         <Flex direction='column' align='flex-start' ml='3' h='100vh' borderRight={"2px solid darkgray"} p={5}>
             <div id="sidebar">

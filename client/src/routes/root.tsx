@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext } from "react";
 import { Quiz } from "../global";
-import { checkIfPassword, getQuizzes } from "./endpoints";
+import { checkIfPassword } from "./endpoints";
 import QuizGrid from "./components/QuizGrid";
 import Header from "./components/Header";
 import { useDisclosure } from "@chakra-ui/react";

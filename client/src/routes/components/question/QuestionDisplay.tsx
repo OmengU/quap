@@ -24,7 +24,7 @@ const QuestionDisplay = ({ isEditing, question }: Props) => {
 
     const { options, setOptions } = useContext(OptionsContext);
     const { hasOptionError } = useContext(OptionErrorContext);
-    const {setType : setContextType} = useContext(TypeContext);
+    const { setType: setContextType } = useContext(TypeContext);
 
     useEffect(() => {
         setName(question.questionName);

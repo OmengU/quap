@@ -1,7 +1,7 @@
 import { Button, FormControl, FormErrorMessage, FormHelperText, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react"
 import { useState } from "react"
 import { createQuiz } from "../endpoints"
-import { redirect, useNavigate } from "react-router"
+import { useNavigate } from "react-router"
 
 type Props = {
     isOpen: boolean,

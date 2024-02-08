@@ -82,7 +82,7 @@ export const getQuestionById: GetQuestionById = async (questionId: string) => {
     }
 }
 
-export const updateQuiz: UpdateQuiz = async(id: string, body: QuizDto) => {
+export const updateQuiz: UpdateQuiz = async (id: string, body: QuizDto) => {
     const response = await fetch(`${URL}/Quiz/${id}`, {
         method: 'PATCH',
         headers: {
@@ -108,7 +108,7 @@ export const updateQuestion: UpdateQuestion = async (id: string, body: QuestionD
     return data as Question;
 }
 
-export const updateOption: UpdateOption  = async (id: string, body: OptionDto) => {
+export const updateOption: UpdateOption = async (id: string, body: OptionDto) => {
     const response = await fetch(`${URL}/Option/${id}`, {
         method: 'PATCH',
         headers: {
