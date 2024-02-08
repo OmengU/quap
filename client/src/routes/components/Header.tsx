@@ -16,8 +16,8 @@ const Header = ({ onOpen }: Props) => {
     const { isOpen: isOpenPassword, onOpen: onOpenPassword, onClose: onClosePassword } = useDisclosure()
 
     return <>
-        <Flex direction='row' boxShadow='xl' p='4' roundedBottom='md' ml='2' mr='2' mb={"10"} align={"center"}>
-            <Image src={quapLogo} boxSize={"4rem"} />
+        <Flex direction='row' boxShadow='xl' p='3' pt={1} pb={1} roundedBottom='md' ml='2' mr='2' mb={"10"} align={"center"}>
+            <Image src={quapLogo} boxSize={"4.5rem"} />
             <Heading size='lg'>
                 Quap
             </Heading>
