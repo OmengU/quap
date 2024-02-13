@@ -71,7 +71,7 @@ const GamePlayer = () => {
                 <Box p="1rem" key={i}
                     minW={{ base: "100%", md: question.options.length <= 3 ? `${100 / question.options.length}%` : "33.33%" }}
                     h={{ base: `${100 / question.options.length}%`, md: question.options.length <= 3 ? "100%" : "50%" }}>
-                    <Button p={"1.5rem"}
+                    <Button p={{base: "0", md: "1.5rem"}}
                         bg={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? "white" : colors[i]}
                         color={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? "black" : "white"}
                         border={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? `10px solid ${colors[i]}` : "none"}

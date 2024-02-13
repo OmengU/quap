@@ -36,7 +36,7 @@ const WaitingRoom = () => {
                     Waiting room
                 </Heading>
                 <Text fontSize={"xl"} mt={3} bg={"white"} p={"1rem"} borderRadius={"15px"}>
-                    Connect to this game via: {gameLink}:5173/play
+                    Connect to this game via: {location.hostname}:5173/play
                 </Text>
             </Flex>
             <Button colorScheme="green" mt={"3"} size={"lg"} onClick={(event) => {

@@ -36,10 +36,10 @@ const QuizGridElement = ({ quizName, description, nQuestions, id }: Props) => {
     return <>
         <Card maxW='sm'>
             <CardHeader>
-                <Flex direction='row' wrap={"wrap"} gap={2}>
+                <Flex direction={{base: "column", md: "row"}} gap={2}>
                     <Heading size='lg'>{quizName}</Heading>
                     <Spacer />
-                    <Badge fontSize='.9rem' colorScheme="green">{nQuestions} {nQuestions == 1 ? "Question" : "Questions"}</Badge>
+                    <Badge fontSize='.9rem' colorScheme="green" h={"fit-content"} p={".5rem"}>{nQuestions} {nQuestions == 1 ? "Question" : "Questions"}</Badge>
                 </Flex>
             </CardHeader>
             <Divider color='grey' />

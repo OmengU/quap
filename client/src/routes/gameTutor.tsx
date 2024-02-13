@@ -83,13 +83,13 @@ const GameTutor = () => {
     return <>
         <Box>
             <Flex h={"33vh"} bgGradient={"linear(to-l, #7928CA, #FF0080)"} direction={"row"} align={"center"} justify={"center"} p={"1rem"} gap={"2rem"}>
-                <Flex align={"center"} h={"60%"} bg={"white"} borderRadius={"15px"} p={"1.5rem"}>
-                    <Text fontSize={"5xl"}>
+                <Flex align={"center"} h={"60%"} bg={"white"} w={"fit-content"} borderRadius={"15px"} p={"1.5rem"}>
+                    <Text fontSize={"4xl"} textAlign={"center"}>
                         ⏱️{timerSeconds}
                     </Text>
                 </Flex>
-                <Flex align={"center"} h={"60%"} bg={"white"} borderRadius={"15px"} p={"1.5rem"} >
-                    <Text fontSize={"5xl"}>
+                <Flex align={"center"} minH={"60%"} h={"auto"} bg={"white"} w={"fit-content"} borderRadius={"15px"} p={"1.5rem"} >
+                    <Text fontSize={"4xl"}>
                         {question.questionName}
                     </Text>
                 </Flex>
@@ -120,7 +120,7 @@ const GameTutor = () => {
 
         <Flex wrap="wrap" justifyContent="center" h={"67vh"} p={"2.5rem"} gap={"1.5rem"}>
             {question.options.map((o, i) =>
-                <Box minW={question.options.length <= 3 ? `${100 / question.options.length}%` : "33.33%"} key={i}>
+                <Box minW={question.options.length <= 3 ? `${100 / question.options.length}%` : "30%"} key={i}>
                     <Card bg={colors[i]} h={"100%"}>
                         <CardBody display="flex" justifyContent="center" alignItems="center">
                             <Text fontSize={"8xl"} color={"white"}>
