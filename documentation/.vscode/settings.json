@@ -4,6 +4,7 @@
         "automapper",
         "bcryptnet",
         "Dietmar",
+        "flexbox",
         "FOSS",
         "jabref",
         "Laurenz",
@@ -11,7 +12,13 @@
         "Mädje",
         "netcore",
         "pagebreak",
+        "reactcomponents",
+        "reactrouter",
         "signalr",
-        "Typst"
+        "Typst",
+        "vite"
+    ],
+    "cSpell.enableFiletypes": [
+        "typst"
     ]
 }

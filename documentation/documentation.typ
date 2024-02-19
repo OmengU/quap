@@ -175,7 +175,7 @@ The database used for this project is PostgreSQL, a #acr("FOSS") relational data
 
 This project makes use of some of these features since it uses Enums to store certain data, which are not available on other relational #acr("DBMS"). Further details about said implementation will be covered in the Backend part of the implementation section later in this documentation. One downside of using PostgreSQL with Entity Framework Core is that it requires the installation of a third-party package called `Npgsql` to be supported.
 === Concepts
-The following concepts are vital to understanding the implementation of the Backend, which will be discussed in its own section.
+The following concepts are vital to understanding the implementation of the Backend.
 ==== REST
 #acr("REST") #acr("API")s are generally no different from general #acr("HTTP")-based ones. #acr("REST") itself merely describes a set of guidelines, which are recommended when designing #acr("API")s. They were laid out by Roy Fielding, who co-founded the Apache #acr("HTTP") Server Project, in his Ph.D. thesis written in the year 2000. #acr("API")s that utilize these guidelines are called "RESTful".
 
@@ -211,6 +211,13 @@ In software development, a #acr("DTO") is like a specialized messenger carrying 
 
 An example for a use-case of a #acr("DTO") from this project is that when information about a specific question of a quiz is transferred to a client, any data containing information about wether or not an option is correct or not is omitted to prevent students from cheating.
 ==== Repository Pattern
+The Repository pattern in ASP.NET is a design pattern, where so-called Repositories are created, that act as a middleman between Entity Framework Core and the #acr("API") Controllers. All functions performing #acr("CRUD") operations are defined in the Repositories, so that a Controller never has to work with the database directly. The Repository pattern brings several advantages:
+
+- *Separation of Concerns:* The repository keeps business logic decoupled from the intricate details of data access, leading to cleaner and more maintainable code. This is especially important for larger teams, where many developers work on a single codebase.
+
+- *Reusability:* A single repository can serve multiple parts of the application, reducing code duplication and promoting consistency.
+
+- *Flexibility:* If you need to switch data sources, you only need to modify the repository implementation, keeping the rest of the application intact. @misc-repo
 == Frontend
 This section will cover all technologies used in the implementation of the Frontend part of the application. The Frontend encompasses all parts of the program that a user interacts with. For example, all #acr("GUI")s are part of the Frontend.
 === Programming Languages
@@ -241,10 +248,58 @@ React supports both JavaScript and TypeScript. It also allows the developer to w
 One problem that occurs when working with Libraries such as React is that Web Browsers do not natively support them as they only know how to work with #acr("HTML"), #acr("CSS"), and JavaScript, which means that code written in React first has to compiled to technologies understood by Browsers. This step also requires including or bundling in all dependencies required. The traditional tool of choice for this task was WebPack, but in recent years, another option, namely Vite has increased in popularity.
 
 The main advantage of Vite is that it is much faster than WebPack. Vite achieves this by supporting ES Modules, the official module system for JavaScript. This increases efficiency because code no longer has to be bundled into a single file, which greatly reduces complexity. This makes it also possible for Vite to only update the modules for certain parts of the application since code is bundled into multiple different files. This is particularly useful for development, as it decreases reload times when making small changes to code. Vite is also able to determine if certain parts of code are really necessary to the application and then remove said code from the bundle, reducing its file size. @misc-vite
-==== Chakra-Ui
+==== Chakra-UI
+When working with React or another Component-based Framework/Library, it soon becomes evident, that many different components occur on almost every page. A perfect example of such an element would be a Button or even something more complicated such as a Card or a Dialog/Modal. Additionally, as every Frontend developer knows, it usually takes quite a long time to decide on how the page should look and even longer to subsequently define all the necessary #acr("CSS") rules.
+
+Luckily, several packages and extensions aim to reduce the time of implementing standard Components and styling them. Their way of doing so varies greatly, but Chakra-UI, the solution used in this project, approaches this problem by providing the developer with several predefined and styled Components. These range from commonly used elements like the ones mentioned above to more abstract ones like one Component that is a container with the #acr("CSS") flexbox display property. Chakra-UI also allows for basic styling of its Components by passing Props and it provides the functionality to easily make the website responsive (usable on smaller screens) and accessible. @misc-chakra The following shows a Button that is inside of a Container with flexbox:
+```tsx
+<Flex justify="center" gap="2px" direction="row">
+  <Button colorScheme="green" p="1px">Save</Button>
+</Flex>
+```
+As is visible in the example given, it is very easy to work with Chakra-UI. Specific Props will not be explained here or in the following documentation of the implementation with a few exceptions.
+
+Chakra-UI is installed using the #acr("NPM"). It is then required to wrap the main Component in a ChakraProvider Component. Afterwords, Chakra-UI can be used anywhere in the application. @misc-chakra
 ==== React Router
+When working on more complex projects, React alone is often not enough, since it lacks any features to declare multiple routes with different pages. There is, however, a library that adds such support called React Router. It offers several different kinds of routers. This project uses a BrowserRouter, where the current location is stored in the Browser's address bar. A BrowserRouter allows the developer to define routes and children routes by adding a path and a Component for the page like this:
+```ts
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    loader: quizLoader,
+  },
+  {
+    path: "/editquiz/:quizId,
+    element: <CreateEditQuiz />,
+    loader: loader,
+    action: addQuestionAction,
+    children: [
+      {
+        path: "question/:questionId",
+        element: <ShowQuestion />,
+        loader: questionLoader,
+      }},
+```
+The main Component then has to be wrapped in a Router Component.
+
+In addition to simple routing, React Router also supports more advanced features such as loaders and actions, as shown in the example above. Loaders allow the developer to define functions that automatically get executed when the component loads. This is used to load data from an external data source (#acr("API")). Actions on the other hand are more complicated. They emulate the standard #acr("HTML") feature, where, when a form is submitted, a #acr("HTTP") request is made. Actions intercept said request and relay the form data to a specifically defined function on a route. There, the data is processed and sent to a Backend Server. If there is only one action defined per route, said action is automatically executed on a form submit. Otherwise, the route of the action desired has to be defined on the Form.
+
+React Router also allows for the creation of Links to redirect to another page. Redirecting is also possible as a return value of an action or via a React Hook called `useNavigate()`. @misc-reactrouter Hooks will be explained in the next section.
 === Concepts
-==== React Components/Lifecycle
+The following concepts are vital to understanding the implementation of the Frontend.
+==== React Component Types
+React offers the ability to create two different types of Components: *Class* Components and *Functional* Components. Class Components are the older way, available since React was first released. They are essentially JavaScript Objects/Classes. They allow for the use Lifecycle Methods, which perform actions at specific stages of the component's lifecycle (creation, update, deletion). They also allow for management of the component state. This means that it is possible to store data specific to the component instance and to modify that data at any time. Functional Components, on the other hand rely on functions for their implementation. When displayed, Functional Components act like a standard function and are executed once. They return  #acr("JSX") markup. Due to that behavior, they do not support Lifecycle Methods and dynamic state management. This made them by far the less popular option for a long time until Hooks were introduced. Hooks add the previously missing features to Functional Components. The by far most used Hook is the useState Hook. It allows for state management. It is initialized with a value and a setter function. Once the setter function is called, the entire Component gets rerendered with the updated data.
+```tsx
+const [name, setName] = useState<string>("Simon")
+```
+In this example, name is initialized with the value "Simon". The specification of the type is required only when working with TypeScript.
+
+Functional Components are generally preferred nowadays since they require less Boilerplate Code and are more performant. They also receive more support than Class Components, which are considered outdated at this point. Another reason for the popularity of Functional Components is that Classes behave very irregularly in JavaScript, which can lead to many bugs. Functions are more reliable. @misc-reactcomponents 
+
+#pagebreak()
+
+= implementation
 
 #pagebreak()
 

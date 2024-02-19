@@ -30,6 +30,7 @@
   "FTP": ("File Transfer Protocol"),
   "IP": ("Internet Protocol"),
   "DOM": ("Document Object Model"),
-  "JSX": ("JavaScript Extensible Markup Language (XML)")
+  "JSX": ("JavaScript Extensible Markup Language (XML)"),
+  "NPM": ("Node Package Manager"),
 ))
 }
