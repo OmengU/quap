@@ -302,6 +302,42 @@ Functional Components are generally preferred nowadays since they require less B
 #pagebreak()
 
 = Implementation
+== Architecture
+=== Backend
+General information about Architecture of Backend including a Diagram.
+=== Frontend
+Same as Backend with Diagram of pages.
+== Quiz Management
+=== Backend
+==== Models/DTOs
+==== Repositories
+==== Controllers
+=== Frontend
+==== Main page
+==== Edit Quiz Page
+== Access Control with password
+=== Backend
+=== Frontend
+== Game Flow
+=== Models/DTOs
+=== Repositories
+=== Controller
+=== Initialize Game
+=== Join Game
+=== Start Game
+=== Gameplay
+=== End Game
+== Miscellaneous Code
+=== Configuration
+
+#pagebreak()
+
+= Conclusion
+== Results
+=== Backend
+=== Frontend
+== Potential future additions
+== Reflection on the project
 
 #pagebreak()
 
