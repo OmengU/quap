@@ -1,6 +1,22 @@
 #import "template.typ": project
 #import "abbreviations.typ": abbreviations
 #import "@preview/acrostiche:0.3.1": *
+#import "@preview/codelst:2.0.0": sourcecode
+
+#let code = sourcecode.with(
+  frame: block.with(
+    fill: rgb("#F6FFF3"),
+    inset: 5mm,
+    radius: 10pt,
+    stroke: 1pt + green,
+  ),
+)
+
+#show figure.where(kind: "code"): set text(size: 13pt)
+#show figure.caption.where(kind: "code"): set text(size: 10pt)
+
+
+
 
 #let candidates = (
   (
@@ -36,7 +52,7 @@
 #pagebreak()
 
 = Theoretical Foundations
-This chapter delves into various applications, programming languages, frameworks, and related technologies pertinent to this work. Each component receives a thorough examination, covering its functionalities, potential use cases, unique features, benefits, drawbacks, and any existing limitations. By illuminating these strengths and weaknesses, I aim to equip readers with a comprehensive understanding of these technologies and their significance to the overall project.
+This chapter delves into various applications, programming languages, frameworks, and related technologies pertinent to this work. Each component receives a thorough examination, covering its functionalities, potential use cases, unique features, benefits, drawbacks, and any existing limitations. By illuminating these strengths and weaknesses, I aim to equip readers with a comprehensive understanding of these technologies and their significance to the overall project. This section is meant as a reference point for the rest of the documentation. An explanation of what was achieved can be found in the #link(<implementation>)[Implementation] section.
 == Software used
 Many programs and other software were used in order to complete the must-goals. The following section will cover them in detail. To qualify as a program, a piece of software has to be executable.
 === Development
@@ -126,7 +142,7 @@ C\#, or as it is pronounced "C sharp" is a general-purpose programming language 
 The language is written object-oriented, meaning that the core of each C\# application is Classes, independent entities containing both variables and business logic. It also provides type safety, which in combination with the language's automatic memory management and garbage collector makes C\# very user-friendly and reliable. Its syntax is often compared to that of the very popular language Java. Microsoft originally developed the language only for their own Windows #acr("OS"), but it has since been made available for macOS and Linux as well. @misc-csharp It is part of the larger .NET Framework used to create many different kinds of applications. The original .NET Framework is only supported on Windows. A cross-platform version called .NET Core is also available. The most recent .NET Core revision as of February 2024 is .NET Core 8. @ms-dotnet
 === Frameworks/Libraries
 In addition to C\# as the main programming language of the Backend, several Frameworks, Libraries and Packages were also used in cases where additional features were required. 
-==== Asp.NET Core
+==== Asp.NET Core <asp.netcore>
 Asp.NET is #acr("FOSS"), cross-platform, and lightweight Framework built as an addition to the previously mentioned .NET Core Framework. It enables developers to create high-performing Web Applications with the C\# language. It is based upon the older Asp.NET Framework, which opposed to its newer counterpart is only available for Windows, as it is based on the regular .NET Framework. Asp.NET still receives updates. They are, however, small in nature. Asp.NET Core is a total rewrite of the previously existing functionality.
 
 Asp.NET Core provides the ability to create both #acr("MVC") and Web #acr("API") applications. #acr("MVC") describes a popular architectural pattern, where the application logic is split into three distinct parts:
@@ -142,7 +158,7 @@ Web #acr("API")s on the other hand merely provide endpoints, to which other appl
 This project uses a Web #acr("API") without any #acr("MVC") Components.
 ===== Entity Framework Core
 Asp.NET Core also provides an #acr("ORM") called Entity Framework Core. An #acr("ORM") is an abstraction layer between the application and the database. It is used to perform #acr("CRUD") operations, without having to write database queries by hand. They typically provide interfaces to interact with database tables as if they were regular objects. One thing of note is that the term is reserved for relational databases only. Non-relational solutions use different terms (for example Object Document Mapper in MongoDb). Entity Framework Core supports SQLServer out of the box, although there are third-party packages, which add support for further databases. @misc-orm
-==== AutoMapper
+==== AutoMapper <automapper>
 To convert between a Model and a #acr("DTO"), it is normally required to manually assign the values as follows:
 ```c#
 model.name = dto.name;
@@ -150,7 +166,7 @@ model.date = dto.date;
 model.price = dto.price;
 ```
 Doing this can not only lead to a lot of filler code, but it may also be impossible with larger objects. #acr("DTO")s themselves will be thoroughly explained later in this document. AutoMapper is a library that allows the developer to define maps between certain models/#acr("DTO")s. It will then try to automatically match corresponding fields. Should this fail, the developer is able to manually create maps as well. Maps are not bidirectional, so each one has to be created twice. AutoMapper includes an easy way of doing this by simply defining the map a second time and adding `.ReverseMap()` at the end of one of them. @misc-automapper
-==== SignalR
+==== SignalR <signalR>
 In a traditional Web #acr("API"), clients can only send requests to the server, to which the server may then respond. This system works well for certain use cases, but for others, for example, chats or games, it is too limited. Instead, these applications may benefit from the use of another technology, namely WebSockets. They differ from traditional #acr("HTTP") endpoints by establishing a persistent connection between clients and servers with two-way communication channels. The technical term for communication of that sort is "Full-Duplex Communication". Messages transmitted over WebSockets are also delivered or received in real time. Although their usefulness is without doubt, WebSockets also possess certain limitations, which a developer has to keep in mind when using them:
 
 - *Poor Security:* WebSocket messages are by default not transported securely. This may lead to unauthorized access to systems and data breaches.
@@ -164,7 +180,7 @@ As a solution to said problems, Microsoft released the SignalR library for .NET 
 In the clients, for example, a website, SignalR is also available as a package. Once installed, event listeners can be defined, which waits for a specific message from the server. Each message requires its own listener. Additionally, clients can also call the previously discussed functions on the server by invoking them with their name and, if needed, adding data needed in the Backend.
 
 SignalR also allows for the creation of a custom function that is executed on a client establishing a connection by overriding the `Hub.OnConnected()` or `Hub.OnConnectedAsync()` methods. It is also possible to invoke functions on the Hub on the same ASP.NET application by using a HubContext. Lastly, it has to be mentioned that SignalR also supports other real-time communication technologies other than WebSockets. They are, however, excluded in this documentation, since they are not used. An example of one of them would be Server Side Events. @book-signalr 
-==== Bcrypt.NET
+==== Bcrypt.NET <bcrpyt>
 Bcrypt.NET is a .NET library implementing the popular Bcrypt password-hashing function. @misc-bcryptnet
 
 Bcrypt was designed by Niels Provos and David Mazières in 1999 and is based on the 1993 developed Blowfish Cipher, itself created by American cryptographer Bruce Schneider. Although there are newer ciphers and algorithms out there, Blowfish even has a successor called Twofish, Bcrypt is still considered secure and widely used thanks to its availability on many platforms.
@@ -172,7 +188,7 @@ Bcrypt was designed by Niels Provos and David Mazières in 1999 and is based on 
 It does not only just hash passwords, it also salts them. Salting adds additional security compared to just hashing, where passwords are merely encrypted using a predefined algorithm. One downside of doing things this way is that hackers retain the ability to use so-called Rainbow Tables, which are created by first gathering a list of commonly used passwords, most of them regular words without major alterations. Frequently used tricks such as replacing the letters "O" and "E" with the numbers 0 and 3 respectively are also taken into consideration. This list is then run through an algorithm to get a list of hashed passwords. Salting mitigates this issue like so: When passwords are hashed, in addition to simply applying the algorithm a random string of numbers and characters is used as a second argument to the hashing function. This string is referred to as the Salt. It is used inside of the hashing function to modify the resulting hashed password so that encrypting the same password with multiple Salts results in different outputs rendering Rainbow Tables useless.
 
 In addition to Salts and to distinguish itself from competing solutions, Bcrypt is also significantly slower than other algorithms, making regular encryption and decryption still possible, but rendering Rainbow Tables time-consuming to produce, even without the use of Salts. @misc-bcrypt
-=== PostgreSQL
+=== PostgreSQL <postgres>
 The database used for this project is PostgreSQL, a #acr("FOSS") relational database. Similar to other relational databases like MySQL and SQLServer, it stores data in tables divided into rows and columns. Another shared characteristic is that most relational databases use #acr("SQL") to write queries performing #acr("CRUD") operations on stored data. What differentiates PostgreSQL from other solutions is that it is a so-called Object Relational Database, meaning that it supports concepts like custom data types and inheritance typically found in #acr("OOP"). It also allows multiple transactions to be run at the same time, by assigning a snapshot of the database to each one and for reusable queries. @misc-postgres
 
 This project makes use of some of these features since it uses Enums to store certain data, which are not available on other relational #acr("DBMS"). Further details about said implementation will be covered in the Backend part of the implementation section later in this documentation. One downside of using PostgreSQL with Entity Framework Core is that it requires the installation of a third-party package called `Npgsql` to be supported.
@@ -301,10 +317,43 @@ Functional Components are generally preferred nowadays since they require less B
 
 #pagebreak()
 
-= Implementation
+= Implementation <implementation>
+This chapter of the diploma thesis will cover the practical implementation of the project. It is divided into several chapters, were information about the architecture and code is separated into sections loosely based on the must-goals. It will also contain graphics and images, which aim to provide an even better look at the finished product.
 == Architecture
+Even though the application is run locally, it still relies heavily on technologies commonly found in web development. A major deciding force for employing going this route was that the project is very similar to web applications in not only its concept (all available solutions, which were used as inspirations for this project are web-based), but also its general composition. The reason for this similarity is found in the fact that the application has to be accessible from not only a tutor's PC, but from a student's device as well.
+
+This sameness also extends to its general architectural Design, which like web applications is divided into a Frontend and a Backend. The former includes all Clients and #acr("GUI")s accessed by students and tutors, and the latter containing a Server, which is responsible for storing and managing Quiz/Game data and for providing access to said data via multiple methods, which are outlined in @architecture-general:
+#figure(image("images/architecture/General.jpg"), caption: [General Architecture Overview])<architecture-general>
+As seen in the @architecture-general, communication occurs both via #acr("HTTP"), where data is requested by the Client and then subsequently provided/mutated/stored by the Server, as well as bidirectional #link(<signalR>)[SignalR] WebSocket connections.
 === Backend
-General information about Architecture of Backend including a Diagram.
+#figure(image("images/architecture/Server.jpg"), caption: [Backend Architecture Design])<architecture-backend>
+*Logo Reference:*
+
+#grid(
+  columns: (1fr, 1fr, 1fr, 1fr),
+  figure(image("images/logos/postgres.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<postgres>)[Postgres]@image-postgers]], supplement: "Logo", kind: "Logo"),
+  figure(image("images/logos/automapper.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<automapper>)[AutoMapper]@image-automapper]], supplement: "Logo", kind: "Logo"),
+  figure(image("images/logos/signalr.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<signalR>)[SignalR]@image-signalr]], supplement: "Logo", kind: "Logo"),
+  figure(image("images/logos/bcrypt.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<bcrpyt>)[Bcrypt.NET]@image-bcrypt]], supplement: "Logo", kind: "Logo"),
+  )
+
+@architecture-backend shows the general composition of the Backend Server application. It is developed in #link(<asp.netcore>)[Asp.NET Core] and thus written with the C\# programming language. It contains all Models, DTOs, Repositories, and Controllers needed for managing the persistent storage of Quizzes and Games in addition to basic user verification capabilities. All of these components will be explained in detail in their own sections. Information is stored in a PostgreSQL database, which is run as a Docker Container. It is initialized using a `docker-compose.yaml` file:
+#figure(caption: [Postgres Docker Compose],supplement: [Code Snippet], kind: "code")[#code[
+```yaml
+services:
+  postgres:
+    container_name: quap
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd
+    ports:
+      - 5432:5432
+```
+]
+]<code-dockercompose>
+
+The difference between a `docker-compose.yaml` and a `dockerfile` is
 === Frontend
 Same as Backend with Diagram of pages.
 == Quiz Management
@@ -342,3 +391,8 @@ Same as Backend with Diagram of pages.
 #pagebreak()
 
 #bibliography("references.bib")
+
+#outline(
+  title: [Code Directory],
+  target: figure.where(kind: "code"),
+)
