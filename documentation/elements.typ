@@ -1,10 +1,7 @@
 #let code-snippet(
   caption: "",
-  body
+  body,
 ) = {
-
-  show figure.where(kind: "code"): set text(size: 13pt)
-  show figure.caption.where(kind: "code"): set text(size: 10pt, style: "italic")
 
   show figure.where(kind: "code"): fig => align(left)[
   #fig.body  

@@ -4,7 +4,7 @@
 #import "elements.typ" : code-snippet
 
 
-#show figure.caption.where(kind: "logo"): set text(size: 10pt, style: "italic")
+#show figure.caption: set text(size: 10pt, style: "italic")
 
 #let candidates = (
   (
@@ -266,7 +266,7 @@ Luckily, several packages and extensions aim to reduce the time it takes to impl
 As is shown in the example given, it is very easy to work with Chakra-UI. Specific Props will not be explained here or in the following documentation of the implementation with a few exceptions.
 
 Chakra-UI is installed using the #acr("NPM"). It is then required to wrap the main Component in a ChakraProvider Component. Afterwords, Chakra-UI can be used anywhere in the application. @misc-chakra
-==== React Router
+==== React Router <reactRouter>
 When working on more complex projects, React alone is often not enough, since it lacks any features to declare multiple routes with different pages. There is, however, a library that adds such support called React Router. It offers several different kinds of routers. This project uses a BrowserRouter, where the current location is stored in the Browser's address bar. A BrowserRouter allows the developer to define routes and children routes by adding a path and a Component for the page like this:
 ```ts
 const router = createBrowserRouter([
@@ -295,34 +295,34 @@ React Router also allows for the creation of Links to redirect to another page. 
 === Concepts
 The following concepts are vital to understanding the implementation of the Frontend.
 ==== React Component Types
-React offers the ability to create two different types of Components: *Class* Components and *Functional* Components. Class Components are the older way, available since React was first released. They are essentially JavaScript Objects/Classes. They allow for the use Lifecycle Methods, which perform actions at specific stages of the component's lifecycle (creation, update, deletion). They also allow for management of the component state. This means that it is possible to store data specific to the component instance and to modify that data at any time. Functional Components, on the other hand rely on functions for their implementation. When displayed, Functional Components act like a standard function and are executed once. They return  #acr("JSX") markup. Due to that behavior, they do not support Lifecycle Methods and dynamic state management. This made them by far the less popular option for a long time until Hooks were introduced. Hooks add the previously missing features to Functional Components. The by far most used Hook is the useState Hook. It allows for state management. It is initialized with a value and a setter function. Once the setter function is called, the entire Component gets rerendered with the updated data.
+React offers the ability to create two different types of Components: *Class* Components and *Functional* Components. Class Components are the older way, available since React was first released. They are essentially JavaScript Objects/Classes. They allow for the use of Lifecycle Methods, which perform actions at specific stages of the component's lifecycle (creation, update, deletion). They also allow for the management of the component state. This means that it is possible to store data specific to the component instance and to modify that data at any time. Functional Components, on the other hand, rely on functions for their implementation. When displayed, Functional Components act like a standard function and are executed once. They return  #acr("JSX") markup. Due to that behavior, they do not support Lifecycle Methods and dynamic state management. This made them by far the less popular option for a long time until Hooks were introduced. Hooks add the previously missing features to Functional Components. The by far most used Hook is the useState Hook. It allows for state management. It is initialized with a value and a setter function. Once the setter function is called, the entire Component gets rerendered with the updated data.
 ```tsx
 const [name, setName] = useState<string>("Simon")
 ```
-In this example, name is initialized with the value "Simon". The specification of the type is required only when working with TypeScript.
+In this example, the name is initialized with the value "Simon". The specification of the type is required only when working with TypeScript.
 
 Functional Components are generally preferred nowadays since they require less Boilerplate code and are more performant. They also receive more support than Class Components, which are considered outdated at this point. Another reason for the popularity of Functional Components is that Classes behave very irregularly in JavaScript, which can lead to many bugs. Functions, on the other hand, are considered more reliable. @misc-reactcomponents 
 
 #pagebreak()
 
 = Implementation <implementation>
-This chapter of the diploma thesis will cover the practical implementation of the project. It is divided into several chapters, were information about the architecture and code is separated into sections loosely based on the must-goals. It will also contain graphics and images, which aim to provide an even better look at the finished product.
+This chapter of the diploma thesis will cover the practical implementation of the project. It is divided into several chapters, where information about the architecture and code is separated into sections loosely based on the must-goals. It will also contain graphics and images, which aim to provide an even better look at the finished product.
 == Architecture
-Even though the application is run locally, it still relies heavily on technologies commonly found in web development. A major deciding force for employing going this route was that the project is very similar to web applications in not only its concept (all available solutions, which were used as inspirations for this project are web-based), but also its general composition. The reason for this similarity is found in the fact that the application has to be accessible from not only a tutor's PC, but from a student's device as well.
+Even though the application is run locally, it still relies heavily on technologies commonly found in web development. A major deciding force for employing going this route was that the project is very similar to web applications in not only its concept (all available solutions, which were used as inspirations for this project are web-based) but also its general composition. The reason for this similarity is found in the fact that the application has to be accessible from not only a tutor's PC but from a student's device as well.
 
-This sameness also extends to its general architectural Design, which like web applications is divided into a Frontend and a Backend. The former includes all Clients and #acr("GUI")s accessed by students and tutors, and the latter containing a Server, which is responsible for storing and managing Quiz/Game data and for providing access to said data via multiple methods, which are outlined in @architecture-general:
-#figure(image("images/architecture/General.jpg"), caption: [General Architecture Overview])<architecture-general>
+This sameness also extends to its general architectural Design, which like web applications is divided into a Frontend and a Backend. The former includes all Clients and #acr("GUI")s accessed by students and tutors, and the latter contains a Server, which is responsible for storing and managing Quiz/Game data and for providing access to said data via multiple methods, which are outlined in @architecture-general:
+#figure(image("images/architecture/General.jpg"), caption: [General Architecture Overview], kind: "image", supplement: "Figure")<architecture-general>
 As seen in the @architecture-general, communication occurs both via #acr("HTTP"), where data is requested by the Client and then subsequently provided/mutated/stored by the Server, as well as bidirectional #link(<signalR>)[SignalR] WebSocket connections.
 === Backend
-#figure(image("images/architecture/Server.jpg"), caption: [Backend Architecture Design])<architecture-backend>
+#figure(image("images/architecture/Server.jpg"), caption: [Backend Architecture Design], kind: "image", supplement: "Figure")<architecture-backend>
 *Logo Reference:*
 
 #grid(
   columns: (1fr, 1fr, 1fr, 1fr),
-  figure(image("images/logos/postgres.png", height: 1.5cm), caption: [#link(<postgres>)[Postgres]@image-postgers], supplement: "Logo", kind: "logo"),
-  figure(image("images/logos/automapper.png", height: 1.5cm), caption: [#link(<automapper>)[AutoMapper]@image-automapper], supplement: "Logo", kind: "logo"),
-  figure(image("images/logos/signalr.png", height: 1.5cm), caption: [#link(<signalR>)[SignalR]@image-signalr], supplement: "Logo", kind: "logo"),
-  figure(image("images/logos/bcrypt.png", height: 1.5cm), caption: [#link(<bcrpyt>)[Bcrypt.NET]@image-bcrypt], supplement: "Logo", kind: "logo"),
+  figure(image("images/logos/postgres.png", height: 1.5cm), caption: [#link(<postgres>)[Postgres]@image-postgers], supplement: "Figure", kind: "image"),
+  figure(image("images/logos/automapper.png", height: 1.5cm), caption: [#link(<automapper>)[AutoMapper]@image-automapper], supplement: "Figure", kind: "image"),
+  figure(image("images/logos/signalr.png", height: 1.5cm), caption: [#link(<signalR>)[SignalR]@image-signalr], supplement: "Figure", kind: "image"),
+  figure(image("images/logos/bcrypt.png", height: 1.5cm), caption: [#link(<bcrpyt>)[Bcrypt.NET]@image-bcrypt], supplement: "Figure", kind: "image"),
   )
 
 @architecture-backend shows the general composition of the Backend Server application. It is developed in #link(<asp.netcore>)[Asp.NET Core] and thus written with the C\# programming language. It contains all Models, DTOs, Repositories, and Controllers needed for managing the persistent storage of Quizzes and Games in addition to basic user verification capabilities. All of these components will be explained in detail in their own sections. Information is stored in a PostgreSQL database, which is run as a Docker Container. It is initialized using a `docker-compose.yaml` file:
@@ -340,12 +340,96 @@ services:
 ```
 ]
 
-The difference between a `docker-compose.yaml` and a `dockerfile` is
+The difference between a `docker-compose.yaml` and a `dockerfile` is that the former is used to run and configure Docker Containers, while the latter is used to do the same for Docker Images. @misc-dockercompose. This is also evident from the code segment provided above, where an already created image providing the latest version of PostgreSQL is specified. The only thing left to configure is the username and password for the database. Here, they are still hard-coded, as the must-goals do not require a more complex solution, but it would be better for larger projects to obfuscate that information. This, however, is outside the scope of this project.
+
+The DbContext shown in @architecture-backend is a class that utilizes Entity Framework Core. It is used to configure what to store in the database and how to do so. Further detail will follow in sections describing various Models.
 === Frontend
-Same as Backend with Diagram of pages.
+#figure(image("images/architecture/Client.jpg"), caption: [Frontend Architecture Design], kind: "image", supplement: "Figure")<architecture-frontend>
+*Logo Reference:*
+#figure(image("images/logos/reactrouter.png", height: 1.5cm), caption: [#link(<reactRouter>)[React Router]@image-reactrouter], supplement: "Figure", kind: "image")
+
+The Frontend of the project is a complex React application. It is divided into two main sections, which are different in both their implementation and use case. The first one is the Game Pages, which contain all the functionality needed for playing a game. They are shown in their own section in @architecture-frontend. This part of the application mainly uses SignalR connections to communicate with the Server. The other section is the Quiz Management interfaces, entirely used by the tutor. Here, they are able to create new Quizzes, edit existing ones, or delete Quizzes, which are no longer used. These functions are separated into two pages:
+
+- *Root Page:* Default page of the client. Displays all Quizzes and lets the tutor edit, create, delete, or start games with quizzes.
+
+- *Edit Quiz Page*: This page is navigated when editing a Quiz. Here, individual Questions and Options are visible and editable.
+
+Deleting and editing Quizzes requires the tutor to enter a password for verification. This segment of the Frontend relies on #acr("HTTP") endpoints for interactions with the Backend, making significant use of React Router Loaders and Actions to manage data. All code needed to perform Requests to the #acr("HTTP") #acr("API") is located in the `endpoints.ts` file, from where it is imported into other parts of the application. All routes needed are defined in the Main Component.
 == Quiz Management
+A major part of the planned project was a tutor's ability to manage Quizzes. This includes the creation, editing, and deleting of Quizzes and their containing Questions and Options. The aim was to create user-friendly interfaces to perform these tasks and for the Quizzes to be stored perpetually.
 === Backend
+In the Server, this section includes a RESTful #acr("API") providing several endpoints for managing Quizzes.
 ==== Models/DTOs
+In order to properly store data, the Creation of multiple Models is required. A model is a class used as a reference by Entity Framework Core to create SQL queries to Initialize tables. Each Model represents one of these tables. This section includes three Models: Quiz, Question, and Option. Of those three, Option is the lowest in their shared hierarchical order as it is part of a Question, which in turn is part of a Quiz. The Option Model includes distinct fields that represent different essential data. The Model itself is created as a regular C\# class:
+#code-snippet(caption: "Option Model")[
+  ```cs
+  public class Option
+	{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid OId { get; set; }
+    public string OptionText { get; set; } = String.Empty;
+    public bool IsCorrect { get; set; } = false;
+    public DateTime CreationDate { get; set; } 
+    = DateTime.Now.ToUniversalTime();
+
+    public Guid QuestionId { get; set; }
+    public Question Question { get; set; }
+	}
+  ```
+]
+The annotation `[Key]` is used to define the ID of an Option as the primary key and the line below tells Entity Framework Core to automatically generate a random ID when creating a new entry in the database. The CreationDate is needed for sorting Options. Note that an Option also includes a reference to the Question containing it. This is done by adding fields for the Question ID and the Question itself. This is not strictly necessary when all a developer wants to do is use a model in another model as part of a composition dependency. It is however necessary for Entity Framework Core to properly assign foreign keys in the created database tables. Including both is considered a best practice, although it is not strictly necessary. An interesting fact was, however, discovered when testing several methods of assigning foreign keys as part of the planning stage of this project: Including both a reference to the parent object and its ID is necessary if Entity Framework Core should perform Cascading Deletes (Children of an Object are also deleted from the database when said object is deleted. This is useful since it removes the need for the developer to carefully manage the database to prevent no longer used data from being stored.). Not including any reference to the containing Model on the other hand is advantageous when Model data is referenced elsewhere or needed again at a later time. This observation was also made use of when storing Games.
+
+As it was clear from the example given of the Option Model, Models tend to not be very complex as they simply contain definitions of fields. The Question Model is structured very similarly:
+#code-snippet(caption: "Question Model")[
+```cs
+public class Question
+	{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid QuestionId { get; set; }
+    public string QuestionName { get; set; } = string.Empty;
+    public int NOptions { get; set; } = 0;
+    public List<Option> Options { get; set; } = new List<Option>();
+    public QType Type { get; set;} = QType.SingleChoice;
+    public int ?TimeLimit { get; set; }
+    public int ?Points { get; set; }
+    public DateTime CreationDate { get; set; } 
+    = DateTime.Now.ToUniversalTime();
+
+    public Guid QuizId { get; set; }
+    public Quiz Quiz { get; set; }
+	}
+```
+]
+There are, however, also several differences that deserve an examination. Line 8 shows the first example of how Models are used within other Models. It is evident from the example given that this is not very difficult to do. They can simply be used like any Class in #acr("OOP"). The time limit and points are declared nullable by prefixing them with a `?`. This is done because those properties are not set when creating a question and are added later. The biggest addition to the Question Model is the use of an Enum. An Enum is a set of constants, where each keyword is associated with an integer index. They are used when a variable can have multiple predefined states that can be switched between. @misc-enum. The definition for the Question type Enum is done as follows:
+#code-snippet(caption: "Question type Enum")[
+```cs
+public enum QType
+{
+    SingleChoice, MultipleChoice
+}
+```
+]
+SingleChoice is assignable both with the integer: `Qtype[0]` and by using its name: `Qtype.SingleChoice`. The same goes for MultipleChoice. An Enum was used in this case, since it provides more flexibility if new Question types are introduced in the future and it improves the readability of the code.
+
+The Quiz Model is structured very similarly to the Option model. It is, however, still important to the understanding of the rest of this documentation to know what is defined.
+#code-snippet(caption: "Quiz Model")[
+```cs
+public class Quiz
+	{
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public Guid QuizId { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public int NQuestions { get; set; } = 0;
+		public List<Question> Questions { get; set; } = new List<Question>();
+		public DateTime CreationDate { get; set; } 
+    = DateTime.Now.ToUniversalTime();
+  }
+```
+]
 ==== Repositories
 ==== Controllers
 === Frontend
@@ -380,6 +464,11 @@ Same as Backend with Diagram of pages.
 #bibliography("references.bib")
 
 #outline(
-  title: [Code Directory],
+  title: [Code Listings],
   target: figure.where(kind: "code"),
+)
+
+#outline(
+  title: [Image Listings],
+  target: figure.where(kind: "image"),
 )
