@@ -1,22 +1,10 @@
 #import "template.typ": project
 #import "abbreviations.typ": abbreviations
 #import "@preview/acrostiche:0.3.1": *
-#import "@preview/codelst:2.0.0": sourcecode
-
-#let code = sourcecode.with(
-  frame: block.with(
-    fill: rgb("#F6FFF3"),
-    inset: 5mm,
-    radius: 10pt,
-    stroke: 1pt + green,
-  ),
-)
-
-#show figure.where(kind: "code"): set text(size: 13pt)
-#show figure.caption.where(kind: "code"): set text(size: 10pt)
+#import "elements.typ" : code-snippet
 
 
-
+#show figure.caption.where(kind: "logo"): set text(size: 10pt, style: "italic")
 
 #let candidates = (
   (
@@ -331,15 +319,15 @@ As seen in the @architecture-general, communication occurs both via #acr("HTTP")
 
 #grid(
   columns: (1fr, 1fr, 1fr, 1fr),
-  figure(image("images/logos/postgres.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<postgres>)[Postgres]@image-postgers]], supplement: "Logo", kind: "Logo"),
-  figure(image("images/logos/automapper.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<automapper>)[AutoMapper]@image-automapper]], supplement: "Logo", kind: "Logo"),
-  figure(image("images/logos/signalr.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<signalR>)[SignalR]@image-signalr]], supplement: "Logo", kind: "Logo"),
-  figure(image("images/logos/bcrypt.png", height: 1.5cm), caption: [#text(size: 10pt, style: "italic")[#link(<bcrpyt>)[Bcrypt.NET]@image-bcrypt]], supplement: "Logo", kind: "Logo"),
+  figure(image("images/logos/postgres.png", height: 1.5cm), caption: [#link(<postgres>)[Postgres]@image-postgers], supplement: "Logo", kind: "logo"),
+  figure(image("images/logos/automapper.png", height: 1.5cm), caption: [#link(<automapper>)[AutoMapper]@image-automapper], supplement: "Logo", kind: "logo"),
+  figure(image("images/logos/signalr.png", height: 1.5cm), caption: [#link(<signalR>)[SignalR]@image-signalr], supplement: "Logo", kind: "logo"),
+  figure(image("images/logos/bcrypt.png", height: 1.5cm), caption: [#link(<bcrpyt>)[Bcrypt.NET]@image-bcrypt], supplement: "Logo", kind: "logo"),
   )
 
 @architecture-backend shows the general composition of the Backend Server application. It is developed in #link(<asp.netcore>)[Asp.NET Core] and thus written with the C\# programming language. It contains all Models, DTOs, Repositories, and Controllers needed for managing the persistent storage of Quizzes and Games in addition to basic user verification capabilities. All of these components will be explained in detail in their own sections. Information is stored in a PostgreSQL database, which is run as a Docker Container. It is initialized using a `docker-compose.yaml` file:
-#figure(caption: [Postgres Docker Compose],supplement: [Code Snippet], kind: "code")[#code[
-```yaml
+#code-snippet(caption: "Postgres Docker Compose")[
+  ```yaml
 services:
   postgres:
     container_name: quap
@@ -351,7 +339,6 @@ services:
       - 5432:5432
 ```
 ]
-]<code-dockercompose>
 
 The difference between a `docker-compose.yaml` and a `dockerfile` is
 === Frontend
