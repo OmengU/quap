@@ -342,7 +342,7 @@ services:
 
 The difference between a `docker-compose.yaml` and a `dockerfile` is that the former is used to run and configure Docker Containers, while the latter is used to do the same for Docker Images. @misc-dockercompose. This is also evident from the code segment provided above, where an already created image providing the latest version of PostgreSQL is specified. The only thing left to configure is the username and password for the database. Here, they are still hard-coded, as the must-goals do not require a more complex solution, but it would be better for larger projects to obfuscate that information. This, however, is outside the scope of this project.
 
-The DbContext shown in @architecture-backend is a class that utilizes Entity Framework Core. It is used to configure what to store in the database and how to do so. Further detail will follow in sections describing various Models.
+The DbContext shown in @architecture-backend is a class that utilizes Entity Framework Core. It is used to configure what to store in the database and how to do so. Further detail will follow in sections describing various Models. At the core of the #link(<asp.netcore>)[Asp.NET Core] project is the `Program.cs` file, which is used for configuration.
 === Frontend
 #figure(image("images/architecture/Client.jpg"), caption: [Frontend Architecture Design], kind: "image", supplement: "Figure")<architecture-frontend>
 *Logo Reference:*
@@ -430,10 +430,165 @@ public class Quiz
   }
 ```
 ]
+Each Model is also mapped to several #acr("DTO")s to more efficient transfer data. The #acr("DTO")s contain the same fields as the Models, although some of them are omitted as most use cases do not require all data. The mapping is done with AutoMapper and maps are configured in the `AutoMapperProfile.cs` file. Most maps can simply by letting AutoMapper assign each field of the #acr("DTO") to its corresponding field on the Model and vice versa. Some, however, require the manual assignment of values:
+#code-snippet(caption: "Manual AutoMapper assignment")[
+```cs
+CreateMap<Quiz, QuizDto>().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
+CreateMap<Quiz, QuizDto>().ReverseMap().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
+```
+]
+In addition to configuring an AutoMapper Profile, there is another step that is required for the Models to become functional: A DbContext has to be created, which allows Entity Framework Core to work with the Models and allows the developer to store the Model data in the desired database by creating DbSets for each Model. It also allows for querying of data by performing #acr("CRUD") operations. The following example shows a simplified version of the DbContext used in this project. It only includes the definition of one DbSet and the needed configuration:
+#code-snippet(caption: "DbContext")[
+```cs
+public class QuizManagementDbContext : DbContext
+{
+	public QuizManagementDbContext(DbContextOptions<QuizManagementDbContext> options) : base(options) { }
+	public DbSet <Question> Questions { get; set; }
+
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.UseExceptionProcessor();
+	}
+  protected override void OnModelCreating(ModelBuilder builder)
+	=> builder.HasPostgresEnum<QType>();
+}
+```
+]
+The OnConfiguring method is run when a migration is created. A migration has to be created manually each time the Models are updated. They automatically generate code, that defines tables and relationships in the database. These are created without manual configuration with one exception. As Enums are only supported by PostgreSQL, they have to be manually assigned to the database.
+
+This DbContext then has to be configured in the main `Program.cs` file. There, the Connection String, which includes all needed information needed to connect to the database (Username, Password), is used to initialize the connection to the database. The String is typically stored in a #acr("JSON"), from where it is imported.
 ==== Repositories
+The next step after the creation of the needed Models is to declare functions, which make use of said Models and their corresponding database tables to perform certain actions needed on the Frontend. As this project uses the Repository Pattern, the first task of this step is to create Repositories for each Model. Only the Question Repository will be shown in detail since they are all very similar.
+
+Before creating the Repository itself, an interface has to be created first, which is then implemented by the Repository:
+#code-snippet(caption: "Question Repository Interface")[
+```cs
+public interface IQuestionRepository
+  {
+      Task<Question> GetQuestionById(Guid Id);
+      Task<Question> CreateQuestion(Question question);
+      Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto question);
+      Task DeleteQuestion(Guid Id);
+      Task<Option> AddOption(Guid Id);
+      Task<IEnumerable<Question>> GetAll(Guid id);
+  }
+```
+]
+This is done to create an even clearer separation between what the code needs (data access functionalities) and how this is achieved (specific implementation using a database or API). It is also essential because it allows for greater flexibility when creating the repositories since IRepositories simply have to be included in other parts of the application by using Dependency Injection. This is useful since it allows for the complete replacement of the specific repository implementation without having to change all other parts of the application and without having to delete the old implementation. Dependency Injection will be further explained in the next section.
+
+After creating an IRepository, an implementation has to be created. There, built-in Entity Framework Core functions are used to mutate data stored on the database. The following shows the implementation of the DeleteQuestion method:
+#code-snippet(caption: "DeleteQuestion implementation in QuestionRepository")[
+```cs
+public async Task DeleteQuestion(Guid Id)
+{
+    Question question = _context.Questions.FirstOrDefault(q => q.QuestionId == Id);
+    Quiz quiz = await _context.Quizzes.FirstOrDefaultAsync(quiz => quiz.QuizId.Equals(question.QuizId));
+    _context.Questions.Remove(question);
+    quiz.NQuestions--;
+    await _context.SaveChangesAsync();
+}
+```
+]
+This function takes an ID of a Question as its argument. This ID is then used to search for the specific Question and the containing Quiz in the database. The Question is then removed from the database and the NQuestions variable, showing how many Questions a Quiz has, is decreased by one. Finally, the modifications are stored by saving the changes in the DbContext. The function is declared as async because interacting with the database includes I/O operations, which can be slow and block the main thread. By making it asynchronous, the function allows other parts of the application to continue running while waiting for the database operation to complete. This means that overall responsiveness and performance are greatly improved. When declared to be asynchronous the function return type has to be a `Task`. It represents a unit of work that is performed in an asynchronous fashion. It tells other parts of the program that if awaited, some action will be run in the background and the program can wait for said action to complete or continue executing other code while waiting. While not strictly necessary when developing Web #acr("API")s, asynchronous functions are considered best practice. @misc-async
+
+All other functions in the Question Repository and their equivalents in the Quiz or Option Repositories follow the same pattern as the DeleteQuestion method shown in the code snippet. Thus, they will not be shown here. One thing that has to be mentioned, however, is that not all functions make use of AutoMapper for Model conversion, since it is not very easy to use AutoMapper when updating an existing instance of an Entity, meaning that for example, an already existing Quiz has to be updated with data from a #acr("DTO") while retaining its ID. This is theoretically possible but it takes a lot of extra configuration, which is too much extra work for a project this size.
+
+In order to work properly, the Repositories have to be registered in the main `Program.cs file`.
 ==== Controllers
+The final step that has to be implemented before the #acr("REST") #acr("API") can be used in the Frontend is the creation of the #acr("API") Controllers. There, specific #acr("HTTP") endpoints are created, which provide an interface for the client to interact with the previously defined Repository methods. As all Controllers (Quiz Controller, Question Controller, Option Controller) are very similar in their implementation, only the Question Controller will be thoroughly explained in this document.
+
+The first step when creating an #acr("API") Controller is to declare the general route, where all endpoints can be accessed. This is done by using the following annotation about the class declaration: `[Route("api/[controller]")]`. The name of the Controller is automatically inserted. The next step is to include all dependencies needed to interact with the data. These might include Repositories, the DbContext, and an AutoMapperProfile. (The Repositories also use this method to inject the DbContext.) The following snippet shows such a configuration. (The snippet has been changed so that the data types of the variables are not shown in the constructor. This is done for space-saving reasons):
+#code-snippet(caption: "Controller Dependency Injection")[
+```cs
+private readonly IOptionRepository _optionRepository;
+private readonly IQuestionRepository _questionRepository;
+private readonly IQuizRepository _quizRepository;
+private readonly IMapper _mapper;
+
+public QuestionController(optionRepository, questionRepository, quizRepository, mapper)
+{
+    _optionRepository = optionRepository;
+    _questionRepository = questionRepository;
+    _quizRepository = quizRepository;
+    _mapper = mapper;
+}
+```
+]
+The dependencies are declared as read-only private variables and then retrieved using Dependency Injection. Dependency Injection is a Design Pattern, which states that higher-level components of the application should not be dependent on lower-level ones. Both should only be aware of each other via abstractions. An example of such an abstraction would be the previously discussed IRepositories. These abstractions themselves should also not depend on specific details in their implementations. The two principles together are referred to as the Dependency Inversion Principle, which is entirely theoretical in nature. The specific mechanism to apply said principle is called the Inversion of Control, which in turn is made use of by Dependency Injection. The specific approach used in Controllers is called Constructor Injection since the dependencies to be injected are passed into the Constructor. Other methods include Method Injection and Property Injection. After they have been configured in `Program.cs`, the Controllers are automatically run with their constructor. @misc-dependency
+
+Specific endpoints can then be created by writing a new function for each endpoint. These functions then use the functionality provided by the Repositories to interact with the database. The following shows how to get all Options from a Question:
+#code-snippet(caption: "GetAllOptions Endpoint")[
+```cs
+[HttpGet("{id}/options")]
+public async Task<ActionResult<Option>> GetAllOptions(Guid id)
+{
+    try
+    {
+        var result = _mapper.Map<IEnumerable<OptionDto>>(await _optionRepository.GetOptionsByQuestionId(id));
+        return Ok(result);
+    }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+```
+]
+The annotation defines the specific #acr("HTTP") request method and also defines the route, which would be `/api/Question/ID/options` in this case. In the function itself, a try-catch block is used to automatically return an error message in case something goes wrong. The list of Options is then gathered by using the Option Repository and converting them to an OptionDto using AutoMapper. This list is then sent to the client with a 200 (success) status code.
 === Frontend
+On the Client, this section includes two pages, which provide the tutor the ability to create and manage Quizzes. The routes for the pages are defined using React Router.
 ==== Main page
+The first page is the main page, also called the index page. It is configured on the default route. Fully loaded, the page looks like this:
+#figure(image("images/screenshots/mainPage.png"), caption: [Main Page Screenshot], supplement: "Figure", kind: "image")
+The fist thing that happens when the page is loaded, is the loading of the Quizzes from the database. This is done using a ReactRouter Loader, which is declared on the route. Loaders and Actions are defined in their own files. There, functions are created for each Loader/Action. The following Loader is used to fetch the Quizzes:
+#code-snippet(caption: "Quiz Loader Function")[
+```ts
+export const quizLoader: LoaderFunction = async () => {
+    const quizzes = await getQuizzes();
+    if (quizzes == null) {
+        throw new Response("", {
+            status: 404,
+            statusText: "Not Found",
+        });
+    }
+    return quizzes;
+}
+```
+]
+This function has the type LoaderFunction, which is provided by ReactRouter. The getQuizzes() method and all other methods containing fetch requests are contained in their own file called `endpoints.ts`, where the JavaScript fetch #acr("API") is used to make a #acr("HTTP") Request to the Server. The URL constant and all Models are imported from another file:
+#code-snippet(caption: "getQuizzes() Method")[
+```ts
+type GetQuizzes = () => Promise<Quiz[]>
+export const getQuizzes: GetQuizzes = async () => {
+    try {
+        const response = await fetch(`${URL}/Quiz`);
+        const data = await response.json();
+        return data as Quiz[];
+    } catch (e) {
+        throw e;
+    }
+}
+```
+]
+The type has to be created in order to tell TypeScript which arguments of which types the function takes and what the return type of the function is.
+
+The Loader can then be used in the Component of the page by using the `useDataLoader` hook. This hook is provided by ReactRouter. Once received, the Quizzes are passed as a Prop to another Component, where the Quizzes are laid out in Cards in a Grid layout. Each of these Cards in turn is its own Component. There, the name and description, as well as the number of Questions is laid out in an appealing way. Each Card also contains three Buttons to start a Game, to edit a Quiz, and to delete a Quiz. Two of these Buttons (Play, Delete) use Action Functions in order to execute #acr("API") calls. The Edit button redirects to the *Edit Quiz Page*. The Start Game button is defined like so:
+#code-snippet(caption: "Start Game Button")[
+```tsx
+<Form method="post" action={`startgame/${id}`}>
+    <Button variant='solid' colorScheme='green' type="submit">
+        Play
+    </Button>
+</Form>
+```
+]
+`variant` and `colorScheme` are Chakra-Ui styling props. When pressing the other two buttons, the tutor has to verify their identity by entering their password. This, however, is explained later on.
+
+When the tutor wants to create a new Quiz, they simply have to press the New Quiz Button in the top right corner of the page. When pressed, a dialog opens where they can enter a name and a description:
+#figure(image("images/screenshots/createQuiz.png", height: 7cm), caption: [Create Quiz Dialog Screenshot], supplement: "Figure", kind: "image")
+This is implemented using the Modal Component provided by Chakra-Ui. This Component can be controlled with the `useDisclosure` hook. This hook provides one boolean value and two functions, which are passed as props to the Modal (In this case the Modal is wrapped in its own Component so they are passed as a Prop of this Component). The value is true if the Modal is open and false if it is closed. The two functions are used to open and close the Modal respectively.
+
+Inside the Modal, there are two input fields and a submit button, which first makes an #acr("API") call to create a new Quiz and then navigates to the *Edit Quiz Page* of the created Quiz by using the `useNavigate` hook. This hook allows for redirection via code.
 ==== Edit Quiz Page
 == Access Control with password
 === Backend
