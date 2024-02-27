@@ -590,6 +590,51 @@ This is implemented using the Modal Component provided by Chakra-Ui. This Compon
 
 Inside the Modal, there are two input fields and a submit button, which first makes an #acr("API") call to create a new Quiz and then navigates to the *Edit Quiz Page* of the created Quiz by using the `useNavigate` hook. This hook allows for redirection via code.
 ==== Edit Quiz Page
+This page is used to edit the details of a Quiz. These details include the specific Questions and the various Options selectable on each Question. This page also gives the tutor the ability to rename a Quiz itself.
+#figure(image("images/screenshots/editQuiz.png", height: 8cm), caption: [Edit Quiz Page], supplement: "Figure", kind: "image")
+The page is split up into 2 sections:
+
+*Sidebar:*
+
+This part of the page is configured as its own component, which is then included in the Edit Quiz Page. In the main Component of the Edit Quiz route, the questions are loaded via a ReactRouter Loader function:
+#code-snippet(caption: "Question Loader function")[
+```ts
+const loader: LoaderFunction = async ({ params }: QuestionsLoaderArgs) => {
+    const quizId = params.quizId ?? "";
+    const questions = await getQuestions(quizId);
+    if (questions == null) {
+        throw new Response("", {
+            status: 404,
+            statusText: "Not Found",
+        });
+    }
+    return questions;
+};
+```
+]
+This function first receives the Quiz ID through the URL parameters (For the route of the Edit Quiz Page is /editQuiz/quizId). The first line of the function uses the null coalescing operator to check if the ID from the parameters is not undefined. The null coalescing operator first checks if the value before ?? is null/undefined. It it is not, the right value is used. If the right value is null, the left value is utilized instead. This seemingly pointless check is needed because even if there is theoretically no chance for the ID to be undefined in TypeScript, the compiler will still throw an error, since it does not know for certain that the parameter is a string and not undefined. Next, a standard #acr("API") call is made. The Questions array received through this Loader is then passed as a Prop to the Sidebar Component. There, the `array.map()` function is used to display a Link to the Question Details View for each Question. Other then the name of the Question, the Link also contains two Chakra-UI badge components displaying the Question type and the number of Options respectively. The button used to create a new Question employs a ReactRouter Action function. At the bottom of the Sidebar, there are two last buttons.
+
+The second button is fairly simple as it merely contains a Link to the main route of the client. The first one, however, is more complicated as it opens a Modal where the name and the description of the Quiz can be altered. This Modal will not be shown here as it is almost entirely the same as the create Quiz Dialog. It does, however, contain some interesting code: As the Modal Component needs to know the current Quiz details in order to populate the standard values of the text boxes, the name and description of the Quiz have to be loaded first. This seemed rather easy at first, since it was assumed in the development process that instead of all Questions, the entire Quiz was loaded in the main Component of the route. This mistake was made due to the Edit Quiz details Modal being a late addition to the page made long after the rest. The problem was then solved by getting the Quiz ID from the #acr("URL") Parameter. This was not very easy since the ReactRouter documentation lacked any explanation on how to perform this task. It was eventually figured out through trial and error:
+#code-snippet(caption: "loading Quiz details in Modal")[
+```ts
+ const { quizId } = useParams<'quizId'>();
+    useEffect(() => {
+        if (quizId) {
+            getQuizById(quizId)
+                .catch(error => console.error(error))
+                .then(data => {
+                    if (data) {
+                        setName(data.name);
+                        setDescription(data.description);
+                    }
+                })
+        } else {
+            console.error("Could not load");
+        }
+    }, [])
+```
+]
+The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Afterwards, the React `useEffect` hook is used to perform the needed #acr("API"). The useEffect Hook gives the developer the ability to perform side effects within function based Components. Side effects are actions that need to happen after React has updated the #acr("DOM"), such as fetching data, subscriptions, timers, or directly manipulating the DOM. By using useEffect, the developer essentially instructs React to execute specific code passed as a function in its first argument after the Component has been rerendered. The Hook also takes an array as its second argument. This array is used to specify when the code should be executed. This is useful since otherwise, the function would run every time the Component is rerendered, which happens a lot in React. If for example a state variable is passed as the second argument, the code is only executed if that specific state changes. If an empty array is passed as it is in the example given, the function is only called on the first render of the Component. @misc-useeffect
 == Access Control with password
 === Backend
 === Frontend

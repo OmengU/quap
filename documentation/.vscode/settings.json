@@ -17,6 +17,7 @@
         "reactrouter",
         "signalr",
         "Typst",
+        "useeffect",
         "vite"
     ],
     "cSpell.enableFiletypes": [
