@@ -16,7 +16,7 @@
     )
   show raw.line: it => {
     box(
-      align(horizon, stack(
+      align(top, stack(
         dir: ltr,
         box(width: 15pt)[#it.number],
         it.body,

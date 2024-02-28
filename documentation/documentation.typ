@@ -540,7 +540,7 @@ On the Client, this section includes two pages, which provide the tutor the abil
 ==== Main page
 The first page is the main page, also called the index page. It is configured on the default route. Fully loaded, the page looks like this:
 #figure(image("images/screenshots/mainPage.png"), caption: [Main Page Screenshot], supplement: "Figure", kind: "image")
-The fist thing that happens when the page is loaded, is the loading of the Quizzes from the database. This is done using a ReactRouter Loader, which is declared on the route. Loaders and Actions are defined in their own files. There, functions are created for each Loader/Action. The following Loader is used to fetch the Quizzes:
+The first thing that happens when the page is loaded, is the loading of the Quizzes from the database. This is done using a ReactRouter Loader, which is declared on the route. Loaders and Actions are defined in their files. There, functions are created for each Loader/Action. The following Loader is used to fetch the Quizzes:
 #code-snippet(caption: "Quiz Loader Function")[
 ```ts
 export const quizLoader: LoaderFunction = async () => {
@@ -555,7 +555,7 @@ export const quizLoader: LoaderFunction = async () => {
 }
 ```
 ]
-This function has the type LoaderFunction, which is provided by ReactRouter. The getQuizzes() method and all other methods containing fetch requests are contained in their own file called `endpoints.ts`, where the JavaScript fetch #acr("API") is used to make a #acr("HTTP") Request to the Server. The URL constant and all Models are imported from another file:
+This function has the type LoaderFunction, which is provided by ReactRouter. The getQuizzes() method and all other methods containing fetch requests are contained in a separate file called `endpoints.ts`, where the JavaScript fetch #acr("API") is used to make a #acr("HTTP") Request to the Server. The URL constant and all Models are imported from another file:
 #code-snippet(caption: "getQuizzes() Method")[
 ```ts
 type GetQuizzes = () => Promise<Quiz[]>
@@ -572,7 +572,7 @@ export const getQuizzes: GetQuizzes = async () => {
 ]
 The type has to be created in order to tell TypeScript which arguments of which types the function takes and what the return type of the function is.
 
-The Loader can then be used in the Component of the page by using the `useDataLoader` hook. This hook is provided by ReactRouter. Once received, the Quizzes are passed as a Prop to another Component, where the Quizzes are laid out in Cards in a Grid layout. Each of these Cards in turn is its own Component. There, the name and description, as well as the number of Questions is laid out in an appealing way. Each Card also contains three Buttons to start a Game, to edit a Quiz, and to delete a Quiz. Two of these Buttons (Play, Delete) use Action Functions in order to execute #acr("API") calls. The Edit button redirects to the *Edit Quiz Page*. The Start Game button is defined like so:
+The Loader can then be used in the Component of the page by using the `useDataLoader` hook. This hook is provided by ReactRouter. Once received, the Quizzes are passed as a Prop to another Component, where the Quizzes are laid out in Cards in a Grid layout. Each of these Cards in turn is its own Component. There, the name and description, as well as the number of Questions is laid out in an appealing way. Each Card also contains three Buttons to start a Game, edit a Quiz, and delete a Quiz. Two of these Buttons (Play, Delete) use Action Functions in order to execute #acr("API") calls. The Edit button redirects to the *Edit Quiz Page*. The Start Game button is defined like so:
 #code-snippet(caption: "Start Game Button")[
 ```tsx
 <Form method="post" action={`startgame/${id}`}>
@@ -612,9 +612,9 @@ const loader: LoaderFunction = async ({ params }: QuestionsLoaderArgs) => {
 };
 ```
 ]
-This function first receives the Quiz ID through the URL parameters (For the route of the Edit Quiz Page is /editQuiz/quizId). The first line of the function uses the null coalescing operator to check if the ID from the parameters is not undefined. The null coalescing operator first checks if the value before ?? is null/undefined. It it is not, the right value is used. If the right value is null, the left value is utilized instead. This seemingly pointless check is needed because even if there is theoretically no chance for the ID to be undefined in TypeScript, the compiler will still throw an error, since it does not know for certain that the parameter is a string and not undefined. Next, a standard #acr("API") call is made. The Questions array received through this Loader is then passed as a Prop to the Sidebar Component. There, the `array.map()` function is used to display a Link to the Question Details View for each Question. Other then the name of the Question, the Link also contains two Chakra-UI badge components displaying the Question type and the number of Options respectively. The button used to create a new Question employs a ReactRouter Action function. At the bottom of the Sidebar, there are two last buttons.
+This function first receives the Quiz ID through the URL parameters (The route of the Edit Quiz Page is /editQuiz/quizId). The first line of the function uses the null coalescing operator to check if the ID from the parameters is not undefined. The null coalescing operator first checks if the value before ?? is null/undefined. If it is not, the right value is used. If the right value is null, the left value is utilized instead. This seemingly pointless check is needed because even if there is theoretically no chance for the ID to be undefined in TypeScript, the compiler will still throw an error since it does not know for certain that the parameter is a string and not undefined. Next, a standard #acr("API") call is made. The Questions array received through this Loader is then passed as a Prop to the Sidebar Component. There, the `array.map()` function is used to display a Link to the Question Details View for each Question. Other than the name of the Question, the Link also contains two Chakra-UI badge components displaying the Question type and the number of Options respectively. The button used to create a new Question employs a ReactRouter Action function. At the bottom of the Sidebar, there are two last buttons.
 
-The second button is fairly simple as it merely contains a Link to the main route of the client. The first one, however, is more complicated as it opens a Modal where the name and the description of the Quiz can be altered. This Modal will not be shown here as it is almost entirely the same as the create Quiz Dialog. It does, however, contain some interesting code: As the Modal Component needs to know the current Quiz details in order to populate the standard values of the text boxes, the name and description of the Quiz have to be loaded first. This seemed rather easy at first, since it was assumed in the development process that instead of all Questions, the entire Quiz was loaded in the main Component of the route. This mistake was made due to the Edit Quiz details Modal being a late addition to the page made long after the rest. The problem was then solved by getting the Quiz ID from the #acr("URL") Parameter. This was not very easy since the ReactRouter documentation lacked any explanation on how to perform this task. It was eventually figured out through trial and error:
+The second button is fairly simple as it merely contains a Link to the main route of the client. The first one, however, is more complicated as it opens a Modal where the name and the description of the Quiz can be altered. This Modal will not be shown here as it is almost entirely the same as the Create Quiz Dialog. It does, however, contain some interesting code: As the Modal Component needs to know the current Quiz details in order to populate the standard values of the text boxes, the name and description of the Quiz have to be loaded first. This seemed rather easy at first since it was assumed in the development process that instead of all Questions, the entire Quiz was loaded in the main Component of the route. This mistake was made due to the Edit Quiz details Modal being a late addition to the page made long after the rest. The problem was then solved by getting the Quiz ID from the #acr("URL") Parameter. This was not very easy since the ReactRouter documentation lacked any explanation on how to perform this task. It was eventually figured out through trial and error:
 #code-snippet(caption: "loading Quiz details in Modal")[
 ```ts
  const { quizId } = useParams<'quizId'>();
@@ -634,9 +634,104 @@ The second button is fairly simple as it merely contains a Link to the main rout
     }, [])
 ```
 ]
-The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Afterwards, the React `useEffect` hook is used to perform the needed #acr("API"). The useEffect Hook gives the developer the ability to perform side effects within function based Components. Side effects are actions that need to happen after React has updated the #acr("DOM"), such as fetching data, subscriptions, timers, or directly manipulating the DOM. By using useEffect, the developer essentially instructs React to execute specific code passed as a function in its first argument after the Component has been rerendered. The Hook also takes an array as its second argument. This array is used to specify when the code should be executed. This is useful since otherwise, the function would run every time the Component is rerendered, which happens a lot in React. If for example a state variable is passed as the second argument, the code is only executed if that specific state changes. If an empty array is passed as it is in the example given, the function is only called on the first render of the Component. @misc-useeffect
+The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Afterwards, the React `useEffect` hook is used to perform the needed #acr("API"). The useEffect Hook gives the developer the ability to perform side effects within function-based Components. Side effects are actions that need to happen after React has updated the #acr("DOM"), such as fetching data, subscriptions, timers, or directly manipulating the DOM. By using useEffect, the developer essentially instructs React to execute specific code passed as a function in its first argument after the Component has been rerendered. The Hook also takes an array as its second argument. This array is used to specify when the code should be executed. This is useful since otherwise, the function would run every time the Component is rerendered, which happens a lot in React. If for example a state variable is passed as the second argument, the code is only executed if that specific state changes. If an empty array is passed as it is in the example given, the function is only called on the first render of the Component. @misc-useeffect
+
+*Question Details View:*
+
+This part of the page encompasses all content to the right of the Sidebar. It can be displayed in two different versions depending on whether or not the Question is merely being viewed (display view) or actively edited (edit view). the views can be switched between by pressing the Edit button to start editing and by pressing the Save/Cancel buttons to mark the edit process as complete. Both views use the same underlying Components. The only difference is that in Edit mode, all buttons and text fields are enabled, which is achieved by declaring a boolean Prop on the Component and using said Prop to manage the state of input fields.
+
+Both views are declared on their own subroutes of `/editquiz/quizId`. The edit view uses the route `/editquiz/quizId/editquestion/questionId` and the display view is available on `/editquiz/quizId/question/questionId`. As it is clear from the fact that the views have their individual #acr("URL")s, they are separate pages. This means that pressing the Links in the Sidebar would, without additional configuration, redirect to another page containing the display view of the desired Question. To display the contents of the route on the same page as the Sidebar, a ReactRouter Outlet Component needs to be included in the Component of the editquiz route. This tells ReactRouter to render the contents of subroutes as part of their parent. Once displayed, individual Questions are loaded using a ReactRouter Loader function. In the case when a new Question is created, the edit view is opened automatically. The Questions are always created without any data. The rest of this explanation will be focused on said edit view as it requires more attention due to the need to manage the State. This is not necessary on the display view since the user has no way of changing any values.
+
+The edit view (and also the display view) contains a Component, which contains several input fields (disabled on display view) for entering data such as the Question name or the time limit and a dropdown list for the Question type. The following shows the input field for the time limit:
+#code-snippet(caption: "Edit Question Time Limit Input Field")[
+```tsx
+<Input type="number" 
+name="timeLimit" 
+value={timeLimit != 0 ? timeLimit : ""} 
+disabled={!isEditing} 
+onChange={(event) => setTimeLimit(+event.target.value)}
+/>
+```
+]
+Its value is set to the time limit loaded with the Loader if the Question has a time limit specified. If not, the field is left empty. If the input changes as the tutor enters a number, said number is stored in State to be used in an #acr("API") call to the server which performs a PATCH Operation to mutate the data of the Question. the plus in front of the expression `event.target.value` is used to convert a string to a number in JavaScript/TypeScript. The component also features an error message that is displayed above the input fields if there are empty fields. This also causes the save button to be disabled:
+*Image of error*
+This is done by declaring a boolean state, which is used to control the visibility of the alert and the ability to click the button. This is then updated by using the useEffect Hook to trigger when the state of the input field values changes.
+#code-snippet(caption: "Edit Question Error Check")[
+```ts
+useEffect(() => {
+    setEmptyError(name == "" || points == 0 || timeLimit == 0);
+}, [name, points, timeLimit])
+```
+]
+Next to the Component for displaying the information about the Question there is another one showing all the Options. This Component uses the `array.map()` function to display one Component for each option, where the Option title can be changed (in the edit view), be marked as correct, or be deleted. As it would be extremely difficult to manage the state of the Options through that many layers of Components, the `useContext()` Hook is used on the main Component of the editquestion route. This hook provides an elegant way to share data across various components within an application, eliminating the need for "prop drilling" (Passing Props through multiple layers). A Context can be thought of as a container, which is accessible anywhere within the Component tree. When a Component needs a specific piece of data, useContext allows it to directly tap into that Context, retrieving the current value. In this example, the Hook is used to store all Option in an array of objects. For this, the TypeScript Index signature is used. This allows the developer to define a key for each entry in the array similar to a dictionary in other languages. The following shows the signature of the state used here: `{ [key: string]: OptionDto; }`. The key in this example is the ID of an Option. Existing Options are loaded into the State as follows:
+#code-snippet(caption: "Load Options into Context State")[
+```ts
+const [options, setOptions] = useState<{ [key: string]: OptionDto }>(() => {
+if (question.options.length > 0) {
+  return question.options.reduce((acc:{[key: string]:OptionDto;}, option) => {
+      acc[option.oId] = {
+          optionText: option.optionText,
+          isCorrect: option.isCorrect
+      };
+      return acc;
+  }, {});
+} else return {}
+    });
+```
+]
+This uses the `array.reduce()` function with two arguments, the dictionary where all options should be stored and the options themselves. The function is then run for every Option to add them to the dictionary. If no Options exist, the dictionary is left empty.
+
+In order to use the Context State in other Components, they have to be wrapped in a Context Provider. This Provider takes the State and SetState functions as arguments. Inside those Components, the Context State can be accessed using the useContext Hook by passing the name of the Context @misc-usecontext:
+#code-snippet(caption: "useContext Hook example")[
+```ts
+const { options: contextOptions } = useContext(OptionsContext);
+```
+]
+In an Option Component, the most complicated problem is to determine whether or not the parent Question is SingleChoice or MultipleChoice. If it is the former, additional code is needed to only allow one Option to be correct at one time. The checkbox itself is made with a Chakra-UI IconButton Component which is filled if the Option is marked correct. The following code shows how an Option is marked as correct:
+#code-snippet(caption: "check if there is already a correct Option")[
+```ts
+setOptions((prevOptions: { [key: string]: OptionDto }) => {
+    const correctOptionId = Object.keys(prevOptions).find(
+    key => prevOptions[key].isCorrect);
+    
+    if (correctOptionId 
+        && correctOptionId !== id 
+        && !prevOptions[id].isCorrect 
+        && type == QType.SingleChoice) {
+            console.error(`Error Message`);
+            return prevOptions;
+    }
+    return { ...prevOptions, [id]: { ...prevOptions[id], isCorrect: !prevOptions[id].isCorrect } };
+});
+```
+]
+It first checks whether or not there already is a correct Option. Afterward, it checks if the ID of the current Option is not the ID of the Option that is marked correct and if the current Option is marked as not correct in the state. Finally, it checks the type of the Question. Said type is also provided to the Component with a Context. If all of these conditions are true, an error message is displayed. Otherwise, the state is updated. The Component containing all Options also contains Alerts for when an Option is empty and for the situation where there are not the required 2-6 Options. The Options from the Context State are then used in combination with the Question data to make an #acr("API") call to the Server to save the changes to the Questions/Options.
 == Access Control with password
+Another must-goal required the addition of functionality, which allows the tutor to restrict certain Actions from being executed without verification. This is necessary since the application is run locally and accessible through the tutor's #acr("IP") address. Without verification, it would be possible for a student to access the page on their own device and modify data without the tutor's consent. The solution that was implemented for this problem is a verification system using a password. This means that the tutor is not required to provide any login data like a username and an Email-address to use the application.
 === Backend
+In the Backend, the password is stored similarly to the Quiz data. This means that it is stored in a hashed form in the same database as the rest of the application data. This is done in order to reduce complexity. A password Model was also created containing an ID that is automatically set to "1" since there can only ever be one password and a string for the password hash.
+
+This Model is then used in a dedicated authentication Controller, which provides endpoints for checking if a password is set, registering a password, verification of an entered password, and changing the password set. The following shows the verification endpoint:
+#code-snippet(caption: "Verify Password endpoint")[
+```cs
+ [HttpPost("verify")]
+public async Task<IActionResult> Verify([FromBody] RegisterVerifyPasswordDto model)
+{
+    var storedPasswordHash = await _context.Passwords.FindAsync(1);
+    if (storedPasswordHash == null) return NotFound("Password not set");
+
+    if (BCrypt.Net.BCrypt.Verify(model.Password, storedPasswordHash.PasswordHash))
+    {
+        return Ok("Password verified successfully");
+    }
+    else
+    {
+        return Unauthorized("Incorrect Password");
+    }
+}
+```
+]
+This code first retrieves the password hash stored in the database. Then, it uses Bcrypt.NET to check whether or not the password passed in the Body and the stored one corresponding to the hash in the database are the same. If they are, a #acr("HTTP") Response with the status code 200 (success) is sent. If they are not, the Server sends a Response with the status code 401 (unauthorized). The endpoint to change the password is similar with the only difference being that in addition to sending a 200 status code, the Server also updates the password hash on the database. The other two endpoints are also structured very similarly. Thus, they will be omitted in this documentation.
 === Frontend
 == Game Flow
 === Models/DTOs
@@ -647,8 +742,6 @@ The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Aft
 === Start Game
 === Gameplay
 === End Game
-== Miscellaneous Code
-=== Configuration
 
 #pagebreak()
 
