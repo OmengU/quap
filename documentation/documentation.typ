@@ -46,7 +46,7 @@ Many programs and other software were used in order to complete the must-goals. 
 === Development
 This section outlines the software used for the development of the application. The specific products were chosen for their support of the used languages as well as their ability to be installed and run on the Windows #acr("OS"). The personal preferences of the developer also played a large influence in the decision process.
 ==== Visual Studio
-Visual Studio is an #acr("IDE") developed by the Redmond, WA-based technology company Microsoft. @eb-microsoft It allows the developer to write code in multiple languages including C\# and C++. It also provides tools for building and executing the written code such as compilers and tools to improve the developer experience, the most notable of which being a Debugger and several code completion tools. A debugger allows the developer to diagnose problems with the code by setting breakpoints, where the program is paused and the values of variables are shown. It also provides functionality to inform the developer when a variable changes. Visual Studio is available in 3 Versions:
+Visual Studio is an #acr("IDE") developed by the Redmond, Washington-based technology company Microsoft. @eb-microsoft It allows the developer to write code in multiple languages including C\# and C++. It also provides tools for building and executing the written code such as compilers and tools to improve the developer experience, the most notable of which being a Debugger and several code completion tools. A debugger allows the developer to diagnose problems with the code by setting breakpoints, where the program is paused and the values of variables are shown. It also provides functionality to inform the developer when a variable changes. Visual Studio is available in 3 Versions:
 
 - Community: #acr("FOSS") version with minimal proprietary additions; targeted towards students
 - Professional: paid version; targeted towards small teams
@@ -55,7 +55,7 @@ The Community version was used for this project. @ms-visualstudio
 
 In this project, Visual Studio was primarily used for the Backend of the application.
 ==== Visual Studio Code
-#acr("VsCode") is a code editor developed by Microsoft with a #acr("FOSS") core, that also contains proprietary components such as telemetry. Although it is not a full-fledged #acr("IDE"), as its core does not contain tools typically found in an #acr("IDE"), such as debuggers and code completion utilities, it is still a very powerful tool thanks to its expansive and well-supported extension eco-system. It is thanks to said extensions, that #acr("VsCode") has become very popular in the field of Web Development, as many developers are dependent on #acr("VsCode") extensions when working with popular frameworks and libraries. When some commonly utilized technologies are used, no extensions are needed, since Microsoft has included tooling for web technologies out of the box such as a basic debugger and code highlighting for the popular programming languages JavaScript and Python @ms-vscode as well as EMMET, an extension providing productivity-enhancing abbreviations and snippets for #acr("HTML") and #acr("CSS"). @ms-emmet
+#acr("VS Code") is a code editor developed by Microsoft with a #acr("FOSS") core, that also contains proprietary components such as telemetry. Although it is not a full-fledged #acr("IDE"), as its core does not contain tools typically found in an #acr("IDE"), such as debuggers and code completion utilities, it is still a very powerful tool thanks to its expansive and well-supported extension eco-system. It is thanks to said extensions, that #acr("VS Code") has become very popular in the field of Web Development, as many developers are dependent on #acr("VS Code") extensions when working with popular frameworks and libraries. When some commonly utilized technologies are used, no extensions are needed, since Microsoft has included tooling for web technologies out of the box such as a basic debugger and code highlighting for the popular programming languages JavaScript and Python @ms-vscode as well as EMMET, an extension providing productivity-enhancing abbreviations and snippets for #acr("HTML") and #acr("CSS"). @ms-emmet
 
 In this project, Visual Studio was primarily used when developing the Frontend of the application.
 ==== Docker Desktop/Docker
@@ -249,7 +249,7 @@ There are, however, many Libraries and Frameworks that aim to solve this problem
 
 In the previous example, the dark mode toggle becomes a Component that, after it has been implemented once, can be used anywhere. In the case of the navigation bar, where the specific links may change, it is also possible to define the content as Props, values that can be passed to a component similarly to arguments of functions. React utilizes a virtual #acr("DOM"), which is an in-memory representation of the actual #acr("DOM") mentioned in the section about JavaScript. It allows  React to efficiently identify and update only the necessary parts of the UI when data changes, leading to faster and smoother user experiences. Components also make it very easy to maintain code down the line. Imagine updating the toggle behavior – you do it in one place, and the change automatically reflects across all instances.
 
-React supports both JavaScript and TypeScript. It also allows the developer to write #acr("HTML") markup directly in the JavaScript/TypeScript file using #acr("JSX"). @misc-react
+React supports both JavaScript and TypeScript. It includes the ability for the developer to write #acr("HTML") markup directly in the JavaScript/TypeScript file using #acr("JSX"). #acr("JSX") also allows for seamless code injection into the markup by wrapping all code to be executed in "{}".  @misc-react
 ==== Vite
 One problem that occurs when working with Libraries such as React is that Web Browsers do not natively support them as they only know how to work with #acr("HTML"), #acr("CSS"), and JavaScript, which means that code written in React first has to compiled to technologies understood by Browsers. This step also requires including or bundling in all dependencies required. The traditional tool of choice for this task was WebPack, but in recent years, another option, namely Vite has increased in popularity.
 
@@ -363,19 +363,18 @@ In the Server, this section includes a RESTful #acr("API") providing several end
 In order to properly store data, the Creation of multiple Models is required. A model is a class used as a reference by Entity Framework Core to create SQL queries to Initialize tables. Each Model represents one of these tables. This section includes three Models: Quiz, Question, and Option. Of those three, Option is the lowest in their shared hierarchical order as it is part of a Question, which in turn is part of a Quiz. The Option Model includes distinct fields that represent different essential data. The Model itself is created as a regular C\# class:
 #code-snippet(caption: "Option Model")[
   ```cs
-  public class Option
-	{
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid OId { get; set; }
-    public string OptionText { get; set; } = String.Empty;
-    public bool IsCorrect { get; set; } = false;
-    public DateTime CreationDate { get; set; } 
-    = DateTime.Now.ToUniversalTime();
+public class Option
+{
+  [Key]
+  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+  public Guid OId { get; set; }
+  public string OptionText { get; set; } = String.Empty;
+  public bool IsCorrect { get; set; } = false;
+  public DateTime CreationDate { get; set; } = DateTime.Now.ToUniversalTime();
 
-    public Guid QuestionId { get; set; }
-    public Question Question { get; set; }
-	}
+  public Guid QuestionId { get; set; }
+  public Question Question { get; set; }
+}
   ```
 ]
 The annotation `[Key]` is used to define the ID of an Option as the primary key and the line below tells Entity Framework Core to automatically generate a random ID when creating a new entry in the database. The CreationDate is needed for sorting Options. Note that an Option also includes a reference to the Question containing it. This is done by adding fields for the Question ID and the Question itself. This is not strictly necessary when all a developer wants to do is use a model in another model as part of a composition dependency. It is however necessary for Entity Framework Core to properly assign foreign keys in the created database tables. Including both is considered a best practice, although it is not strictly necessary. An interesting fact was, however, discovered when testing several methods of assigning foreign keys as part of the planning stage of this project: Including both a reference to the parent object and its ID is necessary if Entity Framework Core should perform Cascading Deletes (Children of an Object are also deleted from the database when said object is deleted. This is useful since it removes the need for the developer to carefully manage the database to prevent no longer used data from being stored.). Not including any reference to the containing Model on the other hand is advantageous when Model data is referenced elsewhere or needed again at a later time. This observation was also made use of when storing Games.
@@ -384,22 +383,21 @@ As it was clear from the example given of the Option Model, Models tend to not b
 #code-snippet(caption: "Question Model")[
 ```cs
 public class Question
-	{
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid QuestionId { get; set; }
-    public string QuestionName { get; set; } = string.Empty;
-    public int NOptions { get; set; } = 0;
-    public List<Option> Options { get; set; } = new List<Option>();
-    public QType Type { get; set;} = QType.SingleChoice;
-    public int ?TimeLimit { get; set; }
-    public int ?Points { get; set; }
-    public DateTime CreationDate { get; set; } 
-    = DateTime.Now.ToUniversalTime();
+{
+  [Key]
+  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+  public Guid QuestionId { get; set; }
+  public string QuestionName { get; set; } = string.Empty;
+  public int NOptions { get; set; } = 0;
+  public List<Option> Options { get; set; } = new List<Option>();
+  public QType Type { get; set;} = QType.SingleChoice;
+  public int ?TimeLimit { get; set; }
+  public int ?Points { get; set; }
+  public DateTime CreationDate { get; set; } = DateTime.Now.ToUniversalTime();
 
-    public Guid QuizId { get; set; }
-    public Quiz Quiz { get; set; }
-	}
+  public Guid QuizId { get; set; }
+  public Quiz Quiz { get; set; }
+}
 ```
 ]
 There are, however, also several differences that deserve an examination. Line 8 shows the first example of how Models are used within other Models. It is evident from the example given that this is not very difficult to do. They can simply be used like any Class in #acr("OOP"). The time limit and points are declared nullable by prefixing them with a `?`. This is done because those properties are not set when creating a question and are added later. The biggest addition to the Question Model is the use of an Enum. An Enum is a set of constants, where each keyword is associated with an integer index. They are used when a variable can have multiple predefined states that can be switched between. @misc-enum. The definition for the Question type Enum is done as follows:
@@ -417,17 +415,16 @@ The Quiz Model is structured very similarly to the Option model. It is, however,
 #code-snippet(caption: "Quiz Model")[
 ```cs
 public class Quiz
-	{
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public Guid QuizId { get; set; }
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public int NQuestions { get; set; } = 0;
-		public List<Question> Questions { get; set; } = new List<Question>();
-		public DateTime CreationDate { get; set; } 
-    = DateTime.Now.ToUniversalTime();
-  }
+{
+  [Key]
+  [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+  public Guid QuizId { get; set; }
+  public string Name { get; set; }
+  public string Description { get; set; }
+  public int NQuestions { get; set; } = 0;
+  public List<Question> Questions { get; set; } = new List<Question>();
+  public DateTime CreationDate { get; set; } = DateTime.Now.ToUniversalTime();
+}
 ```
 ]
 Each Model is also mapped to several #acr("DTO")s to more efficient transfer data. The #acr("DTO")s contain the same fields as the Models, although some of them are omitted as most use cases do not require all data. The mapping is done with AutoMapper and maps are configured in the `AutoMapperProfile.cs` file. Most maps can simply by letting AutoMapper assign each field of the #acr("DTO") to its corresponding field on the Model and vice versa. Some, however, require the manual assignment of values:
@@ -522,15 +519,13 @@ Specific endpoints can then be created by writing a new function for each endpoi
 [HttpGet("{id}/options")]
 public async Task<ActionResult<Option>> GetAllOptions(Guid id)
 {
-    try
-    {
-        var result = _mapper.Map<IEnumerable<OptionDto>>(await _optionRepository.GetOptionsByQuestionId(id));
-        return Ok(result);
-    }
-    catch (Exception ex)
-    {
-        return BadRequest(ex.Message);
-    }
+  try{
+      var result = _mapper.Map<IEnumerable<OptionDto>>(await _optionRepository.GetOptionsByQuestionId(id));
+      return Ok(result);
+  } catch (Exception ex)
+  {
+      return BadRequest(ex.Message);
+  }
 }
 ```
 ]
@@ -539,7 +534,7 @@ The annotation defines the specific #acr("HTTP") request method and also defines
 On the Client, this section includes two pages, which provide the tutor the ability to create and manage Quizzes. The routes for the pages are defined using React Router.
 ==== Main page
 The first page is the main page, also called the index page. It is configured on the default route. Fully loaded, the page looks like this:
-#figure(image("images/screenshots/mainPage.png"), caption: [Main Page Screenshot], supplement: "Figure", kind: "image")
+#figure(image("images/screenshots/mainPage.png"), caption: [Main Page Screenshot], supplement: "Figure", kind: "image")<mainPage>
 The first thing that happens when the page is loaded, is the loading of the Quizzes from the database. This is done using a ReactRouter Loader, which is declared on the route. Loaders and Actions are defined in their files. There, functions are created for each Loader/Action. The following Loader is used to fetch the Quizzes:
 #code-snippet(caption: "Quiz Loader Function")[
 ```ts
@@ -585,7 +580,7 @@ The Loader can then be used in the Component of the page by using the `useDataLo
 `variant` and `colorScheme` are Chakra-Ui styling props. When pressing the other two buttons, the tutor has to verify their identity by entering their password. This, however, is explained later on.
 
 When the tutor wants to create a new Quiz, they simply have to press the New Quiz Button in the top right corner of the page. When pressed, a dialog opens where they can enter a name and a description:
-#figure(image("images/screenshots/createQuiz.png", height: 7cm), caption: [Create Quiz Dialog Screenshot], supplement: "Figure", kind: "image")
+#figure(image("images/screenshots/createQuiz.png", height: 7cm), caption: [Create Quiz Dialog Screenshot], supplement: "Figure", kind: "image") <createQuiz>
 This is implemented using the Modal Component provided by Chakra-Ui. This Component can be controlled with the `useDisclosure` hook. This hook provides one boolean value and two functions, which are passed as props to the Modal (In this case the Modal is wrapped in its own Component so they are passed as a Prop of this Component). The value is true if the Modal is open and false if it is closed. The two functions are used to open and close the Modal respectively.
 
 Inside the Modal, there are two input fields and a submit button, which first makes an #acr("API") call to create a new Quiz and then navigates to the *Edit Quiz Page* of the created Quiz by using the `useNavigate` hook. This hook allows for redirection via code.
@@ -733,12 +728,172 @@ public async Task<IActionResult> Verify([FromBody] RegisterVerifyPasswordDto mod
 ]
 This code first retrieves the password hash stored in the database. Then, it uses Bcrypt.NET to check whether or not the password passed in the Body and the stored one corresponding to the hash in the database are the same. If they are, a #acr("HTTP") Response with the status code 200 (success) is sent. If they are not, the Server sends a Response with the status code 401 (unauthorized). The endpoint to change the password is similar with the only difference being that in addition to sending a 200 status code, the Server also updates the password hash on the database. The other two endpoints are also structured very similarly. Thus, they will be omitted in this documentation.
 === Frontend
+In order for the password verification to be useful to the tutor, the previously described endpoints have to be used in the Frontend.
+
+When first loading the main page of the React application, the endpoint providing information, whether or not a password is set, is accessed using the `useEffect()` hook. If no password is set, a red Register button is displayed next to the new Quiz button on the top of the page. If, however, a password has already been set and the corresponding hashed string is found in the database, the button is replaced with a green one allowing the tutor to change the password. The latter is shown in @mainPage. Both buttons, when clicked, open their own Modals/Dialogs (contained in separate Components), where input fields are provided for the necessary data. They are laid out almost identically to the Modal shown in @createQuiz.
+
+The Modal used for verification, on the other hand, is more involved in its implementation, the reason for this being the necessity to execute certain code or to redirect to other pages on a successful verification attempt. To be more precise, verification is needed when trying to edit or delete a Quiz. This would be trivial if React provided a way to freeze all other components until said verification is complete. This way, it would be possible to simply use the Component like a JavaScript Dialog on a simple #acr("HTML") page. This, however, requires a lot of extra code, which could possibly even include the manual implementation of a custom Hook. Thus, this approach was abandoned.
+
+The easier solution, which was eventually discovered, is that it is feasible to pass a function as a Prop to the Modal Component, which would then be executed on a successful password entry. This works very well when redirecting to the Edit Quiz Page since this only requires a change of route which is easily done with the following function:
+#code-snippet(caption: "redirect to Edit Quiz Page function")[
+```ts
+const onVerificationSuccessEdit = () => {
+    navigate(`editquiz/${id}`);
+}
+```
+]
+A problem arises when trying to apply the same approach to the deletion of Quizzes, which uses a ReactRouter action function. There is no real way to run an action via code. It is possible to redirect to the route of the action, but doing so merely loads the corresponding page. In this case, the delete quiz route does not have a page so an error occurs. There is, however, a way in React to submit a form using code instead of a submit button, which includes the use of the `useRef()` Hook. The core concept behind this Hook can easily be explained using its name: It provides a reference to some value or object. It can also be used to store the state itself. The difference between this Hook and the `useState()` Hook is that a change of the state or referenced data does not cause the Component to rerender. Another distinction of the `useRef()` Hook is the way the state is accessed or mutated. Other than the `useState()` Hook, it does not use a function to update the state as this would trigger a reload of the Component. Instead, it stores the value in a mutable object, which can be accessed or changed by using its `value.current` property. This Hook also allows the developer to reference elements in #acr("JSX"). @misc-useref
+
+The first thing that was attempted in this project was to create a reference to the form and to submit the form via that reference like so:
+#code-snippet(caption: "useRef Hook attempt with Form")[
+```tsx
+const deleteRef = useRef<HTMLFormElement>(null);
+
+const onVerificationSuccessDelete = () => {
+    deleteRef.current?.submit();
+};
+
+<Form method="DELETE" action={`deletequiz/${id}`} ref={deleteRef}>
+```
+]
+Note that this code has been condensed and is not executable in its current state. This should work, but it does not. Even after several hours of research reading the React documentation and studying the behavior of submitting a Form in JavaScript, no explanation for this oddity could be found. The most likely problem is that ReactRouter does not support calling an action without the use of a submit button. The solution, which was eventually come up with, is to create a button in the form, which is not visible to the tutor. This button is then referenced and clicked via code. This solution is not particularly optimal, but since the underlying problem is likely due to a bug in a library, it remains the most elegant way to fix this problem.
+#code-snippet(caption: "useRef successful attempt with invisible button")[
+```tsx
+const deleteBtnRef = useRef<HTMLButtonElement>(null);
+
+const onVerificationSuccessDelete = () => {
+    deleteBtnRef.current?.click();
+};
+
+<Button type="submit" display={"none"} ref={deleteBtnRef}></Button>
+```
+]
 == Game Flow
+The last major area to explore in the implementation section is the logic behind the Game itself. While also making use of a small #acr("REST") #acr("API"), the majority of the communication between the various participants in a game is handled with SignalR. Said communication is handled via a series of messages, which occur throughout the different stages of a Game.
+#figure(image("images/architecture/gameFlow.svg", height: 18cm), caption: [Game Flow Sequence Diagram], supplement: "Figure", kind: "image")
 === Models/DTOs
-=== Repositories
-=== Controller
-=== Initialize Game
-=== Join Game
+similarity to the Quiz data, information about Games is also stored in Models and transmitted using #acr("DTO")s. To be specific, the addition of two new Models was required to properly structure the necessary data.
+
+The first of these is a Model for a Player of a Game. Its general composition is not that different from the Models shown in the Quiz Management section. One potentially noteworthy aspect is that the icon of a Player is not a custom image, as is the case with competing Quiz Game solutions. Instead, a string is used to store an Emoji as the icon. This is possible since they are no different from other Unicode characters. This also makes the application more versatile as it does not rely on a third-party library for this purpose.
+#code-snippet(caption: "Player Model")[
+```cs
+public class Player
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid PlayerId { get; set; }
+    public string Name { get; set; }
+    public string Icon { get; set; }
+    public int Score { get; set; } = 0;
+
+    public Guid GameId { get; set; }
+    public Game Game { get; set; }
+}
+```
+]
+
+The Player Model is then included in the larger Game Model. It also includes a Quiz, but other than the previous times a Model was made part of another, the Quiz Model does not contain any reference to the Game Model. By doing this, cascading delete is not triggered when removing a Game from the Database, which makes it possible to play multiple Games with the same Quiz. The Players are, however, still deleted.
+#code-snippet(caption: "Game Model")[
+```cs
+ public class Game
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid GameId { get; set; }
+    public List<Player> Players { get; set; } = new List<Player>();
+    public Quiz Quiz { get; set; }
+}
+```
+]
+Various #acr("DTO")s were also created for these Models.
+=== Controller/Repositories
+Even though the Game functionality is mainly centered around real-time communication requiring SignalR, certain pieces of functionality can also be performed with a #acr("HTTP") #acr("API"). Thus, a separate Controller was created for the Game. The main two ways this Controller is used are in the creation of a Game and the deletion of a Game once it is finished. These endpoints are almost identical to their counterparts in the Quiz, Question, or Option Controllers. Thus, they will not be shown here for the sake of preventing the spotlight of duplicate code.
+
+Repositories were also implemented for both the Game and the Player Models. They are used both in the Game Controller and the Game Hub. The repos provide basic functionality for interacting with Games/Players, by for example adding a Player to a Game or increasing the score of said Player.
+=== Initialize/Join Game
+the first thing a tutor has to do to provide a Game for their students to play is to select the specific Quiz for said Game. This is done on the main page (@mainPage) by pressing the Play button on a Quiz card. This then makes an #acr("API") call to the server, where a new Game is created in the Game Controller Subsequently, the tutor is redirected to the Waiting Room page. There, a link is displayed for the page where students can join the Game. This link is `location.hostname` browser property.
+*Waiting room screenshot*
+Once started, Players are able to join a Game immediately. They can do so by navigating to the `/play` route of the application. There, they are met with an opened Modal where they can enter their name and select their preferred Emoji as an icon. This is done using a predefined Emoji picker Component, which is available on the #acr("NPM") and is installed using this command `npm i emoji-mart`.
+#code-snippet(caption: "Emoji Picker Component")[
+```tsx
+ <Picker theme="light" data={Data} onEmojiSelect={(event: { native: SetStateAction<string>; }) => {
+    setIcon(event.native);
+    setPickerVisible(!isPickerVisible);
+}} />
+```
+]
+Once selected, the local state of the icon is changed and the Picker is made not visible. If both a name and icon have been selected, the Player can join the Game. Before that, a connection to the Game Hub has to be created. In the case of the join Game page, this connection is declared with the `useRef()` Hook. This is necessary since a state change, and thus a Component rerender, is triggered every time the Player enters a new character in a text field. This would cause the connection to be restarted each time this happens.
+#code-snippet(caption: "Start Connection to Hub in Frontend")[
+```ts
+useEffect(() => {
+    connection.current = new signalR.HubConnectionBuilder()
+        .withUrl(`${sURL}/Game`)
+        .build();
+
+    connection.current.start()
+        .then(() => console.log('Connection started!'))
+        .catch(() => console.log('Error while establishing connection :('));
+
+    return () => {
+        if (connection.current) {
+            connection.current.stop()
+                .then(() => console.log('Connection stopped!'))
+                .catch(() => console.log('Error while stopping connection :('));
+        }
+    };
+}, []);
+```
+]
+This is done inside the `useEffect()` Hook to make the connection available as soon as the Component loads. First, the connection is created and subsequently started outputting messages to the browser console on a successful connection or a failure. The return statement of the `useEffect()` Hook is simply executed when the Component is unloaded, meaning when the page is changed. This is done to properly dispose of the connection before bugs can occur.
+
+If the connection is started correctly and no error appears, the Player can join the Game by simply pressing the join button. This button then sends a message to the Server.
+#code-snippet(caption: "Join Game Message")[
+```tsx
+ connection.current.invoke("RegisterPlayer", dto)
+.then(() => {
+    onClose();
+})
+.catch(err => console.error(err));
+```
+]
+This closes the Modal.
+
+Once a Player is added to the Game, the Hubs send a message to said Player containing their ID. At the same time, the Player is stored in the database. If there is currently no Game open for joining, the Player receives an error message saying so. In order to send individualized messages to Players, there are many options available. The one chosen for this project is to add the Player's connection ID, which is unique to each connection created to the Hub. In said group, the connection ID and the Player ID are associated. This is necessary since the connection ID of a Player changes once they are redirected to a new page. There, the new connection ID simply has to be added to the group and the Player can continue to receive messages.
+#code-snippet(caption: "Player Registration on Server")[
+```cs
+ public async Task RegisterPlayer(CreatePlayerDto dto)
+{
+    await Console.Out.WriteLineAsync(_currentQuestionIndex.ToString());
+    if (_currentQuestionIndex == 0 && _game != null)
+    {
+      Player createdPlayer = await _playerRepositoryCreatePlayer(dto);
+      await _gameRepository.AddPlayer(createdPlayer);
+
+      await Groups.AddToGroupAsync(Context.ConnectionId,
+      createdPlayer.PlayerId.ToString());
+
+      await Clients.All.SendAsync("playerAdded", _mapper
+      Map<PlayerDto>(createdPlayer));
+
+      await Clients.Group(createdPlayer.PlayerId.ToString())
+      .SendAsync( "addedYou", createdPlayer.PlayerId);
+    }
+    else
+    {
+      await Clients.Client(Context.ConnectionId).SendAsync("gameRunning");
+    }
+}
+```
+]
+Messages can be received by the client by creating listeners for specific messages. The following one listens for the "addedYou" message and subsequently stores the ID of the Player in the LocalStorage. From there, it can be accessed at any time when required, for example in the process of submitting an answer.
+#code-snippet(caption: "Message listener")[
+```ts
+connection.current.on("addedYou", (id: string) => {
+    localStorage.setItem('playerId', id);
+})
+```
+]
+At the same time, another message is sent to all clients. This message is listened to in the Waiting Room and is used to automatically display new Players as they join.
 === Start Game
 === Gameplay
 === End Game

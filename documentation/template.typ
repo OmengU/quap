@@ -98,8 +98,16 @@
   set heading(numbering: "1.")
   
   set par(
-    justify: true
+    justify: true,
+    leading: 0.82em,
   )
+
+  let aNames = ()
+
+  for author in authors {
+    aNames.push(author.name)
+  }
+
   set page(
     footer: box(
       stroke: (top: black),
@@ -110,7 +118,7 @@
         columns: (1fr, 1fr, 1fr),
         column-gutter: (1fr, 1fr),
       )[
-        #align(left, text(authorsLastName.join(", ")))
+        #align(left, text(aNames.join(", ")))
       ][
         #align(center, number)
       ][
