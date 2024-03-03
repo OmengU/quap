@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using quap.Data;
 using quap.Models;
 using quap.Models.DTOs;
@@ -20,7 +21,7 @@ namespace quap.Hubs
         private readonly QuizManagementDbContext _context;
         private readonly IHubContext<GameHub> _hubContext;
 
-        private static int _currentQuestionIndex = 0;
+        private static int _currentQuestionIndex;
         private static Timer _questionTimer;
         private static List<Question> _questions;
         private static Game _game;
@@ -72,7 +73,6 @@ namespace quap.Hubs
             else
             {
                 _questionTimer.Dispose();
-                await Console.Out.WriteLineAsync(_game.Players.ToString());
                 await Clients.All.SendAsync("endGame", _game.Players.OrderByDescending(p => p.Score).ToList());
             }
         }
@@ -80,6 +80,7 @@ namespace quap.Hubs
         public async Task StartGame()
         {
             _currentQuestionIndex = 0;
+
             await SendQuestion();
 
             _questionTimer = new Timer(async _ => await TimeOut(), null, TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)), TimeSpan.FromSeconds(Convert.ToDouble(_questions[_currentQuestionIndex].TimeLimit)));
