@@ -1,4 +1,4 @@
-#import "template.typ": project
+#import "template.typ": project, footer-set, table-overview, declaration
 #import "abbreviations.typ": abbreviations
 #import "@preview/acrostiche:0.3.1": *
 #import "elements.typ" : code-snippet
@@ -26,18 +26,139 @@
 )
 
 #show: project.with(
-  title: "Quap - a simple quiz app",
+  title: "Quap - a simple Quiz app",
   subTitle: "Design, development and implementation of a quiz and learning app",
   number: "5AHINF-2023/24-DA12",
   authors: candidates,
   authorsLastName: candidates.map(candidate => candidate.name.split().last()),
 )
 
-#abbreviations
-
-#print-index(title: "List of abbreviations")
+#heading(numbering: none, outlined: false)[Abstract]
 
 #pagebreak()
+
+#show: table-overview
+
+#show: declaration
+
+
+
+
+#abbreviations
+
+#outline(depth: 3)
+#show: footer-set.with(authors: candidates, number: "5AHINF-2023/24-DA12")
+#counter(page).update(1)
+
+#print-index(title: "List of abbreviations", outlined: true)
+
+#pagebreak()
+
+= Planning
+This first section will cover all details relating to the planning of this project. It aims to give an extensive overview of the thought processes and ideas behind this diploma thesis.
+== Task definition
+The first step when starting work on this thesis was to precisely define the nature of the application and to think about what was needed to achieve a completed state.
+=== Initial Idea
+Creating a fun and exciting environment is essential for any instructor/teacher. A popular way to create engaging lessons for students is to utilize quizzes, that not only consolidate previously taught material but also create an opportunity to assess student's abilities without having to rely on often very unpopular and tedious exams/tests.
+That is exactly what I was pondering when I came to the realization that an application providing the feature described above would be an ideal choice for a diploma thesis. And so, I began planning and now I want to turn my plans into reality and hopefully create an application that will help many teachers create better lessons.
+=== Status quo
+Another reason for choosing this project is that existing solutions are often inadequate. They often come with limitations, such as a maximum number of concurrent players, and irritating upselling, such as paid subscriptions and predefined lesson plans filled with irrelevant information and advertisements. They also collect and store user's data.
+A major problem with creating a similar application is that traditional solutions are often hosted on the Web and thus cost a lot to run. This, however, is not a problem with this project, as it is run directly on the instructor's PC and thus only accessible on a local network, which is a nonissue for classroom situations.
+== Goals
+The goal of this project is to create a functional prototype, which, while not 100% flawless, is still usable in a classroom setting.
+
+*Minimalism*
+
+The goal behind the application is not to create a full-fledged teaching suite nor should it apply to as many distinct groups as possible. This product is mainly targeted toward educators, who desire a simple no-frills way to assist them in their class or educators, who are worried about the influence of large corporations on the field of education.
+
+*Simplicity & Ease of Use*
+
+Simplicity is another core principle behind the project. The goal is to create a user interface that, while not using the most up-to-date eye-catching design trends, is able to be used without having to spend more than a couple of minutes trying to figure out how to for example create a quiz.
+
+=== Must-goals
+These goals must be completed by the final presentation in order to be able to call the project completed:
+- *Ability to play quizzes* #linebreak() The application must provide a simple interface for playing quizzes. The quizzes must be laid out on a central page, where a game can be started. When playing a game, the current question is displayed on a projector screen, and a separate interface is provided for choosing the desired answer. The scoreboard must then be displayed on the projector screen after completing the quiz.
+
+- *Ability to create/edit/delete quizzes* #linebreak() The central page provides functionality for managing quizzes. There must also be a separate interface for creating quizzes. The quizzes must be stored on a local database.
+
+-	*Administrator* #linebreak()The program must provide a way for the instructor to create an administrator account in order to prevent students from accessing the central page to alter created quizzes.
+
+-	*Mobile-friendly interface* #linebreak()The student interface must be accessible from mobile devices, meaning that contents should be adjusted according to screen size.
+
+-	*Question properties* #linebreak()The instructor must be able to customize questions in several ways: single choice or multiple choice, number of points on correct completion, time limit, and number of answers. (min. 2, max. 6)
+
+=== Should-goals
+These goals may be completed if all must-goals have already been completed before the hand-in date. Thus, they are considered optional:
+- *Packaging/Containerization* #linebreak()The application may be able to be easily installed/run. Meaning that it can be started by a simple click or by a few CMD Commands.
+-	*Exporting/Importing of quizzes* #linebreak()The instructor may be able to import/export quizzes as text files that can be, when imported into another instance of the program running on an entirely different Computer, fully converted back into a valid quiz, which can immediately be played.
+-	*Animations* #linebreak()The application may contain animations in select parts of the UI (player view, question overview), which may help boost student engagement.
+-	*More question types* #linebreak()The application may contain more than the two previously described (single choice, multiple choice) question types. Possible additions include text field entry (example: Math question), slider, sorting entries, …
+
+== Project Organization
+This section seeks to inform about the organization of the project and to define certain tasks and milestones.
+=== Roles
+#grid(
+  columns: (1fr, 1fr),
+  column-gutter: 5mm,
+  align(end)[#text(weight: "bold")[
+     Main Supervisor#linebreak()Secondary Supervisor#linebreak()#linebreak()Project leader#linebreak()#linebreak()Project team
+  ]
+  ],
+  align(start)[
+    Dietmar Winkler#linebreak()Markus Falkensteiner#linebreak()#linebreak()Florian Piberger#linebreak()#linebreak()Florian Piberger
+  ]
+)
+=== Task distribution
+*Florian Piberger*
+- Software Design
+  - Backend Components
+  - Frontend Components
+  - Database Schema
+  - Choosing used technologies
+- Design Frontend interface
+- Coding
+  - Implementation of Backend APIs
+  - Implementation of Frontend Components
+  - Implementation of Real-time communication between Frontend and Backend
+  - Creating Database Models
+- Testing 
+- Documentation
+
+=== Milestones
+*Until late 09/2023 - early 10/2023:*
+- Complete Scope Statement
+- Start learning unknown technologies
+- Enter details in the diploma thesis database
+
+*Until end 10/2023:*
+- Decide on major technologies
+- Database schema for quizzes
+- Initial work on the Backend
+  - Architecture
+  - ~30% complete
+
+*Until end 11/2023:*
+- Backend - basic real-time communication
+- Frontend - initial work
+
+*Until end 12/2023:*
+- Frontend - Design
+- Backend - first prototype
+
+*Until end 01/2024:*
+- Documentation - research and start writing (~40-50% complete)
+- Frontend - first prototype
+
+*Until end 02/2024:*
+- Frontend/Backend - last polish and testing
+- Documentation - ~80-85% complete
+
+*Until end 03/2024:*
+- Documentation – complete
+- Backend – complete 
+- Frontend – complete
+- Start work on video and poster
+
 
 = Theoretical Foundations
 This chapter delves into various applications, programming languages, frameworks, and related technologies pertinent to this work. Each component receives a thorough examination, covering its functionalities, potential use cases, unique features, benefits, drawbacks, and any existing limitations. By illuminating these strengths and weaknesses, I aim to equip readers with a comprehensive understanding of these technologies and their significance to the overall project. This section is meant as a reference point for the rest of the documentation. An explanation of what was achieved can be found in the #link(<implementation>)[Implementation] section.
@@ -48,18 +169,18 @@ This section outlines the software used for the development of the application. 
 ==== Visual Studio
 Visual Studio is an #acr("IDE") developed by the Redmond, Washington-based technology company Microsoft. @eb-microsoft It allows the developer to write code in multiple languages including C\# and C++. It also provides tools for building and executing the written code such as compilers and tools to improve the developer experience, the most notable of which being a Debugger and several code completion tools. A debugger allows the developer to diagnose problems with the code by setting breakpoints, where the program is paused and the values of variables are shown. It also provides functionality to inform the developer when a variable changes. Visual Studio is available in 3 Versions:
 
-- Community: #acr("FOSS") version with minimal proprietary additions; targeted towards students
+- Community: Open source version with minimal proprietary additions; targeted towards students
 - Professional: paid version; targeted towards small teams
 - Enterprise: targeted towards large cooperations
 The Community version was used for this project. @ms-visualstudio
 
 In this project, Visual Studio was primarily used for the Backend of the application.
 ==== Visual Studio Code
-#acr("VS Code") is a code editor developed by Microsoft with a #acr("FOSS") core, that also contains proprietary components such as telemetry. Although it is not a full-fledged #acr("IDE"), as its core does not contain tools typically found in an #acr("IDE"), such as debuggers and code completion utilities, it is still a very powerful tool thanks to its expansive and well-supported extension eco-system. It is thanks to said extensions, that #acr("VS Code") has become very popular in the field of Web Development, as many developers are dependent on #acr("VS Code") extensions when working with popular frameworks and libraries. When some commonly utilized technologies are used, no extensions are needed, since Microsoft has included tooling for web technologies out of the box such as a basic debugger and code highlighting for the popular programming languages JavaScript and Python @ms-vscode as well as EMMET, an extension providing productivity-enhancing abbreviations and snippets for #acr("HTML") and #acr("CSS"). @ms-emmet
+#acr("VS Code") is a code editor developed by Microsoft with a open source core, that also contains proprietary components such as telemetry. Although it is not a full-fledged #acr("IDE"), as its core does not contain tools typically found in an #acr("IDE"), such as debuggers and code completion utilities, it is still a very powerful tool thanks to its expansive and well-supported extension eco-system. It is thanks to said extensions, that #acr("VS Code") has become very popular in the field of Web Development, as many developers are dependent on #acr("VS Code") extensions when working with popular frameworks and libraries. When some commonly utilized technologies are used, no extensions are needed, since Microsoft has included tooling for web technologies out of the box such as a basic debugger and code highlighting for the popular programming languages JavaScript and Python @ms-vscode as well as EMMET, an extension providing productivity-enhancing abbreviations and snippets for #acr("HTML") and #acr("CSS"). @ms-emmet
 
 In this project, Visual Studio was primarily used when developing the Frontend of the application.
 ==== Docker Desktop/Docker
-Docker Desktop is a #acr("GUI") application for Windows and macOs used to manage Docker Containers. It is available in both a #acr("FOSS") community edition and a paid commercial version. It allows the developer to create and maintain Docker Images as well as Kubernetes Clusters.
+Docker Desktop is a #acr("GUI") application for Windows and macOs used to manage Docker Containers. It is available in both a open source community edition and a paid commercial version. It allows the developer to create and maintain Docker Images as well as Kubernetes Clusters.
 
 Docker itself is a system that gives developers the ability to quickly deploy software. It might be easier to think of it as a way to package an application, including all dependencies and configuration files into a self-contained and reusable package. Said package is referred to as a Container. Docker is often used in combination with a #acr("CI/CD") pipeline, where code is automatically tested, built, and in the case of Continuous Deployment published.
 
@@ -69,11 +190,11 @@ Even if a developer does not containerize their software, as is the case with th
 === Other Software
 This section outlines software that was used for various miscellaneous tasks other than than software development.
 ==== Mozilla Firefox
-Mozilla Firefox is a #acr("FOSS") Web Browser developed by the Mozilla Corporation. It began development in 1998 as a fork of the then open-source Netscape Navigator Browser, which had at one point been the most popular Web Browser in the early days of the internet. It had, however, lost a great bit of popularity at the time it was made open-source. Firefox in turn became a very popular browser in the 2000s, but it has seen declining usage for the last couple of years as the Chrome Browser, developed by Google, has taken the lead. Firefox now hovers around 3 to 10% market share depending on the region.
+Mozilla Firefox is an open source Web Browser developed by the Mozilla Corporation. It began development in 1998 as a fork of the then open-source Netscape Navigator Browser, which had at one point been the most popular Web Browser in the early days of the internet. It had, however, lost a great bit of popularity at the time it was made open-source. Firefox in turn became a very popular browser in the 2000s, but it has seen declining usage for the last couple of years as the Chrome Browser, developed by Google, has taken the lead. Firefox now hovers around 3 to 10% market share depending on the region.
 
 Firefox was used in this project to test and interact with the Frontend interface. It was preferred over Chrome or Browsers based on it, because it not only offers a greater amount of privacy but also better developer tools, especially when viewing #acr("CSS") properties of #acr("HTML") elements. @eb-firefox
 ==== Swagger #acr("UI")
-Swagger #acr("UI") is an interface built upon the OpenAPI Specification for documenting an #acr("API") by using either a YAML or #acr("JSON") document to describe the available endpoints and the models used for data transfer. It was originally known as the Swagger Specification. Swagger itself includes a set of tools, which aid the developer in the design, development, and documentation of #acr("API")s.
+Swagger #acr("UI") is an interface built upon the OpenAPI Specification for documenting an #acr("API") by using either a YAML or #acr("JSON") document to describe the available endpoints and the Models used for data transfer. It was originally known as the Swagger Specification. Swagger itself includes a set of tools, which aid the developer in the design, development, and documentation of #acr("API")s.
 
 Swagger #acr("UI") is one of these tools. It helps the developer keep an overview of the #acr("API") by generating a #acr("GUI") out of the YAML/#acr("JSON") document displaying all endpoints. It then allows for the testing of the endpoints by providing fields for each parameter, where test data can be entered and buttons to submit the #acr("API") calls. @misc-swagger
 ==== Typst
@@ -213,9 +334,9 @@ Although there are several other smaller rules, six concepts build the core of #
 
 + *Code-On-Demand:* Servers may transfer executable code to the client temporarily It also has to be ensured, that the server has to make sure, that the client can execute said code. An example would be JavaScript files. @book-rest
 ==== DTOs
-In software development, a #acr("DTO") is like a specialized messenger carrying only the data needed between different parts of an application. In their implementation, #acr("DTO")s look very similar to regular models. The major difference is that they are not meant to represent data stored on the database, but instead data that is sent and received. A #acr("DTO") is usually associated with a model and includes all fields from said model needed for a certain data transfer. They are a good way to obfuscate data and are categorized as a Design Pattern. @misc-dto
+In software development, a #acr("DTO") is like a specialized messenger carrying only the data needed between different parts of an application. In their implementation, #acr("DTO")s look very similar to regular Model. The major difference is that they are not meant to represent data stored on the database, but instead data that is sent and received. A #acr("DTO") is usually associated with a Model and includes all fields from said Model needed for a certain data transfer. They are a good way to obfuscate data and are categorized as a Design Pattern. @misc-dto
 
-An example for a use-case of a #acr("DTO") from this project is that when information about a specific question of a quiz is transferred to a client, any data containing information about wether or not an option is correct or not is omitted to prevent students from cheating.
+An example for a use-case of a #acr("DTO") from this project is that when information about a specific Question of a Quiz is transferred to a client, any data containing information about wether or not an Option is correct or not is omitted to prevent students from cheating.
 ==== Repository Pattern
 The Repository pattern in ASP.NET is a design pattern, where so-called Repositories are created, that act as a middleman between Entity Framework Core and the #acr("API") Controllers. All functions performing #acr("CRUD") operations are defined in the Repositories, so that a Controller never has to work with the database directly. The Repository pattern brings several advantages:
 
@@ -247,7 +368,7 @@ When creating larger web applications, it is very common to use the same element
 
 There are, however, many Libraries and Frameworks that aim to solve this problem by allowing the developer to create reusable blocks called Components. The most popular solutions are Angular and React, the latter of which is used in this project. Components are self-contained, customizable, and readily interchangeable.
 
-In the previous example, the dark mode toggle becomes a Component that, after it has been implemented once, can be used anywhere. In the case of the navigation bar, where the specific links may change, it is also possible to define the content as Props, values that can be passed to a component similarly to arguments of functions. React utilizes a virtual #acr("DOM"), which is an in-memory representation of the actual #acr("DOM") mentioned in the section about JavaScript. It allows  React to efficiently identify and update only the necessary parts of the UI when data changes, leading to faster and smoother user experiences. Components also make it very easy to maintain code down the line. Imagine updating the toggle behavior – you do it in one place, and the change automatically reflects across all instances.
+In the previous example, the dark mode toggle becomes a Component that, after it has been implemented once, can be used anywhere. In the case of the navigation bar, where the specific links may change, it is also possible to define the content as Props, values that can be passed to a Component similarly to arguments of functions. React utilizes a virtual #acr("DOM"), which is an in-memory representation of the actual #acr("DOM") mentioned in the section about JavaScript. It allows  React to efficiently identify and update only the necessary parts of the UI when data changes, leading to faster and smoother user experiences. Components also make it very easy to maintain code down the line. Imagine updating the toggle behavior – you do it in one place, and the change automatically reflects across all instances.
 
 React supports both JavaScript and TypeScript. It includes the ability for the developer to write #acr("HTML") markup directly in the JavaScript/TypeScript file using #acr("JSX"). #acr("JSX") also allows for seamless code injection into the markup by wrapping all code to be executed in "{}".  @misc-react
 ==== Vite
@@ -255,7 +376,7 @@ One problem that occurs when working with Libraries such as React is that Web Br
 
 The main advantage of Vite is that it is much faster than WebPack. Vite achieves this by supporting ES Modules, the official module system for JavaScript. This increases efficiency because code no longer has to be bundled into a single file, which greatly reduces complexity. This makes it also possible for Vite to only update the modules for certain parts of the application since code is bundled into multiple different files. This is particularly useful for development, as it decreases reload times when making small changes to code. Vite is also able to determine if certain parts of code are really necessary to the application and then remove said code from the bundle, reducing its file size. @misc-vite
 ==== Chakra-UI
-When working with React or another Component-based Framework/Library, it soon becomes evident, that many different components occur on almost every page. A perfect example of such an element would be a Button or even something more complicated such as a Card or a Dialog/Modal. Additionally, as every Frontend developer knows, it usually takes quite a long time to decide on how the page should look and even longer to subsequently define all the necessary #acr("CSS") rules.
+When working with React or another Component-based Framework/Library, it soon becomes evident, that many different Components occur on almost every page. A perfect example of such an element would be a Button or even something more complicated such as a Card or a Dialog/Modal. Additionally, as every Frontend developer knows, it usually takes quite a long time to decide on how the page should look and even longer to subsequently define all the necessary #acr("CSS") rules.
 
 Luckily, several packages and extensions aim to reduce the time it takes to implement standard Components and to style them. Their way of doing so varies greatly, but Chakra-UI, the solution used in this project, approaches this problem by providing the developer with several predefined and styled Components. These range from commonly used elements like the ones mentioned above to more abstract ones like one Component that is a container with the #acr("CSS") flexbox display property. Chakra-UI also allows for basic styling of its Components by passing Props and it provides the functionality to easily make the website responsive (usable on smaller screens) and accessible. @misc-chakra The following shows a Button that is inside of a Container with flexbox:
 ```tsx
@@ -289,13 +410,13 @@ const router = createBrowserRouter([
 ```
 The main Component then has to be wrapped in a Router Component in order for the routes to work.
 
-In addition to simple routing, React Router also supports more advanced features such as loaders and actions, as shown in the example above. Loaders allow the developer to define functions that automatically get executed when the component loads. This is used to load data from an external data source (#acr("API")). Actions on the other hand are more complicated. They emulate the standard #acr("HTML") feature, where, when a form is submitted, a #acr("HTTP") request is made. Actions intercept said request and relay the form data to a specifically defined function on a route. There, the data is processed and sent to a Backend Server. If there is only one action defined per route, said action is automatically executed on a form submit. Otherwise, the route of the action desired has to be defined on the Form.
+In addition to simple routing, React Router also supports more advanced features such as loaders and actions, as shown in the example above. Loaders allow the developer to define functions that automatically get executed when the Component loads. This is used to load data from an external data source (#acr("API")). Actions on the other hand are more complicated. They emulate the standard #acr("HTML") feature, where, when a form is submitted, a #acr("HTTP") request is made. Actions intercept said request and relay the form data to a specifically defined function on a route. There, the data is processed and sent to a Backend Server. If there is only one action defined per route, said action is automatically executed on a form submit. Otherwise, the route of the action desired has to be defined on the Form.
 
 React Router also allows for the creation of Links to redirect to another page. Redirecting is also possible as a return value of an action or via a React Hook called `useNavigate()`. @misc-reactrouter Hooks will be explained in the next section.
 === Concepts
 The following concepts are vital to understanding the implementation of the Frontend.
 ==== React Component Types
-React offers the ability to create two different types of Components: *Class* Components and *Functional* Components. Class Components are the older way, available since React was first released. They are essentially JavaScript Objects/Classes. They allow for the use of Lifecycle Methods, which perform actions at specific stages of the component's lifecycle (creation, update, deletion). They also allow for the management of the component state. This means that it is possible to store data specific to the component instance and to modify that data at any time. Functional Components, on the other hand, rely on functions for their implementation. When displayed, Functional Components act like a standard function and are executed once. They return  #acr("JSX") markup. Due to that behavior, they do not support Lifecycle Methods and dynamic state management. This made them by far the less popular option for a long time until Hooks were introduced. Hooks add the previously missing features to Functional Components. The by far most used Hook is the useState Hook. It allows for state management. It is initialized with a value and a setter function. Once the setter function is called, the entire Component gets rerendered with the updated data.
+React offers the ability to create two different types of Components: *Class* Components and *Functional* Components. Class Components are the older way, available since React was first released. They are essentially JavaScript Objects/Classes. They allow for the use of Lifecycle Methods, which perform actions at specific stages of the Component's lifecycle (creation, update, deletion). They also allow for the management of the Component state. This means that it is possible to store data specific to the Component instance and to modify that data at any time. Functional Components, on the other hand, rely on functions for their implementation. When displayed, Functional Components act like a standard function and are executed once. They return  #acr("JSX") markup. Due to that behavior, they do not support Lifecycle Methods and dynamic state management. This made them by far the less popular option for a long time until Hooks were introduced. Hooks add the previously missing features to Functional Components. The by far most used Hook is the useState Hook. It allows for state management. It is initialized with a value and a setter function. Once the setter function is called, the entire Component gets rerendered with the updated data.
 ```tsx
 const [name, setName] = useState<string>("Simon")
 ```
@@ -313,6 +434,7 @@ Even though the application is run locally, it still relies heavily on technolog
 This sameness also extends to its general architectural Design, which like web applications is divided into a Frontend and a Backend. The former includes all Clients and #acr("GUI")s accessed by students and tutors, and the latter contains a Server, which is responsible for storing and managing Quiz/Game data and for providing access to said data via multiple methods, which are outlined in @architecture-general:
 #figure(image("images/architecture/General.jpg"), caption: [General Architecture Overview], kind: "image", supplement: "Figure")<architecture-general>
 As seen in the @architecture-general, communication occurs both via #acr("HTTP"), where data is requested by the Client and then subsequently provided/mutated/stored by the Server, as well as bidirectional #link(<signalR>)[SignalR] WebSocket connections.
+#pagebreak()
 === Backend
 #figure(image("images/architecture/Server.jpg"), caption: [Backend Architecture Design], kind: "image", supplement: "Figure")<architecture-backend>
 *Logo Reference:*
@@ -348,9 +470,9 @@ The DbContext shown in @architecture-backend is a class that utilizes Entity Fra
 *Logo Reference:*
 #figure(image("images/logos/reactrouter.png", height: 1.5cm), caption: [#link(<reactRouter>)[React Router]@image-reactrouter], supplement: "Figure", kind: "image")
 
-The Frontend of the project is a complex React application. It is divided into two main sections, which are different in both their implementation and use case. The first one is the Game Pages, which contain all the functionality needed for playing a game. They are shown in their own section in @architecture-frontend. This part of the application mainly uses SignalR connections to communicate with the Server. The other section is the Quiz Management interfaces, entirely used by the tutor. Here, they are able to create new Quizzes, edit existing ones, or delete Quizzes, which are no longer used. These functions are separated into two pages:
+The Frontend of the project is a complex React application. It is divided into two main sections, which are different in both their implementation and use case. The first one is the Game Pages, which contain all the functionality needed for playing a Game. They are shown in their own section in @architecture-frontend. This part of the application mainly uses SignalR connections to communicate with the Server. The other section is the Quiz Management interfaces, entirely used by the tutor. Here, they are able to create new Quizzes, edit existing ones, or delete Quizzes, which are no longer used. These functions are separated into two pages:
 
-- *Root Page:* Default page of the client. Displays all Quizzes and lets the tutor edit, create, delete, or start games with quizzes.
+- *Root Page:* Default page of the client. Displays all Quizzes and lets the tutor edit, create, delete, or start Games with Quizzes.
 
 - *Edit Quiz Page*: This page is navigated when editing a Quiz. Here, individual Questions and Options are visible and editable.
 
@@ -360,7 +482,7 @@ A major part of the planned project was a tutor's ability to manage Quizzes. Thi
 === Backend
 In the Server, this section includes a RESTful #acr("API") providing several endpoints for managing Quizzes.
 ==== Models/DTOs
-In order to properly store data, the Creation of multiple Models is required. A model is a class used as a reference by Entity Framework Core to create SQL queries to Initialize tables. Each Model represents one of these tables. This section includes three Models: Quiz, Question, and Option. Of those three, Option is the lowest in their shared hierarchical order as it is part of a Question, which in turn is part of a Quiz. The Option Model includes distinct fields that represent different essential data. The Model itself is created as a regular C\# class:
+In order to properly store data, the Creation of multiple Models is required. A Model is a class used as a reference by Entity Framework Core to create SQL queries to Initialize tables. Each Model represents one of these tables. This section includes three Models: Quiz, Question, and Option. Of those three, Option is the lowest in their shared hierarchical order as it is part of a Question, which in turn is part of a Quiz. The Option Model includes distinct fields that represent different essential data. The Model itself is created as a regular C\# class:
 #code-snippet(caption: "Option Model")[
   ```cs
 public class Option
@@ -371,13 +493,12 @@ public class Option
   public string OptionText { get; set; } = String.Empty;
   public bool IsCorrect { get; set; } = false;
   public DateTime CreationDate { get; set; } = DateTime.Now.ToUniversalTime();
-
   public Guid QuestionId { get; set; }
   public Question Question { get; set; }
 }
   ```
 ]
-The annotation `[Key]` is used to define the ID of an Option as the primary key and the line below tells Entity Framework Core to automatically generate a random ID when creating a new entry in the database. The CreationDate is needed for sorting Options. Note that an Option also includes a reference to the Question containing it. This is done by adding fields for the Question ID and the Question itself. This is not strictly necessary when all a developer wants to do is use a model in another model as part of a composition dependency. It is however necessary for Entity Framework Core to properly assign foreign keys in the created database tables. Including both is considered a best practice, although it is not strictly necessary. An interesting fact was, however, discovered when testing several methods of assigning foreign keys as part of the planning stage of this project: Including both a reference to the parent object and its ID is necessary if Entity Framework Core should perform Cascading Deletes (Children of an Object are also deleted from the database when said object is deleted. This is useful since it removes the need for the developer to carefully manage the database to prevent no longer used data from being stored.). Not including any reference to the containing Model on the other hand is advantageous when Model data is referenced elsewhere or needed again at a later time. This observation was also made use of when storing Games.
+The annotation `[Key]` is used to define the ID of an Option as the primary key and the line below tells Entity Framework Core to automatically generate a random ID when creating a new entry in the database. The CreationDate is needed for sorting Options. Note that an Option also includes a reference to the Question containing it. This is done by adding fields for the Question ID and the Question itself. This is not strictly necessary when all a developer wants to do is use a Model in another Model as part of a composition dependency. It is however necessary for Entity Framework Core to properly assign foreign keys in the created database tables. Including both is considered a best practice, although it is not strictly necessary. An interesting fact was, however, discovered when testing several methods of assigning foreign keys as part of the planning stage of this project: Including both a reference to the parent object and its ID is necessary if Entity Framework Core should perform Cascading Deletes (Children of an Object are also deleted from the database when said object is deleted. This is useful since it removes the need for the developer to carefully manage the database to prevent no longer used data from being stored.). Not including any reference to the containing Model on the other hand is advantageous when Model data is referenced elsewhere or needed again at a later time. This observation was also made use of when storing Games.
 
 As it was clear from the example given of the Option Model, Models tend to not be very complex as they simply contain definitions of fields. The Question Model is structured very similarly:
 #code-snippet(caption: "Question Model")[
@@ -400,7 +521,7 @@ public class Question
 }
 ```
 ]
-There are, however, also several differences that deserve an examination. Line 8 shows the first example of how Models are used within other Models. It is evident from the example given that this is not very difficult to do. They can simply be used like any Class in #acr("OOP"). The time limit and points are declared nullable by prefixing them with a `?`. This is done because those properties are not set when creating a question and are added later. The biggest addition to the Question Model is the use of an Enum. An Enum is a set of constants, where each keyword is associated with an integer index. They are used when a variable can have multiple predefined states that can be switched between. @misc-enum. The definition for the Question type Enum is done as follows:
+There are, however, also several differences that deserve an examination. Line 8 shows the first example of how Models are used within other Models. It is evident from the example given that this is not very difficult to do. They can simply be used like any Class in #acr("OOP"). The time limit and points are declared nullable by prefixing them with a `?`. This is done because those properties are not set when creating a Question and are added later. The biggest addition to the Question Model is the use of an Enum. An Enum is a set of constants, where each keyword is associated with an integer index. They are used when a variable can have multiple predefined states that can be switched between. @misc-enum. The definition for the Question type Enum is done as follows:
 #code-snippet(caption: "Question type Enum")[
 ```cs
 public enum QType
@@ -411,7 +532,7 @@ public enum QType
 ]
 SingleChoice is assignable both with the integer: `Qtype[0]` and by using its name: `Qtype.SingleChoice`. The same goes for MultipleChoice. An Enum was used in this case, since it provides more flexibility if new Question types are introduced in the future and it improves the readability of the code.
 
-The Quiz Model is structured very similarly to the Option model. It is, however, still important to the understanding of the rest of this documentation to know what is defined.
+The Quiz Model is structured very similarly to the Option Model. It is, however, still important to the understanding of the rest of this documentation to know what is defined.
 #code-snippet(caption: "Quiz Model")[
 ```cs
 public class Quiz
@@ -567,7 +688,7 @@ export const getQuizzes: GetQuizzes = async () => {
 ]
 The type has to be created in order to tell TypeScript which arguments of which types the function takes and what the return type of the function is.
 
-The Loader can then be used in the Component of the page by using the `useDataLoader` hook. This hook is provided by ReactRouter. Once received, the Quizzes are passed as a Prop to another Component, where the Quizzes are laid out in Cards in a Grid layout. Each of these Cards in turn is its own Component. There, the name and description, as well as the number of Questions is laid out in an appealing way. Each Card also contains three Buttons to start a Game, edit a Quiz, and delete a Quiz. Two of these Buttons (Play, Delete) use Action Functions in order to execute #acr("API") calls. The Edit button redirects to the *Edit Quiz Page*. The Start Game button is defined like so:
+The Loader can then be used in the Component of the page by using the `useDataLoader()` Hook. This Hook is provided by ReactRouter. Once received, the Quizzes are passed as a Prop to another Component, where the Quizzes are laid out in Cards in a Grid layout. Each of these Cards in turn is its own Component. There, the name and description, as well as the number of Questions is laid out in an appealing way. Each Card also contains three Buttons to start a Game, edit a Quiz, and delete a Quiz. Two of these Buttons (Play, Delete) use Action Functions in order to execute #acr("API") calls. The Edit button redirects to the *Edit Quiz Page*. The Start Game button is defined like so:
 #code-snippet(caption: "Start Game Button")[
 ```tsx
 <Form method="post" action={`startgame/${id}`}>
@@ -581,9 +702,9 @@ The Loader can then be used in the Component of the page by using the `useDataLo
 
 When the tutor wants to create a new Quiz, they simply have to press the New Quiz Button in the top right corner of the page. When pressed, a dialog opens where they can enter a name and a description:
 #figure(image("images/screenshots/createQuiz.png", height: 7cm), caption: [Create Quiz Dialog Screenshot], supplement: "Figure", kind: "image") <createQuiz>
-This is implemented using the Modal Component provided by Chakra-Ui. This Component can be controlled with the `useDisclosure` hook. This hook provides one boolean value and two functions, which are passed as props to the Modal (In this case the Modal is wrapped in its own Component so they are passed as a Prop of this Component). The value is true if the Modal is open and false if it is closed. The two functions are used to open and close the Modal respectively.
+This is implemented using the Modal Component provided by Chakra-Ui. This Component can be controlled with the `useDisclosure()` Hook. This Hook provides one boolean value and two functions, which are passed as props to the Modal (In this case the Modal is wrapped in its own Component so they are passed as a Prop of this Component). The value is true if the Modal is open and false if it is closed. The two functions are used to open and close the Modal respectively.
 
-Inside the Modal, there are two input fields and a submit button, which first makes an #acr("API") call to create a new Quiz and then navigates to the *Edit Quiz Page* of the created Quiz by using the `useNavigate` hook. This hook allows for redirection via code.
+Inside the Modal, there are two input fields and a submit button, which first makes an #acr("API") call to create a new Quiz and then navigates to the *Edit Quiz Page* of the created Quiz by using the `useNavigate()` Hook. This Hook allows for redirection via code.
 ==== Edit Quiz Page
 This page is used to edit the details of a Quiz. These details include the specific Questions and the various Options selectable on each Question. This page also gives the tutor the ability to rename a Quiz itself.
 #figure(image("images/screenshots/editQuiz.png", height: 8cm), caption: [Edit Quiz Page], supplement: "Figure", kind: "image")
@@ -591,7 +712,7 @@ The page is split up into 2 sections:
 
 *Sidebar:*
 
-This part of the page is configured as its own component, which is then included in the Edit Quiz Page. In the main Component of the Edit Quiz route, the questions are loaded via a ReactRouter Loader function:
+This part of the page is configured as its own component, which is then included in the Edit Quiz Page. In the main Component of the `editquiz` route, the Questions are loaded via a ReactRouter Loader function:
 #code-snippet(caption: "Question Loader function")[
 ```ts
 const loader: LoaderFunction = async ({ params }: QuestionsLoaderArgs) => {
@@ -607,7 +728,7 @@ const loader: LoaderFunction = async ({ params }: QuestionsLoaderArgs) => {
 };
 ```
 ]
-This function first receives the Quiz ID through the URL parameters (The route of the Edit Quiz Page is /editQuiz/quizId). The first line of the function uses the null coalescing operator to check if the ID from the parameters is not undefined. The null coalescing operator first checks if the value before ?? is null/undefined. If it is not, the right value is used. If the right value is null, the left value is utilized instead. This seemingly pointless check is needed because even if there is theoretically no chance for the ID to be undefined in TypeScript, the compiler will still throw an error since it does not know for certain that the parameter is a string and not undefined. Next, a standard #acr("API") call is made. The Questions array received through this Loader is then passed as a Prop to the Sidebar Component. There, the `array.map()` function is used to display a Link to the Question Details View for each Question. Other than the name of the Question, the Link also contains two Chakra-UI badge components displaying the Question type and the number of Options respectively. The button used to create a new Question employs a ReactRouter Action function. At the bottom of the Sidebar, there are two last buttons.
+This function first receives the Quiz ID through the URL parameters (The route of the Edit Quiz Page is `/editQuiz/quizId`). The first line of the function uses the null coalescing operator to check if the ID from the parameters is not undefined. The null coalescing operator first checks if the value before ?? is null/undefined. If it is not, the right value is used. If the right value is null, the left value is utilized instead. This seemingly pointless check is needed because even if there is theoretically no chance for the ID to be undefined in TypeScript, the compiler will still throw an error since it does not know for certain that the parameter is a string and not undefined. Next, a standard #acr("API") call is made. The Questions array received through this Loader is then passed as a Prop to the Sidebar Component. There, the `array.map()` function is used to display a Link to the Question Details View for each Question. Other than the name of the Question, the Link also contains two Chakra-UI badge Components displaying the Question type and the number of Options respectively. A button used to create a new Question employs a ReactRouter Action function. At the bottom of the Sidebar, there are two last buttons.
 
 The second button is fairly simple as it merely contains a Link to the main route of the client. The first one, however, is more complicated as it opens a Modal where the name and the description of the Quiz can be altered. This Modal will not be shown here as it is almost entirely the same as the Create Quiz Dialog. It does, however, contain some interesting code: As the Modal Component needs to know the current Quiz details in order to populate the standard values of the text boxes, the name and description of the Quiz have to be loaded first. This seemed rather easy at first since it was assumed in the development process that instead of all Questions, the entire Quiz was loaded in the main Component of the route. This mistake was made due to the Edit Quiz details Modal being a late addition to the page made long after the rest. The problem was then solved by getting the Quiz ID from the #acr("URL") Parameter. This was not very easy since the ReactRouter documentation lacked any explanation on how to perform this task. It was eventually figured out through trial and error:
 #code-snippet(caption: "loading Quiz details in Modal")[
@@ -629,13 +750,13 @@ The second button is fairly simple as it merely contains a Link to the main rout
     }, [])
 ```
 ]
-The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Afterwards, the React `useEffect` hook is used to perform the needed #acr("API"). The useEffect Hook gives the developer the ability to perform side effects within function-based Components. Side effects are actions that need to happen after React has updated the #acr("DOM"), such as fetching data, subscriptions, timers, or directly manipulating the DOM. By using useEffect, the developer essentially instructs React to execute specific code passed as a function in its first argument after the Component has been rerendered. The Hook also takes an array as its second argument. This array is used to specify when the code should be executed. This is useful since otherwise, the function would run every time the Component is rerendered, which happens a lot in React. If for example a state variable is passed as the second argument, the code is only executed if that specific state changes. If an empty array is passed as it is in the example given, the function is only called on the first render of the Component. @misc-useeffect
+The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Afterwards, the React `useEffect` Hook is used to perform the needed #acr("API"). The useEffect Hook gives the developer the ability to perform side effects within function-based Components. Side effects are actions that need to happen after React has updated the #acr("DOM"), such as fetching data, subscriptions, timers, or directly manipulating the DOM. By using useEffect, the developer essentially instructs React to execute specific code passed as a function in its first argument after the Component has been rerendered. The Hook also takes an array as its second argument. This array is used to specify when the code should be executed. This is useful since otherwise, the function would run every time the Component is rerendered, which happens a lot in React. If for example a state variable is passed as the second argument, the code is only executed if that specific state changes. If an empty array is passed as it is in the example given, the function is only called on the first render of the Component. @misc-useeffect
 
 *Question Details View:*
 
-This part of the page encompasses all content to the right of the Sidebar. It can be displayed in two different versions depending on whether or not the Question is merely being viewed (display view) or actively edited (edit view). the views can be switched between by pressing the Edit button to start editing and by pressing the Save/Cancel buttons to mark the edit process as complete. Both views use the same underlying Components. The only difference is that in Edit mode, all buttons and text fields are enabled, which is achieved by declaring a boolean Prop on the Component and using said Prop to manage the state of input fields.
+This part of the page encompasses all content to the right of the Sidebar. It can be displayed in two different versions depending on whether or not the Question is merely being viewed (display view) or actively edited (edit view). the views can be switched between by pressing the "Edit" button to start editing and by pressing the "Save"/"Cancel" buttons to mark the edit process as complete. Both views use the same underlying Components. The only difference is that in Edit mode, all buttons and text fields are enabled, which is achieved by declaring a boolean Prop on the Component and using said Prop to manage the state of input fields.
 
-Both views are declared on their own subroutes of `/editquiz/quizId`. The edit view uses the route `/editquiz/quizId/editquestion/questionId` and the display view is available on `/editquiz/quizId/question/questionId`. As it is clear from the fact that the views have their individual #acr("URL")s, they are separate pages. This means that pressing the Links in the Sidebar would, without additional configuration, redirect to another page containing the display view of the desired Question. To display the contents of the route on the same page as the Sidebar, a ReactRouter Outlet Component needs to be included in the Component of the editquiz route. This tells ReactRouter to render the contents of subroutes as part of their parent. Once displayed, individual Questions are loaded using a ReactRouter Loader function. In the case when a new Question is created, the edit view is opened automatically. The Questions are always created without any data. The rest of this explanation will be focused on said edit view as it requires more attention due to the need to manage the State. This is not necessary on the display view since the user has no way of changing any values.
+Both views are declared on their own subroutes of `/editquiz/quizId`. The edit view uses the route `/editquiz/quizId/editquestion/questionId` and the display view is available on `/editquiz/quizId/question/questionId`. As it is clear from the fact that the views have their individual #acr("URL")s, they are separate pages. This means that pressing the Links in the Sidebar would, without additional configuration, redirect to another page containing the display view of the desired Question. To display the contents of the route on the same page as the Sidebar, a ReactRouter Outlet Component needs to be included in the Component of the `editquiz` route. This tells ReactRouter to render the contents of subroutes as part of their parent. Once displayed, individual Questions are loaded using a ReactRouter Loader function. In the case when a new Question is created, the edit view is opened automatically. The Questions are always created without any data. The rest of this explanation will be focused on said edit view as it requires more attention due to the need to manage the State. This is not necessary on the display view since the user has no way of changing any values.
 
 The edit view (and also the display view) contains a Component, which contains several input fields (disabled on display view) for entering data such as the Question name or the time limit and a dropdown list for the Question type. The following shows the input field for the time limit:
 #code-snippet(caption: "Edit Question Time Limit Input Field")[
@@ -648,8 +769,8 @@ onChange={(event) => setTimeLimit(+event.target.value)}
 />
 ```
 ]
-Its value is set to the time limit loaded with the Loader if the Question has a time limit specified. If not, the field is left empty. If the input changes as the tutor enters a number, said number is stored in State to be used in an #acr("API") call to the server which performs a PATCH Operation to mutate the data of the Question. the plus in front of the expression `event.target.value` is used to convert a string to a number in JavaScript/TypeScript. The component also features an error message that is displayed above the input fields if there are empty fields. This also causes the save button to be disabled:
-*Image of error*
+Its value is set to the time limit loaded with the Loader if the Question has a time limit specified. If not, the field is left empty. If the input changes as the tutor enters a number, said number is stored in State to be used in an #acr("API") call to the server which performs a PATCH Operation to mutate the data of the Question. the plus in front of the expression `event.target.value` is used to convert a string to a number in JavaScript/TypeScript. The Component also features an error message that is displayed above the input fields if there are empty fields. This also causes the save button to be disabled:
+#figure(image("images/screenshots/questionError.png", height: 6.5cm), caption: [Error Message Empty Question fields], supplement: "Figure", kind: "image")
 This is done by declaring a boolean state, which is used to control the visibility of the alert and the ability to click the button. This is then updated by using the useEffect Hook to trigger when the state of the input field values changes.
 #code-snippet(caption: "Edit Question Error Check")[
 ```ts
@@ -658,7 +779,7 @@ useEffect(() => {
 }, [name, points, timeLimit])
 ```
 ]
-Next to the Component for displaying the information about the Question there is another one showing all the Options. This Component uses the `array.map()` function to display one Component for each option, where the Option title can be changed (in the edit view), be marked as correct, or be deleted. As it would be extremely difficult to manage the state of the Options through that many layers of Components, the `useContext()` Hook is used on the main Component of the editquestion route. This hook provides an elegant way to share data across various components within an application, eliminating the need for "prop drilling" (Passing Props through multiple layers). A Context can be thought of as a container, which is accessible anywhere within the Component tree. When a Component needs a specific piece of data, useContext allows it to directly tap into that Context, retrieving the current value. In this example, the Hook is used to store all Option in an array of objects. For this, the TypeScript Index signature is used. This allows the developer to define a key for each entry in the array similar to a dictionary in other languages. The following shows the signature of the state used here: `{ [key: string]: OptionDto; }`. The key in this example is the ID of an Option. Existing Options are loaded into the State as follows:
+Next to the Component for displaying the information about the Question there is another one showing all the Options. This Component uses the `array.map()` function to display one Component for each Option, where the Option title can be changed (in the edit view), be marked as correct, or be deleted. As it would be extremely difficult to manage the state of the Options through that many layers of Components, the `useContext()` Hook is used on the main Component of the `editquestion` route. This Hook provides an elegant way to share data across various Components within an application, eliminating the need for "prop drilling" (Passing Props through multiple layers). A Context can be thought of as a container, which is accessible anywhere within the Component tree. When a Component needs a specific piece of data, useContext allows it to directly tap into that Context, retrieving the current value. In this example, the Hook is used to store all Option in an array of objects. For this, the TypeScript Index signature is used. This allows the developer to define a key for each entry in the array similar to a dictionary in other languages. The following shows the signature of the state used here: `{ [key: string]: OptionDto; }`. The key in this example is the ID of an Option. Existing Options are loaded into the State as follows:
 #code-snippet(caption: "Load Options into Context State")[
 ```ts
 const [options, setOptions] = useState<{ [key: string]: OptionDto }>(() => {
@@ -674,7 +795,7 @@ if (question.options.length > 0) {
     });
 ```
 ]
-This uses the `array.reduce()` function with two arguments, the dictionary where all options should be stored and the options themselves. The function is then run for every Option to add them to the dictionary. If no Options exist, the dictionary is left empty.
+This uses the `array.reduce()` function with two arguments, the dictionary where all Options should be stored and the Options themselves. The function is then run for every Option to add them to the dictionary. If no Options exist, the dictionary is left empty.
 
 In order to use the Context State in other Components, they have to be wrapped in a Context Provider. This Provider takes the State and SetState functions as arguments. Inside those Components, the Context State can be accessed using the useContext Hook by passing the name of the Context @misc-usecontext:
 #code-snippet(caption: "useContext Hook example")[
@@ -730,9 +851,9 @@ This code first retrieves the password hash stored in the database. Then, it use
 === Frontend
 In order for the password verification to be useful to the tutor, the previously described endpoints have to be used in the Frontend.
 
-When first loading the main page of the React application, the endpoint providing information, whether or not a password is set, is accessed using the `useEffect()` hook. If no password is set, a red Register button is displayed next to the new Quiz button on the top of the page. If, however, a password has already been set and the corresponding hashed string is found in the database, the button is replaced with a green one allowing the tutor to change the password. The latter is shown in @mainPage. Both buttons, when clicked, open their own Modals/Dialogs (contained in separate Components), where input fields are provided for the necessary data. They are laid out almost identically to the Modal shown in @createQuiz.
+When first loading the main page of the React application, the endpoint providing information, whether or not a password is set, is accessed using the `useEffect()` Hook. If no password is set, a red "Register" button is displayed next to the "New Quiz" button on the top of the page. If, however, a password has already been set and the corresponding hashed string is found in the database, the button is replaced with a green one allowing the tutor to change the password. The latter is shown in @mainPage. Both buttons, when clicked, open their own Modals/Dialogs (contained in separate Components), where input fields are provided for the necessary data. They are laid out almost identically to the Modal shown in @createQuiz.
 
-The Modal used for verification, on the other hand, is more involved in its implementation, the reason for this being the necessity to execute certain code or to redirect to other pages on a successful verification attempt. To be more precise, verification is needed when trying to edit or delete a Quiz. This would be trivial if React provided a way to freeze all other components until said verification is complete. This way, it would be possible to simply use the Component like a JavaScript Dialog on a simple #acr("HTML") page. This, however, requires a lot of extra code, which could possibly even include the manual implementation of a custom Hook. Thus, this approach was abandoned.
+The Modal used for verification, on the other hand, is more involved in its implementation, the reason for this being the necessity to execute certain code or to redirect to other pages on a successful verification attempt. To be more precise, verification is needed when trying to edit or delete a Quiz. This would be trivial if React provided a way to freeze all other Components until said verification is complete. This way, it would be possible to simply use the Component like a JavaScript Dialog on a simple #acr("HTML") page. This, however, requires a lot of extra code, which could possibly even include the manual implementation of a custom Hook. Thus, this approach was abandoned.
 
 The easier solution, which was eventually discovered, is that it is feasible to pass a function as a Prop to the Modal Component, which would then be executed on a successful password entry. This works very well when redirecting to the Edit Quiz Page since this only requires a change of route which is easily done with the following function:
 #code-snippet(caption: "redirect to Edit Quiz Page function")[
@@ -742,7 +863,7 @@ const onVerificationSuccessEdit = () => {
 }
 ```
 ]
-A problem arises when trying to apply the same approach to the deletion of Quizzes, which uses a ReactRouter action function. There is no real way to run an action via code. It is possible to redirect to the route of the action, but doing so merely loads the corresponding page. In this case, the delete quiz route does not have a page so an error occurs. There is, however, a way in React to submit a form using code instead of a submit button, which includes the use of the `useRef()` Hook. The core concept behind this Hook can easily be explained using its name: It provides a reference to some value or object. It can also be used to store the state itself. The difference between this Hook and the `useState()` Hook is that a change of the state or referenced data does not cause the Component to rerender. Another distinction of the `useRef()` Hook is the way the state is accessed or mutated. Other than the `useState()` Hook, it does not use a function to update the state as this would trigger a reload of the Component. Instead, it stores the value in a mutable object, which can be accessed or changed by using its `value.current` property. This Hook also allows the developer to reference elements in #acr("JSX"). @misc-useref
+A problem arises when trying to apply the same approach to the deletion of Quizzes, which uses a ReactRouter action function. There is no real way to run an action via code. It is possible to redirect to the route of the action, but doing so merely loads the corresponding page. In this case, the `deletequiz` route does not have a page so an error occurs. There is, however, a way in React to submit a form using code instead of a submit button, which includes the use of the `useRef()` Hook. The core concept behind this Hook can easily be explained using its name: It provides a reference to some value or object. It can also be used to store the state itself. The difference between this Hook and the `useState()` Hook is that a change of the state or referenced data does not cause the Component to rerender. Another distinction of the `useRef()` Hook is the way the state is accessed or mutated. Other than the `useState()` Hook, it does not use a function to update the state as this would trigger a reload of the Component. Instead, it stores the value in a mutable object, which can be accessed or changed by using its `value.current` property. This Hook also allows the developer to reference elements in #acr("JSX"). @misc-useref
 
 The first thing that was attempted in this project was to create a reference to the form and to submit the form via that reference like so:
 #code-snippet(caption: "useRef Hook attempt with Form")[
@@ -769,7 +890,7 @@ const onVerificationSuccessDelete = () => {
 ```
 ]
 == Game Flow
-The last major area to explore in the implementation section is the logic behind the Game itself. While also making use of a small #acr("REST") #acr("API"), the majority of the communication between the various participants in a game is handled with SignalR. Said communication is handled via a series of messages, which occur throughout the different stages of a Game.
+The last major area to explore in the implementation section is the logic behind the Game itself. While also making use of a small #acr("REST") #acr("API"), the majority of the communication between the various participants in a Game is handled with SignalR. Said communication is handled via a series of messages, which occur throughout the different stages of a Game. The following sequence diagram shows all messages in the chronological order they occur in. Details about the implementations of certain messages will be shown further down in this section.
 #figure(image("images/architecture/gameFlow.svg", height: 18cm), caption: [Game Flow Sequence Diagram], supplement: "Figure", kind: "image")
 === Models/DTOs
 similarity to the Quiz data, information about Games is also stored in Models and transmitted using #acr("DTO")s. To be specific, the addition of two new Models was required to properly structure the necessary data.
@@ -811,8 +932,8 @@ Even though the Game functionality is mainly centered around real-time communica
 
 Repositories were also implemented for both the Game and the Player Models. They are used both in the Game Controller and the Game Hub. The repos provide basic functionality for interacting with Games/Players, by for example adding a Player to a Game or increasing the score of said Player.
 === Initialize/Join Game
-the first thing a tutor has to do to provide a Game for their students to play is to select the specific Quiz for said Game. This is done on the main page (@mainPage) by pressing the Play button on a Quiz card. This then makes an #acr("API") call to the server, where a new Game is created in the Game Controller Subsequently, the tutor is redirected to the Waiting Room page. There, a link is displayed for the page where students can join the Game. This link is `location.hostname` browser property.
-*Waiting room screenshot*
+the first thing a tutor has to do to provide a Game for their students to play is to select the specific Quiz for said Game. This is done on the main page (@mainPage) by pressing the "Play" button on a Quiz card. This then makes an #acr("API") call to the server, where a new Game is created in the Game Controller Subsequently, the tutor is redirected to the Waiting Room page. There, a link is displayed for the page where students can join the Game. This link is `location.hostname` browser property.
+#figure(image("images/screenshots/waitingRoom.png"), caption: [Game Waiting Room], supplement: "Figure", kind: "image")
 Once started, Players are able to join a Game immediately. They can do so by navigating to the `/play` route of the application. There, they are met with an opened Modal where they can enter their name and select their preferred Emoji as an icon. This is done using a predefined Emoji picker Component, which is available on the #acr("NPM") and is installed using this command `npm i emoji-mart`.
 #code-snippet(caption: "Emoji Picker Component")[
 ```tsx
@@ -846,7 +967,7 @@ useEffect(() => {
 ]
 This is done inside the `useEffect()` Hook to make the connection available as soon as the Component loads. First, the connection is created and subsequently started outputting messages to the browser console on a successful connection or a failure. The return statement of the `useEffect()` Hook is simply executed when the Component is unloaded, meaning when the page is changed. This is done to properly dispose of the connection before bugs can occur.
 
-If the connection is started correctly and no error appears, the Player can join the Game by simply pressing the join button. This button then sends a message to the Server.
+If the connection is started correctly and no error appears, the Player can join the Game by simply pressing the "Join" button. This button then sends a message to the Server.
 #code-snippet(caption: "Join Game Message")[
 ```tsx
  connection.current.invoke("RegisterPlayer", dto)
@@ -894,22 +1015,134 @@ connection.current.on("addedYou", (id: string) => {
 ```
 ]
 At the same time, another message is sent to all clients. This message is listened to in the Waiting Room and is used to automatically display new Players as they join.
-=== Start Game
+#pagebreak()
 === Gameplay
-=== End Game
+As soon as all students have joined, the tutor can simply start the Game by pressing the "Start Game" button on the Waiting Room page. This sends the "StartGame" message to the SignalR Hub on the server. There, the first Question is sent to all clients. This is done in a separate function from the StartGame function since the sending of Questions is not just required when starting the Game. On the tutor's computer, which screen is projected to a projection screen or shown on a digital whiteboard, a redirection to the page of the `/gameTeacher` route occurs. There, all relevant information about the Question is displayed straightforwardly:
+#figure(image("images/screenshots/gameTutor.png", height: 8.5cm), caption: [Game Teacher View], supplement: "Figure", kind: "image")
+The top part of the page features a pleasing gradient background with multiple cards for important information. On the first card, the timer is displayed. It continuously goes down until it reaches zero, at which point the Question is closed for answering. Further detail on the implementation of the timer in the Frontend and Backend will follow further down this section since it requires further information to be comprehended in its entirety. Next to the timer, the name of the Question is displayed. The last two cards are used to display the points received if the correct Option or Options are selected, and a button to advance to the next Question respectively. The bottom part of the page features the individual Options displayed in a grid layout. The colors shown are predefined in an array and assigned to the cards by utilizing a previously unknown feature of the `array.map()` function. As it has been previously explained, this function allows for an action to be performed on each element of an array, which is used here to display a card for each Option. This has already been done similarly  way in the Sidebar on the Edit Quiz page. The new functionality used here is that it also allows the developer to define an incrementing number similar to a for loop. This number is then used to select the correct color from the colors array.
 
+On the Player side, the student is redirected to the page of the `/gameStudent` route. There, a different layout is displayed depending on whether the Question is single or multiple-choice. The difference between the two is that Options are selected and submitted via a separate button on a multiple-choice Question. The styling of the Options is also different. This page also features a mobile-friendly responsive design, as it is likely that a student might want to play on their phone instead of a Laptop or Computer.
+#grid(
+  columns: (1fr, 1fr),
+  figure(image("images/screenshots/gamePlayerSingle.png", height: 7cm), caption: [Game Student View Single Choice], supplement: "Figure", kind: "image"),
+  figure(image("images/screenshots/gamePlayerMulti.png", height: 7cm), caption: [Game Student View Multi Choice], supplement: "Figure", kind: "image"),
+  )
+The way answers are submitted differs slightly between the two. Both rely on the same function to send the IDs of the selected Options to the server alongside the Player ID stored in LocalStorage. This is done comparably to any other SignalR message described until now. The difference between the two is how this function is used. In a single-choice Question, each Option contains a click event handler, which runs this function passing the ID of the Option as an argument:
+#code-snippet(caption: "Submit single Answer")[
+```ts
+ const submitSingle = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+        event.preventDefault();
+        sendToHub([id]);
+    }
+```
+]
+Even though only a single ID needs to be sent to the Hub on the server, an array is still used to make the sendToHub function usable for both applications. On the Backend, the sent IDs are used to create a list of Options. This list is then checked and if all Options are correct, the score of the Player is updated. If the Options are part of a multiple-choice Question, the IDs are added to an array and submitted via a submit button.
+#code-snippet(caption: "Submit multiple Answers")[
+```ts
+const selectMulti = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    event.preventDefault();
+    multiIds.includes(id) ? 
+    setMultiIds([...multiIds.filter((m) => m != id)]) :
+    setMultiIds([...multiIds, id]);
+}
+```
+]
+This function first checks if the ID has already been added to the array. If it has, it is removed by filtering the array. Otherwise, it is simply added. This is done to allow for an Option to be both selectable and deselectable.
+
+Once all Players have submitted an answer, the tutor can press the "Next Question" button in the top portion of the teacher view. A message is then sent to the Hub requesting the scores of the students, which leads to the following function being called:
+#code-snippet(caption: "Request Scores function")[
+```cs
+ public async Task RequestScores()
+{
+  _game.Players = await _context.Players.ToListAsync();
+
+  var playersWithScore = _game.Players.Where(p => p.Score > 0).ToList();
+  var topPlayers = playersWithScore.Count < 3
+      ? playersWithScore.Concat(_game.Players.Except(playersWithScore)
+      .OrderBy(p => Guid.NewGuid()).Take(3 - playersWithScore.Count)).ToList()
+      : playersWithScore.OrderByDescending(p => p.Score).Take(3).ToList();
+
+  await _hubContext.Clients.All.SendAsync("topPlayers", topPlayers);
+
+  foreach (Player player in _game.Players)
+  {
+      await _hubContext.Clients.Group(player.PlayerId.ToString())
+      .SendAsync("resultReceived", player.Score);
+  }
+}
+```
+]
+This function uses a hubContext instead of sending messages normally. This is necessary since it is also executed once the timer has run out. In that case, the current instance of the Hub at the time of the timer creation is no longer active once it reaches zero. This is due to a Hub having a very short lifecycle as it is often disposed of and then created again to improve memory usage. The hubContext is needed because it allows for access to the Hub at any time. The way it is used here is not intended as it is normally used outside a Hub, but its characteristics also make it ideal for this use case. The line `_game.Players = await _context.Players.ToListAsync();` fetches the latest list of Players from the database and assigns it to `_game.Players`. This is done to ensure that `_game.Players` always contains the most up-to-date data from the database.
+
+Next, a list of the top three Players is created. First, all Players who have a score greater than zero are added to a list. This list is then sorted by score and the best three students are selected. If there are fewer than three Players with a score, the list is extended by adding as many scoreless Players as needed to reach three again. After that, the list is sent to the tutor's computer where a Modal is shown with a table showing its data:
+#figure(image("images/screenshots/results.png"), caption: [Top Three Players], supplement: "Figure", kind: "image")
+Each Player also receives their current score via a Modal. The student is also informed whether or not the Question has been answered correctly by storing each score received in an array and comparing the last two scores. If they are identical, a mistake was made when answering. The tutor can then advance to the next Question by pressing the button in the Modal, at which point the server sends the new data to the clients where the contents of the pages are updated.
+
+*Timer*
+
+The timer is first created in the `SartGame()` method of the Hub. There, the time limit of the first Question is assigned to it and the `RequestScores()` function is designated to be executed when the timer runs out. On the Frontend, the timer is simulated using the `useEffect()` Hook.
+#code-snippet(caption: "Timer Frontend")[
+```ts
+ useEffect(() => {
+        let interval: number = 0;
+        if (timerActive && timerSeconds > 0) {
+            interval = setInterval(() => {
+                setTimerSeconds((timerSeconds) => timerSeconds - 1);
+            }, 1000);
+        } else if (!timerActive && timerSeconds != 0) {
+            clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+    }, [timerActive, timerSeconds]);
+```
+]
+The Hook takes a function and an array of dependencies (`timerActive` and `timerSeconds`) as arguments. The function inside the Hook is executed every time one of the dependencies changes.
+
+In this function, an interval is set up to decrement `timerSeconds` by 1 every second, but only if the timer is active and has not yet reached zero. If the timer is not active and `timerSeconds` is not 0, the interval is cleared, effectively pausing the timer. The return statement clears the interval, ensuring that the timer stops when the Component is unmounted or before it updates. This prevents potential memory leaks.
+
+Back on the server side, the timer is stopped when the scores are requested and started again with the new time limit of the next Question.
+=== End Game
+After the last Question of a Quiz has been reached and the tutor has clicked the "Next Question" button in the Modal, the server sends a list of all Players sorted by their score, which is then displayed on a new route.
+#figure(image("images/screenshots/scoreboard.png"), caption: [Scoreboard], supplement: "Figure", kind: "image")
+While this process does work, an error occurs due to the fact that the client of the tutor still tries to request a new Question. The most interesting part of this problem is when it occurs: The error message is displayed long after the redirection to the scoreboard has already taken place. Due to this, it is very likely that the reason lies within the way React dismounts its Components. Somehow, this process seems to send a redundant message to the Hub. While certainly not ideal, this error was ignored due to it not affecting the flow of the Game itself.
+
+Finally, the tutor has to press the "Return to Menu" button, which sends a message to the server requesting the Game be deleted from the database. Once this is done, the server sends a confirmation back and the tutor is redirected to the main page, from where they can either edit a Question, create a new one, or play another Game.
 #pagebreak()
 
 = Conclusion
+The implementation of the must-goals, with the exception of a few bug fixes, was completed on the 7th of February 2024. It took approximately 110 hours of time entirely spent on coding. The planning and research were completed in about 40 hours and the documentation was written in another 40 hours. In total, the completion of the project required 190 hours.
+
+As previously alluded to, all must-goals were completed. However, no should-goals were completed because of time constraints.
 == Results
+The results of this diploma thesis are presented and explained below.
 === Backend
+The project offers a high-performing and well designed Server, which provides both a highly useful #acr("REST") #acr("API") for the seamless management of Quizzes and their underlying Questions and a responsive SignalR Hub used to ensure real-time communication between clients during a game. Both components provide great security and efficiency thanks to the robust ecosystem of ASP.NET Core. Data is persistently stored in a database and represented in well-structured Models, enhancing code readability and making it more readable.
+
+Overall, the Backend development of the project proved more efficient and streamlined than anticipated. The implementation of the SignalR Hub was completed especially quickly as it had been assumed that it would be the most complicated section of the whole project at the start. In reality, SignalR turned out to be easier to work with than anticipated when starting the project.
+
+The #acr("REST") #acr("API") development progressed smoothly due to clear RESTful design principles, resulting in an intuitive and easy-to-understand API. While Entity Framework Core with PostgreSQL was chosen for the database needs, the Enum configuration required additional research. This minor hurdle did not significantly impact the development timeline. Data is also transferred using well-desired #acr("DTO")s powered by the powerful, yet easy-to-use tool AutoMapper. They ensure that the data transfer between the client and the server is done in an efficient and logical manner.
+
+A minor challenge arose when the initial #acr("API") design wasn't fully #acr("REST") compliant, necessitating a complete redesign. This proved to be a valuable learning experience, leading to improved #acr("API") design skills.
+
+The server additionally offers a simple yet effective #acr("API") for adding passwords, securely hashed with Bcrypt.NET and stored in the database. A verification mechanism ensures authorized user access to specific functionalities, adding an extra security layer and protecting data integrity.
+
+Overall, the application boasts a robust, efficient, and secure Backend, providing a solid foundation for a smooth and enjoyable user experience.
 === Frontend
+In addition to the previously described server, the application also provides several #acr("GUI") interfaces, which are not only pleasing to the eye thanks to the well-designed, but still very functional Components from Chakra-UI. They are also highly user-friendly allowing even inexperienced tutors to create engaging Quizzes without much hassle. It also includes a design for the player pages, which is greatly versatile as it is styled to look and function well on full-sized desktop monitors and small smartphones. The fact that the Frontend is implemented entirely with web technologies also makes it not only efficient but also cross-platform. Additionally, the tutor has the ability to set a password to protect their precious Quizzes from meddling students, a great addition for classroom use.
+
+The implementation of the Frontend went significantly less smoothly than the Backend implementation. A major factor for the unexpected complexity was the need for an extensive state management solution for the Edit Quiz page in order to achieve a great layout. Initially, it had not been anticipated that this would need as many complicated Components as it ended up needing. It also had to be rewritten due to the initial implementation not meeting the high standards set for this project. A large breakthrough occurred when the `useContext()` Hook was first used. After this, everything fell right into place and resulted in a well-designed and intuitive page, which as a whole represents the best this application has to offer.
+
+Consequential delays in the development process also occurred when implementing the Game pages as they needed the highest amounts of polish in the entire Frontend due to being interacted with by both students and tutors. However, this effort paid off thanks to the great design and ease of use provided by the pages in their current state.
 == Potential future additions
-== Reflection on the project
+In its current state, the project already offers a feature-rich Quiz application with a great user-friendly design. The connection between the Frontend and the Backend works without major errors and the experience of playing a game Game is very enriching and informative thanks to the ability to create interesting Quizzes.
+
+Even though all must-goals were completed, there is still room for improvements, including the containerization of the application with Docker, making it even more versatile. Additionally, there are still minor bugs and other small problems that could be ironed out. Finally, the ability to export and import Quizzes could help build a community and foster the spirit of learning within everyone willing to expand their horizons.
 
 #pagebreak()
 
 #bibliography("references.bib")
+
+#show outline: set heading(outlined: true)
 
 #outline(
   title: [Code Listings],
