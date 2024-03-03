@@ -1,5 +1,5 @@
 import { Button, Card, CardBody, Flex, Heading, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getIP } from "./endpoints";
 import * as signalR from "@microsoft/signalr";
 import { GameQuestionDto, Paths, Player, sURL } from "../global";
@@ -11,21 +11,40 @@ const WaitingRoom = () => {
     const [players, setPlayers] = useState<Player[]>([])
     const navigate = useNavigate();
 
-    let connection = new signalR.HubConnectionBuilder()
-        .withUrl(`${sURL}/Game`)
-        .build();
+    const connection = useRef<signalR.HubConnection | null>(null);
 
-    connection.start()
-        .then(() => console.log('Connection started!'))
-        .catch(() => console.log('Error while establishing connection :('));
+    useEffect(() => {
+        connection.current = new signalR.HubConnectionBuilder()
+            .withUrl(`${sURL}/Game`)
+            .build();
 
-    connection.on("playerAdded", (player) => {
-        setPlayers([...players, player])
-    });
+        connection.current.start()
+            .then(() => console.log('Connection started!'))
+            .catch(() => console.log('Error while establishing connection :('));
 
-    connection.on("newQuestion", (question: GameQuestionDto) => {
-        navigate(`../${Paths.gameTutor}`, { state: question });
-    })
+
+        if (connection.current) {
+            connection.current.on("playerAdded", (player) => {
+                console.log(player);
+                setPlayers((prevPlayers) => [...prevPlayers, player])
+            });
+
+            connection.current.on("newQuestion", (question: GameQuestionDto) => {
+                navigate(`../${Paths.gameTutor}`, { state: question });
+            })
+
+        }
+
+        return () => {
+            if (connection.current) {
+                connection.current.off("playerAdded");
+                connection.current.off("newQuestion");
+                connection.current.stop()
+                    .then(() => console.log('Connection stopped!'))
+                    .catch(() => console.log('Error while stopping connection :('));
+            }
+        };
+    }, []);
 
     useEffect(() => { getIP().then((ip) => setGameLink(ip)) }, [])
 
@@ -41,8 +60,10 @@ const WaitingRoom = () => {
             </Flex>
             <Button colorScheme="green" mt={"3"} size={"lg"} onClick={(event) => {
                 event.preventDefault();
-                connection.invoke("StartGame")
-                    .catch(err => console.error(err));
+                if (connection.current) {
+                    connection.current.invoke("StartGame")
+                        .catch(err => console.error(err));
+                }
             }}>
                 Start game
             </Button>

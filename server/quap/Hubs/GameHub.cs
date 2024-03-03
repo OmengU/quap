@@ -72,6 +72,7 @@ namespace quap.Hubs
             else
             {
                 _questionTimer.Dispose();
+                await Console.Out.WriteLineAsync(_game.Players.ToString());
                 await Clients.All.SendAsync("endGame", _game.Players.OrderByDescending(p => p.Score).ToList());
             }
         }
@@ -104,6 +105,8 @@ namespace quap.Hubs
         public async Task RequestScores()
         {
             _questionTimer.Change(Timeout.Infinite, Timeout.Infinite);
+
+            _game.Players = await _context.Players.ToListAsync();
 
             var playersWithScore = _game.Players.Where(p => p.Score > 0).ToList();
             var topPlayers = playersWithScore.Count < 3

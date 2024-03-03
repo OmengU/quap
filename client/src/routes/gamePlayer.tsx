@@ -1,18 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { GameQuestionDto, QType, colors, sURL } from "../global";
 import { Flex, Box, Text, Button, Modal, ModalBody, ModalContent, ModalOverlay, useDisclosure, Heading } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as signalR from "@microsoft/signalr";
 
 const GamePlayer = () => {
-    let connection = new signalR.HubConnectionBuilder()
-        .withUrl(`${sURL}/Game`)
-        .build();
-
-    connection.start()
-        .then(() => console.log('Connection started!'))
-        .catch(() => console.log('Error while establishing connection :('));
-
     const location = useLocation();
     const data: GameQuestionDto = location.state;
 
@@ -23,31 +15,64 @@ const GamePlayer = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isOpenTimeout, onOpen: onOpenTimeout, onClose: onCloseTimeout } = useDisclosure();
 
-    connection.on("submitReceived", () => {
-        setAnswered(true);
-    })
+    const connection = useRef<signalR.HubConnection | null>(null);
 
-    connection.on("resultReceived", (score: number) => {
-        console.log(score);
-        setScores((prevScores) => [...prevScores, score]);
-        onOpen();
-    });
+    useEffect(() => {
+        connection.current = new signalR.HubConnectionBuilder()
+            .withUrl(`${sURL}/Game`)
+            .build();
 
-    connection.on("timeOut", () => {
-        onOpenTimeout();
-    })
+        connection.current.start()
+            .then(() => console.log('Connection started!'))
+            .catch(() => console.log('Error while establishing connection :('));
 
-    connection.on("newQuestion", (newQuestion: GameQuestionDto) => {
-        setMultiIds([]);
-        setQuestion(newQuestion);
-        onClose();
-        onCloseTimeout();
-        setAnswered(false);
-    })
+
+        if (connection.current) {
+            connection.current.on("submitReceived", () => {
+                setAnswered(true);
+            })
+
+            connection.current.on("resultReceived", (score: number) => {
+                console.log(score);
+                setScores((prevScores) => [...prevScores, score]);
+                onOpen();
+            });
+
+            connection.current.on("timeOut", () => {
+                onOpenTimeout();
+            })
+
+            connection.current.on("newQuestion", (newQuestion: GameQuestionDto) => {
+                setMultiIds([]);
+                setQuestion(newQuestion);
+                onClose();
+                onCloseTimeout();
+                setAnswered(false);
+            })
+
+        }
+
+        return () => {
+            if (connection.current) {
+                connection.current.off("resultReceived");
+                connection.current.off("submitReceived");
+                connection.current.off("timeOut");
+                connection.current.off("newQuestion");
+                connection.current.stop()
+                    .then(() => console.log('Connection stopped!'))
+                    .catch(() => console.log('Error while stopping connection :('));
+            }
+        };
+    }, []);
+
+
 
     const sendToHub = (ids: string[]) => {
-        connection.invoke("UpdateScore", localStorage.getItem('playerId'), ids)
-            .catch(err => console.error(err));
+        if (connection.current) {
+            console.log(ids);
+            connection.current.invoke("UpdateScore", localStorage.getItem('playerId'), ids)
+                .catch(err => console.error(err));
+        }
     }
 
     const selectMulti = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
@@ -71,7 +96,7 @@ const GamePlayer = () => {
                 <Box p="1rem" key={i}
                     minW={{ base: "100%", md: question.options.length <= 3 ? `${100 / question.options.length}%` : "33.33%" }}
                     h={{ base: `${100 / question.options.length}%`, md: question.options.length <= 3 ? "100%" : "50%" }}>
-                    <Button p={{base: "0", md: "1.5rem"}}
+                    <Button p={{ base: "0", md: "1.5rem" }}
                         bg={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? "white" : colors[i]}
                         color={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? "black" : "white"}
                         border={(question.type == QType.MultipleChoice && !multiIds.includes(o.oId)) || answered ? `10px solid ${colors[i]}` : "none"}
