@@ -46,7 +46,7 @@
 
 #abbreviations
 
-#outline(depth: 3)
+#outline(depth: 3, indent: auto)
 #show: footer-set.with(authors: candidates, number: "5AHINF-2023/24-DA12")
 #counter(page).update(1)
 
@@ -91,7 +91,7 @@ These goals must be completed by the final presentation in order to be able to c
 These goals may be completed if all must-goals have already been completed before the hand-in date. Thus, they are considered optional:
 - *Packaging/Containerization* #linebreak()The application may be able to be easily installed/run. Meaning that it can be started by a simple click or by a few CMD Commands.
 -	*Exporting/Importing of quizzes* #linebreak()The instructor may be able to import/export quizzes as text files that can be, when imported into another instance of the program running on an entirely different Computer, fully converted back into a valid quiz, which can immediately be played.
--	*Animations* #linebreak()The application may contain animations in select parts of the UI (player view, question overview), which may help boost student engagement.
+-	*Animations* #linebreak()The application may contain animations in select parts of the #acr("UI") (player view, question overview), which may help boost student engagement.
 -	*More question types* #linebreak()The application may contain more than the two previously described (single choice, multiple choice) question types. Possible additions include text field entry (example: Math question), slider, sorting entries, …
 
 == Project Organization
@@ -117,7 +117,7 @@ This section seeks to inform about the organization of the project and to define
   - Choosing used technologies
 - Design Frontend interface
 - Coding
-  - Implementation of Backend APIs
+  - Implementation of Backend #acrpl("API")
   - Implementation of Frontend Components
   - Implementation of Real-time communication between Frontend and Backend
   - Creating Database Models
@@ -159,6 +159,7 @@ This section seeks to inform about the organization of the project and to define
 - Frontend – complete
 - Start work on video and poster
 
+#pagebreak()
 
 = Theoretical Foundations
 This chapter delves into various applications, programming languages, frameworks, and related technologies pertinent to this work. Each component receives a thorough examination, covering its functionalities, potential use cases, unique features, benefits, drawbacks, and any existing limitations. By illuminating these strengths and weaknesses, I aim to equip readers with a comprehensive understanding of these technologies and their significance to the overall project. This section is meant as a reference point for the rest of the documentation. An explanation of what was achieved can be found in the #link(<implementation>)[Implementation] section.
@@ -194,7 +195,7 @@ Mozilla Firefox is an open source Web Browser developed by the Mozilla Corporati
 
 Firefox was used in this project to test and interact with the Frontend interface. It was preferred over Chrome or Browsers based on it, because it not only offers a greater amount of privacy but also better developer tools, especially when viewing #acr("CSS") properties of #acr("HTML") elements. @eb-firefox
 ==== Swagger #acr("UI")
-Swagger #acr("UI") is an interface built upon the OpenAPI Specification for documenting an #acr("API") by using either a YAML or #acr("JSON") document to describe the available endpoints and the Models used for data transfer. It was originally known as the Swagger Specification. Swagger itself includes a set of tools, which aid the developer in the design, development, and documentation of #acr("API")s.
+Swagger #acr("UI") is an interface built upon the OpenAPI Specification for documenting an #acr("API") by using either a YAML or #acr("JSON") document to describe the available endpoints and the Models used for data transfer. It was originally known as the Swagger Specification. Swagger itself includes a set of tools, which aid the developer in the design, development, and documentation of #acrpl("API").
 
 Swagger #acr("UI") is one of these tools. It helps the developer keep an overview of the #acr("API") by generating a #acr("GUI") out of the YAML/#acr("JSON") document displaying all endpoints. It then allows for the testing of the endpoints by providing fields for each parameter, where test data can be entered and buttons to submit the #acr("API") calls. @misc-swagger
 ==== Typst
@@ -204,11 +205,11 @@ Another major difference between Typst and older solutions is that it is not sep
 
 The markup and scripting components of Typst are very closely linked and they can both be embedded within each other. Declared variables are also shared between the two, making it very easy to for example create a list of names, programmatically modify it, and output the result in the space of a couple of lines in one file. The same procedure would require the use of multiple separate files in comparable systems. Typst also allows the user to programmatically change the properties of text elements anywhere in the document by using so-called Set Rules. The following two examples show how to add numberings to headings and how to justify the text of paragraphs:
 ```typ
-  set heading(numbering: "1.")
-  
-  set par(
-    justify: true
-  )
+set heading(numbering: "1.")
+
+set par(
+  justify: true
+)
 ```
 When used in text, programmatic elements have to be marked by writing a "\#" in front of them. @typst Typst provides both a #acr("CLI") tool and a #acr("WYSIWYG") web-based editor for writing documents.
 
@@ -269,12 +270,12 @@ This project uses a Web #acr("API") without any #acr("MVC") Components.
 Asp.NET Core also provides an #acr("ORM") called Entity Framework Core. An #acr("ORM") is an abstraction layer between the application and the database. It is used to perform #acr("CRUD") operations, without having to write database queries by hand. They typically provide interfaces to interact with database tables as if they were regular objects. One thing of note is that the term is reserved for relational databases only. Non-relational solutions use different terms (for example Object Document Mapper in MongoDb). Entity Framework Core supports SQLServer out of the box, although there are third-party packages, which add support for further databases. @misc-orm
 ==== AutoMapper <automapper>
 To convert between a Model and a #acr("DTO"), it is normally required to manually assign the values as follows:
-```c#
+```cs
 model.name = dto.name;
 model.date = dto.date;
 model.price = dto.price;
 ```
-Doing this can not only lead to a lot of filler code, but it may also be impossible with larger objects. #acr("DTO")s themselves will be thoroughly explained later in this document. AutoMapper is a library that allows the developer to define maps between certain models/#acr("DTO")s. It will then try to automatically match corresponding fields. Should this fail, the developer is able to manually create maps as well. Maps are not bidirectional, so each one has to be created twice. AutoMapper includes an easy way of doing this by simply defining the map a second time and adding `.ReverseMap()` at the end of one of them. @misc-automapper
+Doing this can not only lead to a lot of filler code, but it may also be impossible with larger objects. #acrpl("DTO") themselves will be thoroughly explained later in this document. AutoMapper is a library that allows the developer to define maps between certain Models/#acrpl("DTO"). It will then try to automatically match corresponding fields. Should this fail, the developer is able to manually create maps as well. Maps are not bidirectional, so each one has to be created twice. AutoMapper includes an easy way of doing this by simply defining the map a second time and adding `.ReverseMap()` at the end of one of them. @misc-automapper
 ==== SignalR <signalR>
 In a traditional Web #acr("API"), clients can only send requests to the server, to which the server may then respond. This system works well for certain use cases, but for others, for example, chats or games, it is too limited. Instead, these applications may benefit from the use of another technology, namely WebSockets. They differ from traditional #acr("HTTP") endpoints by establishing a persistent connection between clients and servers with two-way communication channels. The technical term for communication of that sort is "Full-Duplex Communication". Messages transmitted over WebSockets are also delivered or received in real time. Although their usefulness is without doubt, WebSockets also possess certain limitations, which a developer has to keep in mind when using them:
 
@@ -304,9 +305,9 @@ This project makes use of some of these features since it uses Enums to store ce
 === Concepts
 The following concepts are vital to understanding the implementation of the Backend.
 ==== REST
-#acr("REST") #acr("API")s are #acr("API")s, that use #acr("HTTP") technology. The term #acr("REST") itself merely describes a set of guidelines, which are recommended when designing #acr("HTTP")-based #acr("API")s. They were laid out by Roy Fielding, who co-founded the Apache #acr("HTTP") Server Project, in his Ph.D. thesis written in the year 2000. #acr("API")s that utilize these guidelines are called "RESTful".
+#acr("REST") #acrpl("API") are #acrpl("API"), that use #acr("HTTP") technology. The term #acr("REST") itself merely describes a set of guidelines, which are recommended when designing #acr("HTTP")-based #acrpl("API"). They were laid out by Roy Fielding, who co-founded the Apache #acr("HTTP") Server Project, in his Ph.D. thesis written in the year 2000. #acr("API")s that utilize these guidelines are called "RESTful".
 
-Having well-designed #acr("API")s is essential to the modern web, where developers not only work with their own #acr("API")s but also with several others hosted on other servers in the web. Therefore, it is important, that all #acr("API")s are designed similarly. The core of #acr("REST") is defined by its #acr("URI") format:
+Having well-designed #acrpl("API") is essential to the modern web, where developers not only work with their own #acrpl("API") but also with several others hosted on other servers in the web. Therefore, it is important, that all #acrpl("API") are designed similarly. The core of #acr("REST") is defined by its #acr("URI") format:
 
 `URI = scheme://authority/path[?query][#fragment]`
 
@@ -324,7 +325,7 @@ Although there are several other smaller rules, six concepts build the core of #
 
 + *Client-Server:* There should always be a separation of concerns between clients (the applications processing the data) and the server (the application providing the data). Their interactions must be defined through standardized requests and responses, ensuring independence and scalability.
 
-+ *Uniform Interface:* Resources are identified using URIs and accessed through a standard set of #acr("HTTP") methods (GET, POST, PUT, DELETE). This consistency makes API usage intuitive and predictable for developers.
++ *Uniform Interface:* Resources are identified using URIs and accessed through a standard set of #acr("HTTP") methods (GET, POST, PUT, DELETE). This consistency makes #acr("API") usage intuitive and predictable for developers.
 
 + *Layered System:* This rule specifies, that it is possible for there to be middlemen, such as proxies between the client and the server as long as they are not visible to the client. They may, however, still block certain data from reaching the client. Examples would be Website-blockers on a school network.
 
@@ -334,7 +335,7 @@ Although there are several other smaller rules, six concepts build the core of #
 
 + *Code-On-Demand:* Servers may transfer executable code to the client temporarily It also has to be ensured, that the server has to make sure, that the client can execute said code. An example would be JavaScript files. @book-rest
 ==== DTOs
-In software development, a #acr("DTO") is like a specialized messenger carrying only the data needed between different parts of an application. In their implementation, #acr("DTO")s look very similar to regular Model. The major difference is that they are not meant to represent data stored on the database, but instead data that is sent and received. A #acr("DTO") is usually associated with a Model and includes all fields from said Model needed for a certain data transfer. They are a good way to obfuscate data and are categorized as a Design Pattern. @misc-dto
+In software development, a #acr("DTO") is like a specialized messenger carrying only the data needed between different parts of an application. In their implementation, #acrpl("DTO") look very similar to regular Model. The major difference is that they are not meant to represent data stored on the database, but instead data that is sent and received. A #acr("DTO") is usually associated with a Model and includes all fields from said Model needed for a certain data transfer. They are a good way to obfuscate data and are categorized as a Design Pattern. @misc-dto
 
 An example for a use-case of a #acr("DTO") from this project is that when information about a specific Question of a Quiz is transferred to a client, any data containing information about wether or not an Option is correct or not is omitted to prevent students from cheating.
 ==== Repository Pattern
@@ -346,7 +347,7 @@ The Repository pattern in ASP.NET is a design pattern, where so-called Repositor
 
 - *Flexibility:* If you need to switch data sources, you only need to modify the repository implementation, keeping the rest of the application intact. @misc-repo
 == Frontend
-This section will cover all technologies used in the implementation of the Frontend part of the application. The Frontend encompasses all parts of the program that a user interacts with. For example, all #acr("GUI")s are part of the Frontend.
+This section will cover all technologies used in the implementation of the Frontend part of the application. The Frontend encompasses all parts of the program that a user interacts with. For example, all #acrpl("GUI") are part of the Frontend.
 === Programming Languages
 Following Programming Languages were used in the Frontend.
 ==== JavaScript
@@ -368,25 +369,25 @@ When creating larger web applications, it is very common to use the same element
 
 There are, however, many Libraries and Frameworks that aim to solve this problem by allowing the developer to create reusable blocks called Components. The most popular solutions are Angular and React, the latter of which is used in this project. Components are self-contained, customizable, and readily interchangeable.
 
-In the previous example, the dark mode toggle becomes a Component that, after it has been implemented once, can be used anywhere. In the case of the navigation bar, where the specific links may change, it is also possible to define the content as Props, values that can be passed to a Component similarly to arguments of functions. React utilizes a virtual #acr("DOM"), which is an in-memory representation of the actual #acr("DOM") mentioned in the section about JavaScript. It allows  React to efficiently identify and update only the necessary parts of the UI when data changes, leading to faster and smoother user experiences. Components also make it very easy to maintain code down the line. Imagine updating the toggle behavior – you do it in one place, and the change automatically reflects across all instances.
+In the previous example, the dark mode toggle becomes a Component that, after it has been implemented once, can be used anywhere. In the case of the navigation bar, where the specific links may change, it is also possible to define the content as Props, values that can be passed to a Component similarly to arguments of functions. React utilizes a virtual #acr("DOM"), which is an in-memory representation of the actual #acr("DOM") mentioned in the section about JavaScript. It allows  React to efficiently identify and update only the necessary parts of the #acr("UI") when data changes, leading to faster and smoother user experiences. Components also make it very easy to maintain code down the line. Imagine updating the toggle behavior – you do it in one place, and the change automatically reflects across all instances.
 
 React supports both JavaScript and TypeScript. It includes the ability for the developer to write #acr("HTML") markup directly in the JavaScript/TypeScript file using #acr("JSX"). #acr("JSX") also allows for seamless code injection into the markup by wrapping all code to be executed in "{}".  @misc-react
 ==== Vite
 One problem that occurs when working with Libraries such as React is that Web Browsers do not natively support them as they only know how to work with #acr("HTML"), #acr("CSS"), and JavaScript, which means that code written in React first has to compiled to technologies understood by Browsers. This step also requires including or bundling in all dependencies required. The traditional tool of choice for this task was WebPack, but in recent years, another option, namely Vite has increased in popularity.
 
 The main advantage of Vite is that it is much faster than WebPack. Vite achieves this by supporting ES Modules, the official module system for JavaScript. This increases efficiency because code no longer has to be bundled into a single file, which greatly reduces complexity. This makes it also possible for Vite to only update the modules for certain parts of the application since code is bundled into multiple different files. This is particularly useful for development, as it decreases reload times when making small changes to code. Vite is also able to determine if certain parts of code are really necessary to the application and then remove said code from the bundle, reducing its file size. @misc-vite
-==== Chakra-UI
+==== Chakra UI
 When working with React or another Component-based Framework/Library, it soon becomes evident, that many different Components occur on almost every page. A perfect example of such an element would be a Button or even something more complicated such as a Card or a Dialog/Modal. Additionally, as every Frontend developer knows, it usually takes quite a long time to decide on how the page should look and even longer to subsequently define all the necessary #acr("CSS") rules.
 
-Luckily, several packages and extensions aim to reduce the time it takes to implement standard Components and to style them. Their way of doing so varies greatly, but Chakra-UI, the solution used in this project, approaches this problem by providing the developer with several predefined and styled Components. These range from commonly used elements like the ones mentioned above to more abstract ones like one Component that is a container with the #acr("CSS") flexbox display property. Chakra-UI also allows for basic styling of its Components by passing Props and it provides the functionality to easily make the website responsive (usable on smaller screens) and accessible. @misc-chakra The following shows a Button that is inside of a Container with flexbox:
+Luckily, several packages and extensions aim to reduce the time it takes to implement standard Components and to style them. Their way of doing so varies greatly, but Chakra UI, the solution used in this project, approaches this problem by providing the developer with several predefined and styled Components. These range from commonly used elements like the ones mentioned above to more abstract ones like one Component that is a container with the #acr("CSS") flexbox display property. Chakra UI also allows for basic styling of its Components by passing Props and it provides the functionality to easily make the website responsive (usable on smaller screens) and accessible. @misc-chakra The following shows a Button that is inside of a Container with flexbox:
 ```tsx
 <Flex justify="center" gap="2px" direction="row">
   <Button colorScheme="green" p="1px">Save</Button>
 </Flex>
 ```
-As is shown in the example given, it is very easy to work with Chakra-UI. Specific Props will not be explained here or in the following documentation of the implementation with a few exceptions.
+As is shown in the example given, it is very easy to work with Chakra UI. Specific Props will not be explained here or in the following documentation of the implementation with a few exceptions.
 
-Chakra-UI is installed using the #acr("NPM"). It is then required to wrap the main Component in a ChakraProvider Component. Afterwords, Chakra-UI can be used anywhere in the application. @misc-chakra
+Chakra UI is installed using the #acr("NPM"). It is then required to wrap the main Component in a ChakraProvider Component. Afterwords, Chakra UI can be used anywhere in the application. @misc-chakra
 ==== React Router <reactRouter>
 When working on more complex projects, React alone is often not enough, since it lacks any features to declare multiple routes with different pages. There is, however, a library that adds such support called React Router. It offers several different kinds of routers. This project uses a BrowserRouter, where the current location is stored in the Browser's address bar. A BrowserRouter allows the developer to define routes and children routes by adding a path and a Component for the page like this:
 ```ts
@@ -431,7 +432,7 @@ This chapter of the diploma thesis will cover the practical implementation of th
 == Architecture
 Even though the application is run locally, it still relies heavily on technologies commonly found in web development. A major deciding force for employing going this route was that the project is very similar to web applications in not only its concept (all available solutions, which were used as inspirations for this project are web-based) but also its general composition. The reason for this similarity is found in the fact that the application has to be accessible from not only a tutor's PC but from a student's device as well.
 
-This sameness also extends to its general architectural Design, which like web applications is divided into a Frontend and a Backend. The former includes all Clients and #acr("GUI")s accessed by students and tutors, and the latter contains a Server, which is responsible for storing and managing Quiz/Game data and for providing access to said data via multiple methods, which are outlined in @architecture-general:
+This sameness also extends to its general architectural Design, which like web applications is divided into a Frontend and a Backend. The former includes all Clients and #acrpl("GUI") accessed by students and tutors, and the latter contains a Server, which is responsible for storing and managing Quiz/Game data and for providing access to said data via multiple methods, which are outlined in @architecture-general:
 #figure(image("images/architecture/General.jpg"), caption: [General Architecture Overview], kind: "image", supplement: "Figure")<architecture-general>
 As seen in the @architecture-general, communication occurs both via #acr("HTTP"), where data is requested by the Client and then subsequently provided/mutated/stored by the Server, as well as bidirectional #link(<signalR>)[SignalR] WebSocket connections.
 #pagebreak()
@@ -482,7 +483,7 @@ A major part of the planned project was a tutor's ability to manage Quizzes. Thi
 === Backend
 In the Server, this section includes a RESTful #acr("API") providing several endpoints for managing Quizzes.
 ==== Models/DTOs
-In order to properly store data, the Creation of multiple Models is required. A Model is a class used as a reference by Entity Framework Core to create SQL queries to Initialize tables. Each Model represents one of these tables. This section includes three Models: Quiz, Question, and Option. Of those three, Option is the lowest in their shared hierarchical order as it is part of a Question, which in turn is part of a Quiz. The Option Model includes distinct fields that represent different essential data. The Model itself is created as a regular C\# class:
+In order to properly store data, the Creation of multiple Models is required. A Model is a class used as a reference by Entity Framework Core to create #acr("SQL") queries to Initialize tables. Each Model represents one of these tables. This section includes three Models: Quiz, Question, and Option. Of those three, Option is the lowest in their shared hierarchical order as it is part of a Question, which in turn is part of a Quiz. The Option Model includes distinct fields that represent different essential data. The Model itself is created as a regular C\# class:
 #code-snippet(caption: "Option Model")[
   ```cs
 public class Option
@@ -548,11 +549,11 @@ public class Quiz
 }
 ```
 ]
-Each Model is also mapped to several #acr("DTO")s to more efficient transfer data. The #acr("DTO")s contain the same fields as the Models, although some of them are omitted as most use cases do not require all data. The mapping is done with AutoMapper and maps are configured in the `AutoMapperProfile.cs` file. Most maps can simply by letting AutoMapper assign each field of the #acr("DTO") to its corresponding field on the Model and vice versa. Some, however, require the manual assignment of values:
+Each Model is also mapped to several #acrpl("DTO") to more efficient transfer data. The #acrpl("DTO") contain the same fields as the Models, although some of them are omitted as most use cases do not require all data. The mapping is done with AutoMapper and maps are configured in the `AutoMapperProfile.cs` file. Most maps can simply by letting AutoMapper assign each field of the #acr("DTO") to its corresponding field on the Model and vice versa. Some, however, require the manual assignment of values:
 #code-snippet(caption: "Manual AutoMapper assignment")[
 ```cs
-CreateMap<Quiz, QuizDto>().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
-CreateMap<Quiz, QuizDto>().ReverseMap().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
+CreateMap<Quiz,QuizDto>().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
+CreateMap<Quiz,QuizDto>().ReverseMap().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
 ```
 ]
 In addition to configuring an AutoMapper Profile, there is another step that is required for the Models to become functional: A DbContext has to be created, which allows Entity Framework Core to work with the Models and allows the developer to store the Model data in the desired database by creating DbSets for each Model. It also allows for querying of data by performing #acr("CRUD") operations. The following example shows a simplified version of the DbContext used in this project. It only includes the definition of one DbSet and the needed configuration:
@@ -583,16 +584,16 @@ Before creating the Repository itself, an interface has to be created first, whi
 ```cs
 public interface IQuestionRepository
   {
-      Task<Question> GetQuestionById(Guid Id);
-      Task<Question> CreateQuestion(Question question);
-      Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto question);
-      Task DeleteQuestion(Guid Id);
-      Task<Option> AddOption(Guid Id);
-      Task<IEnumerable<Question>> GetAll(Guid id);
+    Task<Question> GetQuestionById(Guid Id);
+    Task<Question> CreateQuestion(Question question);
+    Task<Question> UpdateQuestion(Guid Id, CreateUpdateQuestionDto question);
+    Task DeleteQuestion(Guid Id);
+    Task<Option> AddOption(Guid Id);
+    Task<IEnumerable<Question>> GetAll(Guid id);
   }
 ```
 ]
-This is done to create an even clearer separation between what the code needs (data access functionalities) and how this is achieved (specific implementation using a database or API). It is also essential because it allows for greater flexibility when creating the repositories since IRepositories simply have to be included in other parts of the application by using Dependency Injection. This is useful since it allows for the complete replacement of the specific repository implementation without having to change all other parts of the application and without having to delete the old implementation. Dependency Injection will be further explained in the next section.
+This is done to create an even clearer separation between what the code needs (data access functionalities) and how this is achieved (specific implementation using a database or #acr("API")). It is also essential because it allows for greater flexibility when creating the repositories since IRepositories simply have to be included in other parts of the application by using Dependency Injection. This is useful since it allows for the complete replacement of the specific repository implementation without having to change all other parts of the application and without having to delete the old implementation. Dependency Injection will be further explained in the next section.
 
 After creating an IRepository, an implementation has to be created. There, built-in Entity Framework Core functions are used to mutate data stored on the database. The following shows the implementation of the DeleteQuestion method:
 #code-snippet(caption: "DeleteQuestion implementation in QuestionRepository")[
@@ -607,7 +608,7 @@ public async Task DeleteQuestion(Guid Id)
 }
 ```
 ]
-This function takes an ID of a Question as its argument. This ID is then used to search for the specific Question and the containing Quiz in the database. The Question is then removed from the database and the NQuestions variable, showing how many Questions a Quiz has, is decreased by one. Finally, the modifications are stored by saving the changes in the DbContext. The function is declared as async because interacting with the database includes I/O operations, which can be slow and block the main thread. By making it asynchronous, the function allows other parts of the application to continue running while waiting for the database operation to complete. This means that overall responsiveness and performance are greatly improved. When declared to be asynchronous the function return type has to be a `Task`. It represents a unit of work that is performed in an asynchronous fashion. It tells other parts of the program that if awaited, some action will be run in the background and the program can wait for said action to complete or continue executing other code while waiting. While not strictly necessary when developing Web #acr("API")s, asynchronous functions are considered best practice. @misc-async
+This function takes an ID of a Question as its argument. This ID is then used to search for the specific Question and the containing Quiz in the database. The Question is then removed from the database and the NQuestions variable, showing how many Questions a Quiz has, is decreased by one. Finally, the modifications are stored by saving the changes in the DbContext. The function is declared as async because interacting with the database includes I/O operations, which can be slow and block the main thread. By making it asynchronous, the function allows other parts of the application to continue running while waiting for the database operation to complete. This means that overall responsiveness and performance are greatly improved. When declared to be asynchronous the function return type has to be a `Task`. It represents a unit of work that is performed in an asynchronous fashion. It tells other parts of the program that if awaited, some action will be run in the background and the program can wait for said action to complete or continue executing other code while waiting. While not strictly necessary when developing Web #acrpl("API"), asynchronous functions are considered best practice. @misc-async
 
 All other functions in the Question Repository and their equivalents in the Quiz or Option Repositories follow the same pattern as the DeleteQuestion method shown in the code snippet. Thus, they will not be shown here. One thing that has to be mentioned, however, is that not all functions make use of AutoMapper for Model conversion, since it is not very easy to use AutoMapper when updating an existing instance of an Entity, meaning that for example, an already existing Quiz has to be updated with data from a #acr("DTO") while retaining its ID. This is theoretically possible but it takes a lot of extra configuration, which is too much extra work for a project this size.
 
@@ -671,7 +672,7 @@ export const quizLoader: LoaderFunction = async () => {
 }
 ```
 ]
-This function has the type LoaderFunction, which is provided by ReactRouter. The getQuizzes() method and all other methods containing fetch requests are contained in a separate file called `endpoints.ts`, where the JavaScript fetch #acr("API") is used to make a #acr("HTTP") Request to the Server. The URL constant and all Models are imported from another file:
+This function has the type LoaderFunction, which is provided by ReactRouter. The getQuizzes() method and all other methods containing fetch requests are contained in a separate file called `endpoints.ts`, where the JavaScript fetch #acr("API") is used to make a #acr("HTTP") Request to the Server. The #acr("URL") constant and all Models are imported from another file:
 #code-snippet(caption: "getQuizzes() Method")[
 ```ts
 type GetQuizzes = () => Promise<Quiz[]>
@@ -698,11 +699,11 @@ The Loader can then be used in the Component of the page by using the `useDataLo
 </Form>
 ```
 ]
-`variant` and `colorScheme` are Chakra-Ui styling props. When pressing the other two buttons, the tutor has to verify their identity by entering their password. This, however, is explained later on.
+`variant` and `colorScheme` are Chakra UI styling props. When pressing the other two buttons, the tutor has to verify their identity by entering their password. This, however, is explained later on.
 
 When the tutor wants to create a new Quiz, they simply have to press the New Quiz Button in the top right corner of the page. When pressed, a dialog opens where they can enter a name and a description:
 #figure(image("images/screenshots/createQuiz.png", height: 7cm), caption: [Create Quiz Dialog Screenshot], supplement: "Figure", kind: "image") <createQuiz>
-This is implemented using the Modal Component provided by Chakra-Ui. This Component can be controlled with the `useDisclosure()` Hook. This Hook provides one boolean value and two functions, which are passed as props to the Modal (In this case the Modal is wrapped in its own Component so they are passed as a Prop of this Component). The value is true if the Modal is open and false if it is closed. The two functions are used to open and close the Modal respectively.
+This is implemented using the Modal Component provided by Chakra UI. This Component can be controlled with the `useDisclosure()` Hook. This Hook provides one boolean value and two functions, which are passed as props to the Modal (In this case the Modal is wrapped in its own Component so they are passed as a Prop of this Component). The value is true if the Modal is open and false if it is closed. The two functions are used to open and close the Modal respectively.
 
 Inside the Modal, there are two input fields and a submit button, which first makes an #acr("API") call to create a new Quiz and then navigates to the *Edit Quiz Page* of the created Quiz by using the `useNavigate()` Hook. This Hook allows for redirection via code.
 ==== Edit Quiz Page
@@ -728,7 +729,7 @@ const loader: LoaderFunction = async ({ params }: QuestionsLoaderArgs) => {
 };
 ```
 ]
-This function first receives the Quiz ID through the URL parameters (The route of the Edit Quiz Page is `/editQuiz/quizId`). The first line of the function uses the null coalescing operator to check if the ID from the parameters is not undefined. The null coalescing operator first checks if the value before ?? is null/undefined. If it is not, the right value is used. If the right value is null, the left value is utilized instead. This seemingly pointless check is needed because even if there is theoretically no chance for the ID to be undefined in TypeScript, the compiler will still throw an error since it does not know for certain that the parameter is a string and not undefined. Next, a standard #acr("API") call is made. The Questions array received through this Loader is then passed as a Prop to the Sidebar Component. There, the `array.map()` function is used to display a Link to the Question Details View for each Question. Other than the name of the Question, the Link also contains two Chakra-UI badge Components displaying the Question type and the number of Options respectively. A button used to create a new Question employs a ReactRouter Action function. At the bottom of the Sidebar, there are two last buttons.
+This function first receives the Quiz ID through the #acr("URL") parameters (The route of the Edit Quiz Page is `/editQuiz/quizId`). The first line of the function uses the null coalescing operator to check if the ID from the parameters is not undefined. The null coalescing operator first checks if the value before ?? is null/undefined. If it is not, the right value is used. If the right value is null, the left value is utilized instead. This seemingly pointless check is needed because even if there is theoretically no chance for the ID to be undefined in TypeScript, the compiler will still throw an error since it does not know for certain that the parameter is a string and not undefined. Next, a standard #acr("API") call is made. The Questions array received through this Loader is then passed as a Prop to the Sidebar Component. There, the `array.map()` function is used to display a Link to the Question Details View for each Question. Other than the name of the Question, the Link also contains two Chakra UI badge Components displaying the Question type and the number of Options respectively. A button used to create a new Question employs a ReactRouter Action function. At the bottom of the Sidebar, there are two last buttons.
 
 The second button is fairly simple as it merely contains a Link to the main route of the client. The first one, however, is more complicated as it opens a Modal where the name and the description of the Quiz can be altered. This Modal will not be shown here as it is almost entirely the same as the Create Quiz Dialog. It does, however, contain some interesting code: As the Modal Component needs to know the current Quiz details in order to populate the standard values of the text boxes, the name and description of the Quiz have to be loaded first. This seemed rather easy at first since it was assumed in the development process that instead of all Questions, the entire Quiz was loaded in the main Component of the route. This mistake was made due to the Edit Quiz details Modal being a late addition to the page made long after the rest. The problem was then solved by getting the Quiz ID from the #acr("URL") Parameter. This was not very easy since the ReactRouter documentation lacked any explanation on how to perform this task. It was eventually figured out through trial and error:
 #code-snippet(caption: "loading Quiz details in Modal")[
@@ -750,13 +751,13 @@ The second button is fairly simple as it merely contains a Link to the main rout
     }, [])
 ```
 ]
-The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Afterwards, the React `useEffect` Hook is used to perform the needed #acr("API"). The useEffect Hook gives the developer the ability to perform side effects within function-based Components. Side effects are actions that need to happen after React has updated the #acr("DOM"), such as fetching data, subscriptions, timers, or directly manipulating the DOM. By using useEffect, the developer essentially instructs React to execute specific code passed as a function in its first argument after the Component has been rerendered. The Hook also takes an array as its second argument. This array is used to specify when the code should be executed. This is useful since otherwise, the function would run every time the Component is rerendered, which happens a lot in React. If for example a state variable is passed as the second argument, the code is only executed if that specific state changes. If an empty array is passed as it is in the example given, the function is only called on the first render of the Component. @misc-useeffect
+The Quiz ID can be loaded if the name of the #acr("URL") field is specified. Afterwards, the React `useEffect` Hook is used to perform the needed #acr("API"). The useEffect Hook gives the developer the ability to perform side effects within function-based Components. Side effects are actions that need to happen after React has updated the #acr("DOM"), such as fetching data, subscriptions, timers, or directly manipulating the #acr("DOM"). By using useEffect, the developer essentially instructs React to execute specific code passed as a function in its first argument after the Component has been rerendered. The Hook also takes an array as its second argument. This array is used to specify when the code should be executed. This is useful since otherwise, the function would run every time the Component is rerendered, which happens a lot in React. If for example a state variable is passed as the second argument, the code is only executed if that specific state changes. If an empty array is passed as it is in the example given, the function is only called on the first render of the Component. @misc-useeffect
 
 *Question Details View:*
 
 This part of the page encompasses all content to the right of the Sidebar. It can be displayed in two different versions depending on whether or not the Question is merely being viewed (display view) or actively edited (edit view). the views can be switched between by pressing the "Edit" button to start editing and by pressing the "Save"/"Cancel" buttons to mark the edit process as complete. Both views use the same underlying Components. The only difference is that in Edit mode, all buttons and text fields are enabled, which is achieved by declaring a boolean Prop on the Component and using said Prop to manage the state of input fields.
 
-Both views are declared on their own subroutes of `/editquiz/quizId`. The edit view uses the route `/editquiz/quizId/editquestion/questionId` and the display view is available on `/editquiz/quizId/question/questionId`. As it is clear from the fact that the views have their individual #acr("URL")s, they are separate pages. This means that pressing the Links in the Sidebar would, without additional configuration, redirect to another page containing the display view of the desired Question. To display the contents of the route on the same page as the Sidebar, a ReactRouter Outlet Component needs to be included in the Component of the `editquiz` route. This tells ReactRouter to render the contents of subroutes as part of their parent. Once displayed, individual Questions are loaded using a ReactRouter Loader function. In the case when a new Question is created, the edit view is opened automatically. The Questions are always created without any data. The rest of this explanation will be focused on said edit view as it requires more attention due to the need to manage the State. This is not necessary on the display view since the user has no way of changing any values.
+Both views are declared on their own subroutes of `/editquiz/quizId`. The edit view uses the route `/editquiz/quizId/editquestion/questionId` and the display view is available on `/editquiz/quizId/question/questionId`. As it is clear from the fact that the views have their individual #acrpl("URL"), they are separate pages. This means that pressing the Links in the Sidebar would, without additional configuration, redirect to another page containing the display view of the desired Question. To display the contents of the route on the same page as the Sidebar, a ReactRouter Outlet Component needs to be included in the Component of the `editquiz` route. This tells ReactRouter to render the contents of subroutes as part of their parent. Once displayed, individual Questions are loaded using a ReactRouter Loader function. In the case when a new Question is created, the edit view is opened automatically. The Questions are always created without any data. The rest of this explanation will be focused on said edit view as it requires more attention due to the need to manage the State. This is not necessary on the display view since the user has no way of changing any values.
 
 The edit view (and also the display view) contains a Component, which contains several input fields (disabled on display view) for entering data such as the Question name or the time limit and a dropdown list for the Question type. The following shows the input field for the time limit:
 #code-snippet(caption: "Edit Question Time Limit Input Field")[
@@ -803,7 +804,7 @@ In order to use the Context State in other Components, they have to be wrapped i
 const { options: contextOptions } = useContext(OptionsContext);
 ```
 ]
-In an Option Component, the most complicated problem is to determine whether or not the parent Question is SingleChoice or MultipleChoice. If it is the former, additional code is needed to only allow one Option to be correct at one time. The checkbox itself is made with a Chakra-UI IconButton Component which is filled if the Option is marked correct. The following code shows how an Option is marked as correct:
+In an Option Component, the most complicated problem is to determine whether or not the parent Question is SingleChoice or MultipleChoice. If it is the former, additional code is needed to only allow one Option to be correct at one time. The checkbox itself is made with a Chakra UI IconButton Component which is filled if the Option is marked correct. The following code shows how an Option is marked as correct:
 #code-snippet(caption: "check if there is already a correct Option")[
 ```ts
 setOptions((prevOptions: { [key: string]: OptionDto }) => {
@@ -893,7 +894,7 @@ const onVerificationSuccessDelete = () => {
 The last major area to explore in the implementation section is the logic behind the Game itself. While also making use of a small #acr("REST") #acr("API"), the majority of the communication between the various participants in a Game is handled with SignalR. Said communication is handled via a series of messages, which occur throughout the different stages of a Game. The following sequence diagram shows all messages in the chronological order they occur in. Details about the implementations of certain messages will be shown further down in this section.
 #figure(image("images/architecture/gameFlow.svg", height: 18cm), caption: [Game Flow Sequence Diagram], supplement: "Figure", kind: "image")
 === Models/DTOs
-similarity to the Quiz data, information about Games is also stored in Models and transmitted using #acr("DTO")s. To be specific, the addition of two new Models was required to properly structure the necessary data.
+similarity to the Quiz data, information about Games is also stored in Models and transmitted using #acrpl("DTO"). To be specific, the addition of two new Models was required to properly structure the necessary data.
 
 The first of these is a Model for a Player of a Game. Its general composition is not that different from the Models shown in the Quiz Management section. One potentially noteworthy aspect is that the icon of a Player is not a custom image, as is the case with competing Quiz Game solutions. Instead, a string is used to store an Emoji as the icon. This is possible since they are no different from other Unicode characters. This also makes the application more versatile as it does not rely on a third-party library for this purpose.
 #code-snippet(caption: "Player Model")[
@@ -926,7 +927,7 @@ The Player Model is then included in the larger Game Model. It also includes a Q
 }
 ```
 ]
-Various #acr("DTO")s were also created for these Models.
+Various #acrpl("DTO") were also created for these Models.
 === Controller/Repositories
 Even though the Game functionality is mainly centered around real-time communication requiring SignalR, certain pieces of functionality can also be performed with a #acr("HTTP") #acr("API"). Thus, a separate Controller was created for the Game. The main two ways this Controller is used are in the creation of a Game and the deletion of a Game once it is finished. These endpoints are almost identical to their counterparts in the Quiz, Question, or Option Controllers. Thus, they will not be shown here for the sake of preventing the spotlight of duplicate code.
 
@@ -1120,7 +1121,7 @@ The project offers a high-performing and well designed Server, which provides bo
 
 Overall, the Backend development of the project proved more efficient and streamlined than anticipated. The implementation of the SignalR Hub was completed especially quickly as it had been assumed that it would be the most complicated section of the whole project at the start. In reality, SignalR turned out to be easier to work with than anticipated when starting the project.
 
-The #acr("REST") #acr("API") development progressed smoothly due to clear RESTful design principles, resulting in an intuitive and easy-to-understand API. While Entity Framework Core with PostgreSQL was chosen for the database needs, the Enum configuration required additional research. This minor hurdle did not significantly impact the development timeline. Data is also transferred using well-desired #acr("DTO")s powered by the powerful, yet easy-to-use tool AutoMapper. They ensure that the data transfer between the client and the server is done in an efficient and logical manner.
+The #acr("REST") #acr("API") development progressed smoothly due to clear RESTful design principles, resulting in an intuitive and easy-to-understand #acr("API"). While Entity Framework Core with PostgreSQL was chosen for the database needs, the Enum configuration required additional research. This minor hurdle did not significantly impact the development timeline. Data is also transferred using well-desired #acrpl("DTO") powered by the powerful, yet easy-to-use tool AutoMapper. They ensure that the data transfer between the client and the server is done in an efficient and logical manner.
 
 A minor challenge arose when the initial #acr("API") design wasn't fully #acr("REST") compliant, necessitating a complete redesign. This proved to be a valuable learning experience, leading to improved #acr("API") design skills.
 
@@ -1128,7 +1129,7 @@ The server additionally offers a simple yet effective #acr("API") for adding pas
 
 Overall, the application boasts a robust, efficient, and secure Backend, providing a solid foundation for a smooth and enjoyable user experience.
 === Frontend
-In addition to the previously described server, the application also provides several #acr("GUI") interfaces, which are not only pleasing to the eye thanks to the well-designed, but still very functional Components from Chakra-UI. They are also highly user-friendly allowing even inexperienced tutors to create engaging Quizzes without much hassle. It also includes a design for the player pages, which is greatly versatile as it is styled to look and function well on full-sized desktop monitors and small smartphones. The fact that the Frontend is implemented entirely with web technologies also makes it not only efficient but also cross-platform. Additionally, the tutor has the ability to set a password to protect their precious Quizzes from meddling students, a great addition for classroom use.
+In addition to the previously described server, the application also provides several #acr("GUI") pages, which are not only pleasing to the eye thanks to the well-designed, but still very functional Components from Chakra UI. They are also highly user-friendly allowing even inexperienced tutors to create engaging Quizzes without much hassle. It also includes a design for the player pages, which is greatly versatile as it is styled to look and function well on full-sized desktop monitors and small smartphones. The fact that the Frontend is implemented entirely with web technologies also makes it not only efficient but also cross-platform. Additionally, the tutor has the ability to set a password to protect their precious Quizzes from meddling students, a great addition for classroom use.
 
 The implementation of the Frontend went significantly less smoothly than the Backend implementation. A major factor for the unexpected complexity was the need for an extensive state management solution for the Edit Quiz page in order to achieve a great layout. Initially, it had not been anticipated that this would need as many complicated Components as it ended up needing. It also had to be rewritten due to the initial implementation not meeting the high standards set for this project. A large breakthrough occurred when the `useContext()` Hook was first used. After this, everything fell right into place and resulted in a well-designed and intuitive page, which as a whole represents the best this application has to offer.
 
