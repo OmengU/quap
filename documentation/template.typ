@@ -8,11 +8,11 @@
   align(center)[
     #pad(x: 2cm)[
       #grid(row-gutter: 1cm,
-            image("images/logoHTL.jpg", height: 5cm),
-            text("Diploma thesis in the higher department of informatics", size: 10pt),
-            text(title, size: 44pt),
-            text(sub, size: 16pt, weight: 700),
-            text(number, size: 12pt),
+            image("images/logoHTL.jpg", height: 6cm),
+            text("Diploma thesis in the higher department of Informatics", size: 11pt),
+            text(title, size: 47pt),
+            text(sub, size: 18pt, weight: 700),
+            text(number, size: 14pt),
           )
     ]
   ]
@@ -71,14 +71,14 @@
     )[
       #set text(size: 0.9em)
       #grid(
-        columns: (1fr, 1fr, 1fr),
+        columns: (1fr, 1fr, 2fr),
         column-gutter: (1fr, 1fr),
       )[
         #align(left, text(aNames.join(", ")))
       ][
-        #align(center, number)
+        #align(center, "")
       ][
-        #align(right, "")
+        #align(right, number)
       ]
     ],
   )
@@ -175,21 +175,22 @@
 
   tablex(
     columns: (1fr, 1fr, 1fr, 1fr),
+    inset: 3mm,
 
-    colspanx(1)[Topic], colspanx(3)[Development of a web-based Quiz application],
-    colspanx(1)[Task #linebreak() (short)], colspanx(3)[
-      The goal is the planning and implementation of a web-based quiz application for classrooms. The application will be run on an instructor’s Computer, to which Students can connect. A quiz is then run on the PC, which Students can take part in by reading the questions on a projector screen and then choosing the right answer on their device.
+    colspanx(1)[*Topic*], colspanx(3)[Development of a web-based Quiz application],
+    colspanx(1)[*Task* #linebreak() *(short)*], colspanx(3)[
+      The goal is to plan and implement a web-based quiz application for classrooms. The application will be run on an instructor's computer, which students can use to connect. A quiz is then run on the PC, which Students can take part in by reading the questions on a projector screen and then choosing the correct answer on their device.
     ],
-    colspanx(2)[Candidates], colspanx(2)[Supervisors],
+    colspanx(2)[*Candidates*], colspanx(2)[*Supervisors*],
     colspanx(2)[Florian Piberger], colspanx(2)[Dipl.-Ing. (FH) Dietmar Winkler],
     colspanx(2)[],colspanx(2)[Prof. Dipl.-Ing. (FH) Markus Falkensteiner],
-    colspanx(4)[External partners],
+    colspanx(4)[*External partners*],
     colspanx(4)[none],
     colspanx(4)[*Budget:* none],
     colspanx(4)[
       *Planned Usage of the product:*
 
-      The source code will be openly viewable on GitHub. Any commercial use of the Code or the product is not intended now or any time in the future.
+      The source code will be openly viewable on GitHub. Commercial use of the Code or the product is not intended now or at any time in the future.
     ]
 
   )
@@ -231,7 +232,7 @@ werden kann.
   rows: (auto, auto),
   inset: 4mm,
 
-  [Kandidaten / Kandidatinnen], [Unterschrift],
+  [*Kandidaten / Kandidatinnen*], [*Unterschrift*],
   [Florian Piberger], []
 )
   
