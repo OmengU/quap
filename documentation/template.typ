@@ -8,7 +8,7 @@
   align(center)[
     #pad(x: 2cm)[
       #grid(row-gutter: 1cm,
-            image("images/logoHTL.jpg", height: 6cm),
+            image("images/logoHTL.svg", height: 6cm),
             text("Diploma thesis in the higher department of Informatics", size: 11pt),
             text(title, size: 47pt),
             text(sub, size: 18pt, weight: 700),

@@ -449,9 +449,9 @@ As seen in the @architecture-general, communication occurs both via #acr("HTTP")
 
 #grid(
   columns: (1fr, 1fr, 1fr, 1fr),
-  figure(image("images/logos/postgres.png", height: 1.5cm), caption: [#link(<postgres>)[Postgres]@image-postgers], supplement: "Figure", kind: "image"),
-  figure(image("images/logos/automapper.png", height: 1.5cm), caption: [#link(<automapper>)[AutoMapper]@image-automapper], supplement: "Figure", kind: "image"),
-  figure(image("images/logos/signalr.png", height: 1.5cm), caption: [#link(<signalR>)[SignalR]@image-signalr], supplement: "Figure", kind: "image"),
+  figure(image("images/logos/postgres.svg", height: 1.5cm), caption: [#link(<postgres>)[Postgres]@image-postgers], supplement: "Figure", kind: "image"),
+  figure(image("images/logos/automapper.svg", height: 1.5cm), caption: [#link(<automapper>)[AutoMapper]@image-automapper], supplement: "Figure", kind: "image"),
+  figure(image("images/logos/signalr.svg", height: 1.5cm), caption: [#link(<signalR>)[SignalR]@image-signalr], supplement: "Figure", kind: "image"),
   figure(image("images/logos/bcrypt.png", height: 1.5cm), caption: [#link(<bcrypt>)[Bcrypt.NET]@image-bcrypt], supplement: "Figure", kind: "image"),
   )
 
@@ -476,7 +476,7 @@ The DbContext shown in @architecture-backend is a class that utilizes Entity Fra
 === Frontend
 #figure(image("images/architecture/Client.jpg"), caption: [Frontend Architecture Design], kind: "image", supplement: "Figure")<architecture-frontend>
 *Logo Reference:*
-#figure(image("images/logos/reactrouter.png", height: 1.5cm), caption: [#link(<reactRouter>)[React Router]@image-reactrouter], supplement: "Figure", kind: "image")
+#figure(image("images/logos/reactrouter.svg", height: 1.5cm), caption: [#link(<reactRouter>)[React Router]@image-reactrouter], supplement: "Figure", kind: "image")
 
 The Frontend of the project is a complex React application. It is divided into two main sections, which differ in their implementation and use case. The first one is the Game Pages, which contain all the functionality needed for playing a Game. They are shown in their own section in @architecture-frontend. This part of the application mainly uses SignalR connections to communicate with the Server. The other section is the Quiz Management interfaces, which are entirely used by the tutor. Here, they can create new Quizzes, edit existing ones, or delete Quizzes that are no longer used. These functions are separated into two pages:
 
