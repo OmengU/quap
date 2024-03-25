@@ -34,13 +34,18 @@
 )
 
 #heading(numbering: none, outlined: false)[Abstract]
-The last 15 years have seen giant leaps in many fields of the computer and IT industry, not only in terms of performance but also when it comes to cost. This expansion has enabled many schools to provide staff and students with their devices, may it be a laptop or a tablet. Such a development has led to countless possibilities for improving education quality. Teachers worldwide have seized this opportunity and created interactive and engaging lessons for their students. Some countries and larger schools have also gone the extra way and have commissioned custom, often costly, software meant to enhance the performance of attendees even further.
+The goal of this diploma thesis project is to plan and implement a web-based quiz application for classrooms and other educational settings. Unlike existing solutions, which rely on a central server for hosting games, the application will be run directly on an instructor's computer, which students can connect to. These existing products are often developed by large multinational for-profit corporations. For that reason, many of them come with artificial limitations and privacy violations to push people into subscribing to often expensive monthly subscription services. This project aims to create a simple, free alternative to empower teachers worldwide and to ensure an adequate level of privacy in the classroom.
 
-However, this has also resulted in the widening of the difference in education quality nationally and internationally since many less-equipped institutions are reliant on already publicly available solutions. These are often developed by large multinational for-profit corporations. For that reason, many of them come with artificial limitations and privacy violations to push people into subscribing to often expensive monthly subscription services. This project aims to create a simple, free alternative to empower teachers worldwide.
+A quiz is run on the PC, which Students can take part in by reading the questions on a projector screen and then choosing the correct answer on their device. Students can use either a mobile phone or a computer to participate in a game, and no installation of additional software is required for students.
+
+#heading(numbering: none, outlined: false)[Kurzfassung]
+Ziel dieses Diplomarbeitsprojekts ist die Planung und Umsetzung einer webbasierten Quizanwendung für Klassenräume und andere Bildungseinrichtungen. Im Gegensatz zu bestehenden Lösungen, die auf einen zentralen Server für das Hosting von Spielen angewiesen sind, wird die Anwendung direkt auf dem Computer des Lehrers laufen, mit dem sich die Schüler verbinden können. Diese bestehenden Produkte werden oft von großen multinationalen, gewinnorientierten Unternehmen entwickelt. Aus diesem Grund sind viele von ihnen mit künstlichen Einschränkungen und Verletzungen der Privatsphäre versehen, um die Nutzer dazu zu bringen, oft teure monatliche Abonnementdienste zu abonnieren. Dieses Projekt zielt darauf ab, eine einfache, kostenlose Alternative zu schaffen, um LehrerInnen weltweit zu unterstützen und ein angemessenes Maß an Privatsphäre im Klassenzimmer zu gewährleisten.
+
+Das Programm funktioniert so, dass auf dem PC ein Quiz läuft, an dem die Schüler teilnehmen können, indem sie die Fragen auf einer Projektionsfläche lesen und dann die richtige Antwort auf ihrem Gerät auswählen. Die Schüler können entweder ein Mobiltelefon oder einen Computer bzw. Laptop verwenden, um an einem Spiel teilzunehmen, und es ist zum Spielen keine Installation von zusätzlicher Software erforderlich.
 
 #pagebreak()
 
-#show: table-overview
+
 
 #show: declaration
 
@@ -60,6 +65,7 @@ However, this has also resulted in the widening of the difference in education q
 = Planning
 This first section will cover all details relating to the planning of this project. It aims to give an extensive overview of the thought processes and ideas behind this diploma thesis.
 == Task definition
+#show: table-overview
 The first step when starting work on this thesis was to define the nature of the application precisely and to think about what was needed to achieve a completed state.
 === Initial idea
 Creating a fun and exciting environment is essential for any instructor/teacher. A popular way to create engaging lessons for students is to utilize quizzes, which not only consolidate previously taught material but also create an opportunity to assess students' abilities without having to rely on often very unpopular and tedious exams/tests.
@@ -115,21 +121,34 @@ This section seeks to inform about the project's organization and define specifi
     Dietmar Winkler#linebreak()Markus Falkensteiner#linebreak()#linebreak()Florian Piberger#linebreak()#linebreak()Florian Piberger
   ]
 )
+#pagebreak()
 === Task distribution
-*Florian Piberger*
-- Software Design
+#align(center)[*Florian Piberger*]
+#linebreak()
+#grid(
+  columns: (auto, 1fr),
+  column-gutter: 5mm,
+  row-gutter: 1cm,
+  [*Software Design*],
+  [
   - Backend Components
   - Frontend Components
   - Database Schema
   - Choosing used technologies
-- Design Frontend interface
-- Coding
+  - Design Frontend interface
+  ],
+  [*Coding*],
+  [
   - Implementation of Backend #acrpl("API")
   - Implementation of Frontend Components
   - Implementation of Real-time communication between Frontend and Backend
   - Creating Database Models
-- Testing 
-- Documentation
+  ],
+  [*Testing*],
+  [The testing concept behind this project relies on a rigorous examination of the user interface and underlying function to fix significant bugs that occur.],
+  [*Documentation*],
+  [The documentation should include an explanation of the implementation by showing noteworthy code snippets. Additionally, it should also explain the decisions made and the technologies used.]
+)
 
 === Milestones
 *Until late 09/2023 - early 10/2023:*
@@ -206,7 +225,7 @@ Swagger #acr("UI") is an interface built upon the OpenAPI Specification for docu
 
 Swagger #acr("UI") is one of these tools. It helps the developer keep an overview of the #acr("API") by generating a #acr("GUI") out of the YAML/#acr("JSON") document displaying all endpoints. It then allows for the testing of the endpoints by providing fields for each parameter, where test data can be entered and buttons to submit the #acr("API") calls. @misc-swagger
 ==== Typst
-Typst is a newly developed #acr("FOSS") markup system primarily targeted toward academic use. It is intended as a replacement for LaTeX. Typst is heavily inspired by Markdown as it includes built-in syntax for commonly used text elements like bold/italic text, unordered/ordered lists, and headings. The system is entirely built with Rust, a modern type-safe high-performance programming language resulting in fast compile times compared to LaTeX.
+Typst is a newly developed markup system primarily targeted toward academic use. It is intended as a replacement for LaTeX. Typst is heavily inspired by Markdown as it includes built-in syntax for commonly used text elements like bold/italic text, unordered/ordered lists, and headings. The system is entirely built with Rust, a modern type-safe high-performance programming language resulting in fast compile times compared to LaTeX.
 
 Another major difference between Typst and older solutions is that it is not separated into a distinct markup and scripting language but is instead one language containing both capabilities. Its scripting side includes implementations of conditionals, loops, and data types, including Strings, Integers, Floats, Arrays, and Dictionaries, all of which are commonly found in other programming languages, making Typst very intuitive for programmers while not being too complicated for regular users. Additionally, it supports many formats for storing bibliographies, including Hayagriva YAML and BibLaTeX files. Typst documents can be exported as #acr("PDF") and #acr("HTML") files.
 
@@ -228,7 +247,7 @@ JabRef is a bibliography management tool that allows the user to collect, catego
 
 Sources can be categorized into several predefined categories including articles, books, thesis, and websites, each requiring the user to enter different information. The categories can also be edited by adding custom fields. @misc-jabref For example, this project required the addition of the date when a website was accessed.
 ==== Git/GitHub
-Git is a so-called #acr("VCS"). A #acr("VCS") is an essential tool in software development. It is used to track changes made to a codebase, organize said codebase, and manage the collaboration between multiple developers in teams or open-source communities. Git was developed by Linus Torvalds, the creator of the famous #acr("FOSS") #acr("OS") Linux in 2005 to be an entirely free and open version control standard. He created it due to the capabilities of the BitKeeper #acr("VCS"), which had been used in the development of Linux, being reduced for non-paying customers.
+Git is a so-called #acr("VCS"). A #acr("VCS") is an essential tool in software development. It is used to track changes made to a codebase, organize said codebase, and manage the collaboration between multiple developers in teams or open-source communities. Git was developed by Linus Torvalds, the creator of the famous free #acr("OS") Linux in 2005 to be an entirely free and open version control standard. He created it due to the capabilities of the BitKeeper #acr("VCS"), which had been used in the development of Linux, being reduced for non-paying customers.
 
 There are a couple of concepts essential to the understanding of Git:
 
@@ -306,7 +325,7 @@ It does not only just hash passwords; it also salts them. Salting adds additiona
 
 In addition to Salts and to distinguish itself from competing solutions, Bcrypt is also significantly slower than other algorithms, making regular encryption and decryption still possible but rendering Rainbow Tables time-consuming to produce, even without the use of Salts. @misc-bcrypt
 === PostgreSQL <postgres>
-The database used for this project is PostgreSQL, a #acr("FOSS") relational database. Similarly to other relational databases like MySQL and SQLServer, it stores data in tables divided into rows and columns. Another shared characteristic is that most relational databases use #acr("SQL") to write queries performing #acr("CRUD") operations on stored data. What differentiates PostgreSQL from other solutions is that it is a so-called Object Relational Database. It supports concepts like custom data types and inheritance typically found in #acr("OOP"). It also allows multiple transactions to be run simultaneously by assigning a snapshot of the database to each one and for reusable queries. @misc-postgres
+The database used for this project is PostgreSQL, an open source relational database. Similarly to other relational databases like MySQL and SQLServer, it stores data in tables divided into rows and columns. Another shared characteristic is that most relational databases use #acr("SQL") to write queries performing #acr("CRUD") operations on stored data. What differentiates PostgreSQL from other solutions is that it is a so-called Object Relational Database. It supports concepts like custom data types and inheritance typically found in #acr("OOP"). It also allows multiple transactions to be run simultaneously by assigning a snapshot of the database to each one and for reusable queries. @misc-postgres
 
 This project uses some of these features since it uses Enums to store specific data, which are not available on other relational #acr("DBMS"). Further details about said implementation will be covered in the Backend part of the implementation section later in this documentation. One downside of using PostgreSQL with Entity Framework Core is that it requires the installation of a third-party package called `Npgsql` to be supported.
 === Concepts
@@ -715,7 +734,7 @@ This is implemented using the Modal Component provided by Chakra UI. This Compon
 Inside the Modal, there are two input fields and a submit button, which first makes an #acr("API") call to create a new Quiz and then navigates to the *Edit Quiz Page* of the created Quiz by using the `useNavigate()` Hook. This Hook allows for redirection via code.
 ==== Edit Quiz Page
 This page is used to edit the details of a Quiz. These details include the specific Questions and the Options selectable on each Question. This page also gives the tutor the ability to rename a Quiz itself.
-#figure(image("images/screenshots/editQuiz.png", height: 8cm), caption: [Edit Quiz Page], supplement: "Figure", kind: "image")
+#figure(image("images/screenshots/editQuiz.png"), caption: [Edit Quiz Page], supplement: "Figure", kind: "image")
 The page is split up into two sections:
 
 *Sidebar:*
@@ -1115,7 +1134,7 @@ Finally, the tutor has to press the "Return to Menu" button, which sends a messa
 #pagebreak()
 
 = Conclusion
-The implementation of the must-goals, with the exception of a few bug fixes, was completed on February 7, 2024. It took approximately 110 hours of time entirely spent on coding. The planning and research were completed in about 40 hours, and the documentation was written in another 40 hours. In total, the project required 190 hours to complete.
+The implementation of the must-goals, with the exception of a few bug fixes, was completed on February 7, 2024. It took approximately 110 hours of time entirely spent on coding. The planning and research were completed in about 35 hours, and the documentation was written in another 35 hours. In total, the project required 180 hours to complete.
 
 As previously alluded to, all must-goals were completed. However, no should-goals were completed because of time constraints.
 == Results
@@ -1149,10 +1168,14 @@ Even though all must-goals were completed, there is still room for improvements,
 
 #show outline: set heading(outlined: true)
 
+#pagebreak()
+
 #outline(
   title: [Code Listings],
   target: figure.where(kind: "code"),
 )
+
+#pagebreak()
 
 #outline(
   title: [Image Listings],

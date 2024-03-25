@@ -170,8 +170,6 @@
 }
 
 #let table-overview(body) = {
-  
-  heading(numbering: none, outlined: false)[Short version/task overview]
 
   tablex(
     columns: (1fr, 1fr, 1fr, 1fr),
@@ -195,7 +193,6 @@
 
   )
 
-  pagebreak()
   body
 }
 
