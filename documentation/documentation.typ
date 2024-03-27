@@ -223,7 +223,7 @@ Firefox was used in this project to test and interact with the Frontend interfac
 ==== Swagger #acr("UI")
 Swagger #acr("UI") is an interface built upon the OpenAPI Specification for documenting an #acr("API") by using either a YAML or #acr("JSON") document to describe the available endpoints and the Models used for data transfer. It was initially known as the Swagger Specification. Swagger itself includes a set of tools that aid the developer in the design, development, and documentation of #acrpl("API").
 
-Swagger #acr("UI") is one of these tools. It helps the developer keep an overview of the #acr("API") by generating a #acr("GUI") out of the YAML/#acr("JSON") document displaying all endpoints. It then allows for the testing of the endpoints by providing fields for each parameter, where test data can be entered and buttons to submit the #acr("API") calls. @misc-swagger
+Swagger #acr("UI") is one of these tools. It helps the developer keep an overview of the #acr("API") by generating a #acr("GUI") out of the YAML/#acr("JSON") document displaying all endpoints. It then allows for the testing of the endpoints by providing fields for each parameter, where test data can be entered, and buttons to submit the #acr("API") calls. @misc-swagger
 ==== Typst
 Typst is a newly developed markup system primarily targeted toward academic use. It is intended as a replacement for LaTeX. Typst is heavily inspired by Markdown as it includes built-in syntax for commonly used text elements like bold/italic text, unordered/ordered lists, and headings. The system is entirely built with Rust, a modern type-safe high-performance programming language resulting in fast compile times compared to LaTeX.
 
@@ -575,7 +575,7 @@ public class Quiz
 }
 ```
 ]
-Each Model is also mapped to several #acrpl("DTO") to transfer data more efficiently. The #acrpl("DTO") contain the same fields as the Models, although some are omitted as most use cases do not require all data. The mapping is done with AutoMapper, and maps are configured in the `AutoMapperProfile.cs` file. Most maps can simply by letting AutoMapper assign each field of the #acr("DTO") to its corresponding field on the Model and vice versa. Some, however, require the manual assignment of values:
+Each Model is also mapped to several #acrpl("DTO") to transfer data more efficiently. The #acrpl("DTO") contain the same fields as the Models, although some are omitted as most use cases do not require all data. The mapping is done with AutoMapper, and maps are configured in the `AutoMapperProfile.cs` file. Most maps can simply be created by letting AutoMapper assign each field of the #acr("DTO") to its corresponding field on the Model and vice versa. Some, however, require the manual assignment of values:
 #code-snippet(caption: "Manual AutoMapper assignment")[
 ```cs
 CreateMap<Quiz,QuizDto>().ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId));
@@ -1158,7 +1158,7 @@ The implementation of the Frontend went significantly less smoothly than the Bac
 
 Consequential delays in the development process also occurred when implementing the Game pages as they needed the highest amounts of polish in the entire Frontend due to being interacted with by both students and tutors. However, this effort paid off thanks to the great design and ease of use provided by the pages in their current state.
 == Potential future additions
-In its current state, the project already offers a feature-rich Quiz application with a great user-friendly design. The connection between the Frontend and the Backend works without significant errors, and the experience of playing a game Game is very enriching and informative thanks to the ability to create exciting Quizzes.
+In its current state, the project already offers a feature-rich Quiz application with a great user-friendly design. The connection between the Frontend and the Backend works without significant errors, and the experience of playing a Game is very enriching and informative thanks to the ability to create exciting Quizzes.
 
 Even though all must-goals were completed, there is still room for improvements, including containerizing the application with Docker, making it even more versatile. Additionally, minor bugs and other small problems could be ironed out. Finally, the ability to export and import Quizzes could help build a community and foster the spirit of learning within everyone willing to expand their horizons.
 
