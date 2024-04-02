@@ -459,7 +459,7 @@ This chapter of the diploma thesis will cover the practical implementation of th
 Even though the application is run locally, it still relies heavily on technologies commonly found in web development. A major deciding force for employing going this route was that the project is very similar to web applications in not only its concept (all available solutions, which were used as inspirations for this project are web-based) but also its general composition. The reason for this similarity is found in the fact that the application has to be accessible from not only a tutor's PC but from a student's device as well.
 
 This sameness also extends to its general architectural Design, which, like web applications, is divided into a Frontend and a Backend. The former includes all clients and #acrpl("GUI") accessed by students and tutors, and the latter contains a Server, which is responsible for storing and managing Quiz/Game data and for providing access to said data via multiple methods, which are outlined in @architecture-general:
-#figure(image("images/architecture/General.jpg"), caption: [General Architecture Overview], kind: "image", supplement: "Figure")<architecture-general>
+#figure(image("images/architecture/General.svg"), caption: [General Architecture Overview], kind: "image", supplement: "Figure")<architecture-general>
 As seen in the @architecture-general, communication occurs both via #acr("HTTP"), where data is requested by the client and then subsequently provided/mutated/stored by the Server, as well as bidirectional #link(<signalR>)[SignalR] WebSocket connections.
 #pagebreak()
 === Backend
